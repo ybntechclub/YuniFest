@@ -1,128 +1,115 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Calendar, MapPin, ArrowRight, ShieldCheck, Flame, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { CountdownTimer } from './CountdownTimer';
 
 export const HeroSection: React.FC = () => {
-  const tickerItems = [
-    "ENGINEERING & TECH",
-    "ESPORTS CHAMPIONSHIP",
-    "CULTURAL SHOWCASE",
-    "GRAND FASHION RUNWAY",
-    "AGRICULTURAL INNOVATION",
-    "TREASURE HUNT (CAP 25)",
-    "OPEN AIR MEGA DJ NIGHT",
-    "FINE ARTS & REELS",
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.95;
+      videoRef.current.play().catch(() => {
+        // Autoplay policy fallback
+      });
+    }
+  }, []);
+
+  const sponsorLogos = [
+    { name: "YBN INNOVATION", sub: "FACULTY OF TECH" },
+    { name: "NIGHTLIGHT", sub: "CAMPUS LIVE" },
+    { name: "RED BULL", sub: "ESPORTS ARENA" },
+    { name: "AGRITECH GUILD", sub: "RANCHI" },
+    { name: "CULTURAL WING", sub: "JHARKHAND" },
   ];
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-between pt-28 pb-12 overflow-hidden bg-[#03060E]">
+    <section className="relative min-h-screen flex flex-col justify-between pt-28 pb-10 overflow-hidden bg-black text-white">
       
-      {/* Dynamic Laser & Ambient Background Layers */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Deep stage laser cones */}
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-[#11234D]/80 via-[#0B1736]/40 to-transparent rounded-full blur-[140px] opacity-80" />
-        <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] bg-[#F5C451]/12 rounded-full blur-[130px]" />
-        <div className="absolute top-1/3 -right-20 w-[500px] h-[500px] bg-[#22D3EE]/10 rounded-full blur-[140px]" />
-        
-        {/* Subtle geometric stage grid */}
-        <div 
-          className="absolute inset-0 opacity-[0.06]" 
-          style={{
-            backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: '48px 48px'
-          }}
-        />
+      {/* 1. Background Video Play Effect (Exact MDNT Concert Crowd Video) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/festival-crowd-poster.jpg"
+          className="absolute inset-0 w-full h-full object-cover scale-105 filter brightness-90 contrast-110"
+        >
+          <source src="/festival-crowd.mp4" type="video/mp4" />
+        </video>
 
-        {/* Ambient top light streak */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#F5C451]/50 to-transparent" />
+        {/* Cinematic Film Overlays */}
+        {/* Darkening gradient from bottom to top so text & logos pop */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
+        {/* Subtle radial vignette */}
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/30 to-black/70" />
       </div>
 
-      {/* Main Hero Center Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 flex-1 flex flex-col justify-center">
-        
-        {/* Top Floating Pill: Live Status */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#081024]/80 border border-white/10 backdrop-blur-md shadow-2xl">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
-            </span>
-            <span className="font-mono text-[11px] uppercase tracking-widest text-slate-300">
-              YBN UNIVERSITY PRESENTS • YUNIFEST 2026
-            </span>
-            <span className="h-3 w-px bg-white/20" />
-            <span className="font-mono text-[11px] font-bold text-[#F5C451]">
-              ₹0 ENTRY
-            </span>
-          </div>
-        </div>
+      {/* 2. Top Padding Spacer for Fixed Floating Nav */}
+      <div className="relative z-10 w-full h-4 sm:h-8" />
 
-        {/* Massive High-Impact All-Caps MDNT-Style Title */}
-        <div className="text-center max-w-5xl mx-auto mb-8">
-          <h1 className="font-headline font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.95]">
-            WE CONNECT YOUTH, CULTURE & TECH THROUGH UNIQUE{' '}
-            <span className="gold-gradient-text block mt-1 underline decoration-[#F5C451]/50 decoration-wavy underline-offset-8">
-              IN-REAL-LIFE EXPERIENCES.
+      {/* 3. Hero Main Headline (Left-Aligned, Massive All-Caps matching screenshot) */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 my-auto">
+        <div className="max-w-5xl">
+          <h1 className="font-headline font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.4rem] xl:text-[6.2rem] tracking-tight text-white uppercase leading-[0.92] select-none">
+            WE CONNECT YOUTH &amp;{' '}
+            CULTURE THROUGH{' '}
+            UNIQUE{' '}
+            <span className="text-[#CCFF00] inline">
+              IN-REAL-LIFE EXPERIENCES
             </span>
           </h1>
-
-          {/* Subtitle / Tagline */}
-          <p className="mt-6 font-display text-base sm:text-xl md:text-2xl text-slate-300 font-medium max-w-3xl mx-auto leading-relaxed">
-            “One Campus. Three Days. Endless Possibilities.”
-          </p>
-
-          <p className="mt-2 font-mono text-xs sm:text-sm text-slate-400 tracking-wider">
-            DECEMBER 10, 11 & 12, 2026 • RANCHI, JHARKHAND, INDIA
-          </p>
         </div>
-
-        {/* CTAs Group */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-          <Link
-            to="/register"
-            className="btn-voltage w-full sm:w-auto px-8 py-4 text-sm font-black flex items-center justify-center gap-3 group"
-          >
-            <span>CLAIM PARTICIPANT PASS</span>
-            <span className="font-mono text-xs bg-[#03060E] text-[#F5C451] px-2 py-0.5 rounded-full font-extrabold">
-              ₹0 FEE
-            </span>
-            <ArrowRight className="w-4 h-4 text-[#03060E] group-hover:translate-x-1 transition-transform" />
-          </Link>
-
-          <Link
-            to="/events"
-            className="btn-outline-luxe w-full sm:w-auto px-7 py-4 text-xs font-bold flex items-center justify-center gap-2 group"
-          >
-            <span>EXPLORE 15+ EVENTS & RULES</span>
-            <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:text-[#F5C451] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </Link>
-        </div>
-
-        {/* Countdown Timer with Technical Border Frame */}
-        <div className="max-w-2xl mx-auto w-full mb-10">
-          <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-widest text-[#F5C451] mb-2 px-2">
-            <span>[ STAGE ACTIVATION COUNTDOWN ]</span>
-            <span>DEC 10, 2026 // 09:00 IST</span>
-          </div>
-          <CountdownTimer />
-        </div>
-
       </div>
 
-      {/* Infinite Horizontal Marquee Ticker (MDNT Signature Element) */}
-      <div className="relative z-10 border-y border-white/10 bg-[#060B1A]/80 backdrop-blur-md py-3.5 ticker-tape mt-8">
-        <div className="flex whitespace-nowrap animate-marquee">
-          {[...tickerItems, ...tickerItems].map((item, idx) => (
-            <div key={idx} className="flex items-center mx-4">
-              <span className="font-headline font-black text-sm tracking-wider uppercase text-slate-300 hover:text-[#F5C451] transition-colors">
-                {item}
-              </span>
-              <span className="font-mono text-xs text-[#F5C451] mx-4 font-bold">
-                ///
-              </span>
+      {/* 4. Bottom Hero Row: Left Logos + Right Copy & Buttons (Exact Screenshot Layout) */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 pt-4 pb-2">
+        <div className="flex flex-col lg:flex-row items-end justify-between gap-8 pt-6 border-t border-white/10">
+          
+          {/* Left: Monochromatic Sponsor / Department Marks */}
+          <div className="w-full lg:w-auto">
+            <div className="flex items-center flex-wrap gap-6 sm:gap-10 opacity-75 hover:opacity-100 transition-opacity">
+              {sponsorLogos.map((brand, i) => (
+                <div key={i} className="flex flex-col select-none">
+                  <span className="font-headline font-black text-sm sm:text-base tracking-wider text-white uppercase">
+                    {brand.name}
+                  </span>
+                  <span className="font-mono text-[9px] text-white/50 tracking-widest uppercase">
+                    {brand.sub}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Right: Copy & Dual Action Buttons (Exactly like screenshot) */}
+          <div className="w-full lg:max-w-md space-y-4">
+            <p className="font-display text-xs sm:text-sm text-white/80 leading-relaxed">
+              <strong className="text-white">YUNIFEST 2026</strong> (YBN University, Ranchi) translates campus energy into moments people actually talk about. One Campus. Three Days. Endless Possibilities.
+            </p>
+
+            <div className="flex items-center gap-3">
+              {/* Button 1: Dark pill with purple/gold dot */}
+              <Link
+                to="/register"
+                className="inline-flex items-center gap-2 bg-[#181818]/90 hover:bg-white hover:text-black border border-white/20 text-white px-6 py-2.5 rounded-full font-headline text-xs font-bold uppercase tracking-wider transition-all active:scale-95 group shadow-lg"
+              >
+                <span>GET PASS</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] group-hover:scale-125 transition-transform" />
+              </Link>
+
+              {/* Button 2: Transparent outline button */}
+              <Link
+                to="/events"
+                className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 border border-white/30 text-white px-6 py-2.5 rounded-full font-headline text-xs font-bold uppercase tracking-wider transition-all active:scale-95"
+              >
+                <span>VIEW OUR WORK</span>
+              </Link>
+            </div>
+          </div>
+
         </div>
       </div>
 

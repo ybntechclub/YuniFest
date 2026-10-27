@@ -20,11 +20,11 @@ export const Navbar: React.FC = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { label: 'Overview', path: '/' },
-    { label: 'Events', path: '/events' },
-    { label: 'Schedule', path: '/schedule' },
-    { label: 'Regulations', path: '/#rules' },
-    { label: 'Leadership', path: '/#coordinators' },
+    { label: 'OVERVIEW', path: '/' },
+    { label: 'EVENTS', path: '/events' },
+    { label: 'SCHEDULE', path: '/schedule' },
+    { label: 'REGULATIONS', path: '/#rules' },
+    { label: 'ORGANIZERS', path: '/#coordinators' },
   ];
 
   const isActive = (path: string) => {
@@ -33,113 +33,103 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-      <div className={`max-w-7xl mx-auto rounded-full transition-all duration-300 ${
-        scrolled 
-          ? 'bg-[#040814]/90 backdrop-blur-xl border border-white/10 shadow-2xl py-2.5 px-4 sm:px-6' 
-          : 'bg-[#040814]/60 backdrop-blur-md border border-white/5 py-3 px-4 sm:px-6'
-      }`}>
-        <div className="flex items-center justify-between">
-          
-          {/* Brand Logo & Editorial Wordmark */}
-          <Link to="/" className="flex items-center gap-3 group focus:outline-none">
-            <div className="w-9 h-9 rounded-full bg-[#0B152D] border border-[#F5C451]/40 flex items-center justify-center p-1.5 shadow-gold-glow group-hover:scale-105 transition-transform">
-              <img src="/yuni-crest.svg" alt="YBN Crest" className="w-full h-full object-contain" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-headline font-black text-lg sm:text-xl tracking-tight text-white group-hover:text-[#F5C451] transition-colors">
-                  YUNIFEST
-                </span>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#F5C451]/15 text-[#F5C451] font-bold border border-[#F5C451]/30">
-                  ’26
-                </span>
-              </div>
-              <p className="font-mono text-[9px] text-slate-400 tracking-widest uppercase">
-                YBN UNIVERSITY • RANCHI
-              </p>
-            </div>
+    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-8 pt-5 pb-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        
+        {/* Left: MDNT-Style Bold Brand Logo */}
+        <Link to="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
+          <div className="w-9 h-9 rounded-full bg-black/60 border border-white/20 backdrop-blur-md flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+            <img src="/yuni-crest.svg" alt="YBN" className="w-full h-full object-contain" />
+          </div>
+          <div className="flex items-baseline gap-1.5">
+            <span className="font-headline font-black text-2xl sm:text-3xl tracking-tighter text-white uppercase group-hover:text-[#CCFF00] transition-colors">
+              YUNIFEST
+            </span>
+            <span className="font-mono text-[10px] text-[#CCFF00] font-bold tracking-widest">
+              ’26
+            </span>
+          </div>
+        </Link>
+
+        {/* Center: Floating Translucent Pill Menu (Exactly like MDNT Screenshot) */}
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 bg-black/45 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-2xl">
+          {navLinks.map((link) => (
+            link.path.startsWith('/#') ? (
+              <a
+                key={link.path}
+                href={link.path}
+                className="font-headline text-xs font-bold tracking-wider uppercase text-white/80 hover:text-white transition-colors"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`font-headline text-xs font-bold tracking-wider uppercase transition-colors ${
+                  isActive(link.path)
+                    ? 'text-[#CCFF00]'
+                    : 'text-white/80 hover:text-white'
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          ))}
+        </nav>
+
+        {/* Right: Solid White Pill Button with Dot (Exactly like MDNT Screenshot) */}
+        <div className="hidden sm:flex items-center gap-3 shrink-0">
+          <Link
+            to="/admin"
+            className="font-headline text-xs uppercase tracking-wider text-white/70 hover:text-white px-3 py-2 rounded-full hover:bg-white/5 transition-colors flex items-center gap-1.5"
+            title="Organizer Portal"
+          >
+            <Shield className="w-3.5 h-3.5 text-[#CCFF00]" />
+            <span>PORTAL</span>
           </Link>
 
-          {/* Desktop Nav - Clean Editorial Pills */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-[#091024]/60 p-1 rounded-full border border-white/5">
-            {navLinks.map((link) => (
-              link.path.startsWith('/#') ? (
-                <a
-                  key={link.path}
-                  href={link.path}
-                  className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-white rounded-full hover:bg-white/5 transition-colors"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`px-4 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-full transition-all ${
-                    isActive(link.path)
-                      ? 'text-[#03060E] bg-[#F5C451] font-bold shadow-sm'
-                      : 'text-slate-300 hover:text-white hover:bg-white/5'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              )
-            ))}
-          </nav>
-
-          {/* Actions & High-Voltage Button */}
-          <div className="hidden sm:flex items-center gap-3">
-            <Link
-              to="/admin"
-              className="font-mono text-[11px] uppercase tracking-wider text-slate-300 hover:text-white px-3 py-1.5 rounded-full hover:bg-white/5 border border-white/10 transition-colors flex items-center gap-1.5"
-            >
-              <Shield className="w-3.5 h-3.5 text-[#F5C451]" />
-              <span>Organizer</span>
-            </Link>
-
-            <Link
-              to="/register"
-              className="btn-voltage text-xs py-2 px-5 flex items-center gap-2 group"
-            >
-              <span>CLAIM PASS</span>
-              <span className="w-2 h-2 rounded-full bg-[#03060E] group-hover:scale-125 transition-transform" />
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2 sm:hidden">
-            <Link
-              to="/register"
-              className="text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-[#F5C451] text-[#03060E]"
-            >
-              ₹0 Pass
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-full bg-[#0B152D] border border-white/10 text-white focus:outline-none"
-              aria-label="Toggle navigation"
-            >
-              {isOpen ? <X className="w-5 h-5 text-[#F5C451]" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-
+          <Link
+            to="/register"
+            className="inline-flex items-center gap-2 bg-white hover:bg-neutral-100 text-black px-6 py-2.5 rounded-full font-headline text-xs font-extrabold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-xl group"
+          >
+            <span>CLAIM PASS</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
+          </Link>
         </div>
+
+        {/* Mobile Toggle */}
+        <div className="flex items-center gap-2 sm:hidden">
+          <Link
+            to="/register"
+            className="bg-white text-black px-4 py-1.5 rounded-full font-headline text-xs font-black uppercase tracking-wider"
+          >
+            ₹0 PASS
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 rounded-full bg-black/60 border border-white/20 text-white focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="w-5 h-5 text-[#CCFF00]" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+
       </div>
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-x-4 top-20 bg-[#040814]/98 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 shadow-2xl animate-fadeIn">
-          <nav className="flex flex-col gap-2">
+        <div className="lg:hidden fixed inset-x-4 top-20 bg-black/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 shadow-2xl animate-fadeIn">
+          <nav className="flex flex-col gap-3">
             {navLinks.map((link) => (
               link.path.startsWith('/#') ? (
                 <a
                   key={link.path}
                   href={link.path}
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-3 text-sm font-headline uppercase font-bold tracking-wider text-slate-200 hover:text-[#F5C451] border-b border-white/5"
+                  className="px-4 py-2 text-base font-headline uppercase font-bold tracking-wider text-white/90 hover:text-[#CCFF00] border-b border-white/5"
                 >
                   {link.label}
                 </a>
@@ -148,12 +138,12 @@ export const Navbar: React.FC = () => {
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`px-4 py-3 text-sm font-headline uppercase font-bold tracking-wider flex items-center justify-between border-b border-white/5 ${
-                    isActive(link.path) ? 'text-[#F5C451]' : 'text-slate-200'
+                  className={`px-4 py-2 text-base font-headline uppercase font-bold tracking-wider flex items-center justify-between border-b border-white/5 ${
+                    isActive(link.path) ? 'text-[#CCFF00]' : 'text-white/90'
                   }`}
                 >
                   <span>{link.label}</span>
-                  <ArrowUpRight className="w-4 h-4 text-slate-500" />
+                  <ArrowUpRight className="w-4 h-4 text-white/40" />
                 </Link>
               )
             ))}
@@ -162,14 +152,14 @@ export const Navbar: React.FC = () => {
               <Link
                 to="/register"
                 onClick={() => setIsOpen(false)}
-                className="btn-voltage w-full py-3.5 text-center text-sm"
+                className="w-full bg-[#CCFF00] text-black font-headline font-black py-3.5 rounded-full text-center text-xs tracking-wider uppercase"
               >
-                REGISTER PASS — ₹0 ENTRY
+                CLAIM OFFICIAL PASS (₹0 ENTRY)
               </Link>
               <Link
                 to="/admin"
                 onClick={() => setIsOpen(false)}
-                className="btn-outline-luxe w-full py-3 text-center text-xs"
+                className="w-full bg-white/10 text-white font-headline py-3 rounded-full text-center text-xs tracking-wider uppercase border border-white/20"
               >
                 Organizer Dashboard Login
               </Link>
