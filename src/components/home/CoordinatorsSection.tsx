@@ -1,78 +1,68 @@
 import React from 'react';
 import { OFFICIAL_COORDINATORS } from '../../data/coordinators';
-import { Users, GraduationCap, UserCheck, Shield } from 'lucide-react';
+import { ShieldCheck, User, GraduationCap } from 'lucide-react';
 
 export const CoordinatorsSection: React.FC = () => {
   return (
-    <section id="coordinators" className="py-20 bg-[#07152F] relative border-t border-[#F5C451]/10">
+    <section id="coordinators" className="py-24 bg-[#03060E] relative border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D2345] border border-[#F5C451]/30 text-xs font-semibold text-[#F5C451] uppercase tracking-wider mb-3">
-            <Users className="w-3.5 h-3.5" />
-            <span>Festival Leadership</span>
+        <div className="max-w-3xl mb-16">
+          <div className="font-mono text-xs uppercase tracking-widest text-[#F5C451] mb-3">
+            [ 03 // LEADERSHIP & ADVISORY ]
           </div>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight mb-3">
-            Core Organizing Committee & Faculty Mentors
+          <h2 className="font-headline font-black text-3xl sm:text-5xl text-white uppercase tracking-tight">
+            ORGANIZING COMMITTEE & <span className="gold-gradient-text">FACULTY MENTORS</span>
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            The dedicated academic leaders and student coordinators spearheading the execution of YUNIFEST 2026.
+          <p className="font-display text-slate-400 text-sm mt-3 leading-relaxed">
+            The official academic and student leadership steering the logistics, juries, and physical venue operations for YUNIFEST 2026.
           </p>
         </div>
 
-        {/* Coordinators Grid */}
+        {/* 3-Column Industrial Luxe Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {OFFICIAL_COORDINATORS.map((item) => (
+          {OFFICIAL_COORDINATORS.map((item, idx) => (
             <div
               key={item.id}
-              className="p-6 rounded-2xl bg-gradient-to-b from-[#0D2345]/80 to-[#07152F]/90 border border-slate-700/70 hover:border-[#F5C451]/50 shadow-card-elevated transition-all duration-300 flex flex-col justify-between"
+              className="mdnt-card crosshair-corner p-6 rounded-2xl flex flex-col justify-between group"
             >
               <div>
                 {/* Event Name Tag */}
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-full bg-[#F5C451]" />
-                  <span className="font-display font-bold text-white text-base">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-headline font-bold text-white text-lg group-hover:text-[#F5C451] transition-colors">
                     {item.event}
+                  </span>
+                  <span className="font-mono text-xs text-slate-500">
+                    #{String(idx + 1).padStart(2, '0')}
                   </span>
                 </div>
 
-                {/* Coordinators Details */}
-                <div className="space-y-3.5">
-                  {/* Student Coordinator */}
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-[#07152F]/80 border border-slate-800">
-                    <UserCheck className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
-                    <div>
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-cyan-300">
-                        Student Coordinator
-                      </div>
-                      <div className="text-sm font-bold text-white mt-0.5">
-                        {item.studentCoordinator}
-                      </div>
-                    </div>
+                {/* Coordinators Profile */}
+                <div className="space-y-3 pt-2">
+                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-1">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-cyan-400 block font-bold">
+                      [ Student Coordinator ]
+                    </span>
+                    <span className="font-headline font-bold text-white text-base block">
+                      {item.studentCoordinator}
+                    </span>
                   </div>
 
-                  {/* Faculty Coordinator */}
-                  <div className="flex items-start gap-3 p-3 rounded-xl bg-[#07152F]/80 border border-slate-800">
-                    <GraduationCap className="w-5 h-5 text-[#F5C451] shrink-0 mt-0.5" />
-                    <div>
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-[#F5C451]">
-                        Faculty Coordinator
-                      </div>
-                      <div className="text-sm font-bold text-slate-100 mt-0.5">
-                        {item.facultyCoordinator}
-                      </div>
-                    </div>
+                  <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5 space-y-1">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#F5C451] block font-bold">
+                      [ Faculty Mentor ]
+                    </span>
+                    <span className="font-headline font-bold text-slate-200 text-base block">
+                      {item.facultyCoordinator}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Verified Verification Badge */}
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                <span className="flex items-center gap-1 text-slate-300">
-                  <Shield className="w-3 h-3 text-[#F5C451]" />
-                  Official YBN University Committee
-                </span>
+              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[10px] text-slate-400 uppercase tracking-widest">
+                <span>YBN UNIVERSITY</span>
+                <span className="text-emerald-400">VERIFIED</span>
               </div>
             </div>
           ))}

@@ -9,7 +9,7 @@ interface TimeLeft {
 }
 
 export const CountdownTimer: React.FC = () => {
-  // Target: Dec 10, 2026 09:00:00 IST (UTC+05:30)
+  // Target: Dec 10, 2026 09:00:00 IST
   const targetDate = new Date('2026-12-10T09:00:00+05:30').getTime();
 
   const calculateTimeLeft = (): TimeLeft => {
@@ -40,28 +40,25 @@ export const CountdownTimer: React.FC = () => {
   }, []);
 
   const timeUnits = [
-    { label: 'Days', value: timeLeft.days },
-    { label: 'Hours', value: timeLeft.hours },
-    { label: 'Minutes', value: timeLeft.minutes },
-    { label: 'Seconds', value: timeLeft.seconds },
+    { label: 'DAYS', value: timeLeft.days },
+    { label: 'HOURS', value: timeLeft.hours },
+    { label: 'MINUTES', value: timeLeft.minutes },
+    { label: 'SECONDS', value: timeLeft.seconds },
   ];
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full">
       <div className="grid grid-cols-4 gap-2 sm:gap-4">
         {timeUnits.map((unit) => (
           <div
             key={unit.label}
-            className="relative flex flex-col items-center justify-center p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#0D2345]/90 to-[#07152F]/90 border border-[#F5C451]/30 shadow-card-elevated backdrop-blur-sm group hover:border-[#F5C451]/60 transition-colors"
+            className="mdnt-card crosshair-corner flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl"
           >
-            {/* Ambient gold glow */}
-            <div className="absolute inset-0 bg-[#F5C451]/5 rounded-xl sm:rounded-2xl pointer-events-none group-hover:bg-[#F5C451]/10 transition-colors" />
-
-            <div className="font-display text-2xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-b from-[#FFFFFF] via-[#FFF3C4] to-[#F5C451] tracking-tight">
+            <div className="font-headline text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight">
               {String(unit.value).padStart(2, '0')}
             </div>
             
-            <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-slate-300 mt-1">
+            <div className="font-mono text-[9px] sm:text-[11px] font-bold tracking-widest text-[#F5C451] uppercase mt-1">
               {unit.label}
             </div>
           </div>
