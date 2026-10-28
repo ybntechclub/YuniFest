@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Shield, ArrowUpRight } from 'lucide-react';
+import { RollText } from '../ui/RollText';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,8 +24,8 @@ export const Navbar: React.FC = () => {
     { label: 'OVERVIEW', path: '/' },
     { label: 'EVENTS', path: '/events' },
     { label: 'SCHEDULE', path: '/schedule' },
-    { label: 'REGULATIONS', path: '/#rules' },
-    { label: 'ORGANIZERS', path: '/#coordinators' },
+    { label: 'REGULATIONS', path: '/regulations' },
+    { label: 'ORGANIZERS', path: '/leadership' },
   ];
 
   const isActive = (path: string) => {
@@ -51,34 +52,24 @@ export const Navbar: React.FC = () => {
           </div>
         </Link>
 
-        {/* Center: Floating Translucent Pill Menu (Exactly like MDNT Screenshot) */}
+        {/* Center: Floating Translucent Pill Menu */}
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8 bg-black/45 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-2xl">
           {navLinks.map((link) => (
-            link.path.startsWith('/#') ? (
-              <a
-                key={link.path}
-                href={link.path}
-                className="font-headline text-xs font-bold tracking-wider uppercase text-white/80 hover:text-white transition-colors"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`font-headline text-xs font-bold tracking-wider uppercase transition-colors ${
-                  isActive(link.path)
-                    ? 'text-[#CCFF00]'
-                    : 'text-white/80 hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
-            )
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`font-headline text-xs font-bold tracking-wider uppercase transition-colors ${
+                isActive(link.path)
+                  ? 'text-[#CCFF00]'
+                  : 'text-white/80 hover:text-white'
+              }`}
+            >
+              <RollText text={link.label} highlightColor="text-[#CCFF00]" />
+            </Link>
           ))}
         </nav>
 
-        {/* Right: Solid White Pill Button with Dot (Exactly like MDNT Screenshot) */}
+        {/* Right: Solid White Pill Button with Dot */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <Link
             to="/admin"
@@ -86,14 +77,14 @@ export const Navbar: React.FC = () => {
             title="Organizer Portal"
           >
             <Shield className="w-3.5 h-3.5 text-[#CCFF00]" />
-            <span>PORTAL</span>
+            <RollText text="PORTAL" highlightColor="text-[#CCFF00]" />
           </Link>
 
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-white hover:bg-neutral-100 text-black px-6 py-2.5 rounded-full font-headline text-xs font-extrabold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-xl group"
+            className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] text-black px-6 py-2.5 rounded-full font-headline text-xs font-extrabold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-xl group"
           >
-            <span>CLAIM PASS</span>
+            <RollText text="CLAIM PASS" highlightColor="text-black" />
             <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
           </Link>
         </div>

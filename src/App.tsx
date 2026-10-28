@@ -8,6 +8,8 @@ import { Footer } from './components/layout/Footer';
 import { HomePage } from './pages/HomePage';
 import { EventsPage } from './pages/EventsPage';
 import { SchedulePage } from './pages/SchedulePage';
+import { RegulationsPage } from './pages/RegulationsPage';
+import { LeadershipPage } from './pages/LeadershipPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { RegisterSuccessPage } from './pages/RegisterSuccessPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
@@ -49,6 +51,8 @@ export const App: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/regulations" element={<RegulationsPage />} />
+            <Route path="/leadership" element={<LeadershipPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/register/success" element={<RegisterSuccessPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />

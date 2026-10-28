@@ -1,154 +1,187 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldAlert, ArrowUpRight, MapPin, Calendar } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import { RollText } from '../ui/RollText';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#02040A] border-t border-white/10 text-slate-400 relative overflow-hidden">
+    <footer className="bg-black text-white relative overflow-hidden pt-20">
       
-      {/* Top Advisory Strip */}
-      <div className="bg-[#060D1E] border-b border-white/5 py-4 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono">
-          <div className="flex items-center gap-2.5 text-[#F5C451]">
-            <ShieldAlert className="w-4 h-4 shrink-0 text-[#F5C451]" />
-            <span className="font-bold tracking-wider">[ ENTRY MANDATE ]:</span>
-            <span className="text-slate-200">
-              PHYSICAL COLLEGE / UNIVERSITY ID CARD IS MANDATORY FOR ENTRY.
-            </span>
-          </div>
-          <Link
-            to="/register"
-            className="text-[11px] font-bold uppercase tracking-wider text-[#03060E] bg-[#F5C451] hover:bg-white px-3.5 py-1.5 rounded-full transition-colors"
-          >
-            CLAIM PASS (₹0)
-          </Link>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 mb-16">
+      {/* 1. Interactive Rotating Text Arch Callout (Matching Screenshot 1) */}
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 mb-20">
+        <div className="relative w-full max-w-[540px] sm:max-w-[620px] aspect-square mx-auto flex items-center justify-center">
           
-          {/* Col 1: Brand & Location */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#0B152D] border border-[#F5C451]/40 flex items-center justify-center p-1.5">
-                <img src="/yuni-crest.svg" alt="YBN Crest" className="w-full h-full object-contain" />
-              </div>
-              <span className="font-headline font-black text-xl text-white">
-                YUNIFEST <span className="text-[#F5C451]">2026</span>
-              </span>
-            </div>
-
-            <p className="font-display text-xs text-slate-400 leading-relaxed">
-              The flagship annual youth festival of YBN University, bringing together technology, culture, creativity, and fellowship.
-            </p>
-
-            <div className="font-mono text-xs text-slate-300 space-y-1 pt-2">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5 text-[#F5C451]" />
-                <span>DECEMBER 10, 11 & 12, 2026</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 text-[#F5C451] shrink-0 mt-0.5" />
-                <span>NAMKUM, RANCHI, JHARKHAND</span>
-              </div>
-            </div>
+          {/* Rotating Circular Text SVG */}
+          <div className="absolute inset-0 w-full h-full animate-spin-slow pointer-events-none select-none">
+            <svg viewBox="0 0 500 500" className="w-full h-full">
+              <defs>
+                <path
+                  id="circlePath"
+                  d="M 250, 250 m -195, 0 a 195,195 0 1,1 390,0 a 195,195 0 1,1 -390,0"
+                  fill="none"
+                />
+              </defs>
+              <text className="font-headline font-black text-[22px] tracking-[0.22em] uppercase">
+                <textPath href="#circlePath" startOffset="0%">
+                  <tspan fill="#CCFF00">LET'S CELEBRATE </tspan>
+                  <tspan fill="#FFFFFF">TOGETHER • YUNIFEST 2026 • ONE CAMPUS • </tspan>
+                  <tspan fill="#CCFF00">THREE DAYS </tspan>
+                  <tspan fill="#FFFFFF">• ENDLESS POSSIBILITIES • </tspan>
+                </textPath>
+              </text>
+            </svg>
           </div>
 
-          {/* Col 2: Navigation */}
-          <div>
-            <h4 className="font-mono text-xs uppercase font-bold tracking-widest text-[#F5C451] mb-5">
-              [ DIRECTORY ]
-            </h4>
-            <ul className="space-y-3 font-display text-xs text-slate-300">
-              <li>
-                <Link to="/" className="hover:text-white transition-colors">
-                  Overview & Manifesto
-                </Link>
-              </li>
-              <li>
-                <Link to="/events" className="hover:text-white transition-colors">
-                  15+ Competitions & Showcases
-                </Link>
-              </li>
-              <li>
-                <Link to="/schedule" className="hover:text-white transition-colors">
-                  Three-Day Programme Timeline
-                </Link>
-              </li>
-              <li>
-                <Link to="/register" className="hover:text-[#F5C451] transition-colors flex items-center gap-1.5">
-                  <span>Participant Registration</span>
-                  <span className="font-mono text-[10px] text-[#F5C451]">₹0</span>
-                </Link>
-              </li>
-              <li>
-                <a href="#rules" className="hover:text-white transition-colors">
-                  Admission Regulations & Conduct
-                </a>
-              </li>
-              <li>
-                <a href="#coordinators" className="hover:text-white transition-colors">
-                  Organizing Committee
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 3: Key Arenas */}
-          <div>
-            <h4 className="font-mono text-xs uppercase font-bold tracking-widest text-[#F5C451] mb-5">
-              [ ARENAS ]
-            </h4>
-            <ul className="space-y-2.5 font-mono text-xs text-slate-400">
-              <li>• ESPORTS: BGMI & FREE FIRE</li>
-              <li>• TREASURE HUNT (CAP: 25)</li>
-              <li>• AMPHITHEATRE DANCE BATTLES</li>
-              <li>• EASTERN & WESTERN SINGING</li>
-              <li>• MODEL PRESENTATION</li>
-              <li>• GRAND FASHION RUNWAY</li>
-              <li>• OPEN-AIR EDM DJ FINALE</li>
-            </ul>
-          </div>
-
-          {/* Col 4: Portal & Verification */}
-          <div>
-            <h4 className="font-mono text-xs uppercase font-bold tracking-widest text-[#F5C451] mb-5">
-              [ ADMIN PORTAL ]
-            </h4>
-            <p className="font-display text-xs text-slate-400 leading-relaxed mb-4">
-              Jury members and authorized student coordinators can manage registration quotas and export verified rosters.
+          {/* Center Callout Box inside the Rotating Arch */}
+          <div className="relative z-10 text-center max-w-sm px-6 py-8 flex flex-col items-center">
+            <h3 className="font-headline font-black text-2xl sm:text-3xl lg:text-4xl text-white uppercase leading-[1.05] tracking-tight mb-3">
+              Ready to claim your spot at Jharkhand's biggest fest?
+            </h3>
+            <p className="font-display text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
+              Join thousands of students on December 10, 11 & 12, 2026 at YBN University, Ranchi.
             </p>
 
             <Link
-              to="/admin/login"
-              className="btn-outline-luxe w-full py-2.5 text-xs font-mono justify-between group"
+              to="/register"
+              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group"
             >
-              <span>ORGANIZER LOGIN</span>
-              <ArrowUpRight className="w-4 h-4 text-[#F5C451] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <RollText text="CLAIM PASS (₹0)" highlightColor="text-black" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
 
         </div>
-
-        {/* Huge Watermark (Signature MDNT Design Language) */}
-        <div className="pt-8 border-t border-white/5 select-none pointer-events-none">
-          <div className="font-headline font-black text-5xl sm:text-7xl md:text-9xl text-white/[0.04] uppercase tracking-tighter text-center leading-none">
-            YUNIFEST 2026
-          </div>
-        </div>
-
-        {/* Bottom Credits Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-slate-500">
-          <p>© 2026 YBN UNIVERSITY, RANCHI. ALL RIGHTS RESERVED.</p>
-          <div className="flex items-center gap-3">
-            <span>DEC 10-12, 2026</span>
-            <span>•</span>
-            <span className="text-[#F5C451]">ONE CAMPUS. ENDLESS POSSIBILITIES.</span>
-          </div>
-        </div>
-
       </div>
+
+      {/* 2. MDNT Iconic Lime Divider Line */}
+      <div className="w-full h-[2px] bg-[#CCFF00]" />
+
+      {/* 3. Footer Metadata & Navigation Columns */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 text-xs font-mono">
+          
+          {/* Address & Location */}
+          <div className="space-y-4">
+            <div>
+              <span className="text-white/40 uppercase tracking-widest text-[10px] block mb-1">
+                ADDRESS:
+              </span>
+              <p className="text-white font-bold leading-relaxed">
+                YBN UNIVERSITY, RAJAULATU,<br />
+                NAMKUM, RANCHI, JHARKHAND — 834010
+              </p>
+            </div>
+
+            <div>
+              <span className="text-white/40 uppercase tracking-widest text-[10px] block mb-1">
+                CONTACT & INQUIRIES:
+              </span>
+              <p className="text-white font-bold">
+                INFO@YBNUNIVERSITY.AC.IN
+              </p>
+              <p className="text-slate-400 mt-0.5">
+                YUNIFEST@YBN.EDU.IN
+              </p>
+            </div>
+
+            <div className="flex items-center gap-4 text-white pt-2">
+              <span className="hover-glitch cursor-pointer font-bold hover:text-[#CCFF00]">[ INSTAGRAM ]</span>
+              <span className="hover-glitch cursor-pointer font-bold hover:text-[#CCFF00]">[ LINKEDIN ]</span>
+            </div>
+          </div>
+
+          {/* Quick Nav Col 1 */}
+          <div className="space-y-3 font-headline font-bold text-sm tracking-wider uppercase">
+            <div>
+              <Link to="/" className="text-[#8B5CF6] hover:text-white transition-colors hover-glitch block">
+                HOME
+              </Link>
+            </div>
+            <div>
+              <Link to="/events" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                EVENTS EXPLORER
+              </Link>
+            </div>
+            <div>
+              <Link to="/schedule" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                3-DAY SCHEDULE
+              </Link>
+            </div>
+            <div>
+              <Link to="/regulations" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                REGULATIONS &amp; ID
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Nav Col 2 */}
+          <div className="space-y-3 font-headline font-bold text-sm tracking-wider uppercase">
+            <div>
+              <Link to="/leadership" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                LEADERSHIP &amp; MENTORS
+              </Link>
+            </div>
+            <div>
+              <Link to="/register" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                GET PASS (₹0 ENTRY)
+              </Link>
+            </div>
+            <div>
+              <Link to="/admin" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                ORGANIZER PORTAL
+              </Link>
+            </div>
+            <div>
+              <a href="#rules" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+                ID VERIFICATION DESK
+              </a>
+            </div>
+          </div>
+
+          {/* Dates & Mandate */}
+          <div className="space-y-3 font-mono text-xs">
+            <div>
+              <span className="text-white/40 uppercase tracking-widest text-[10px] block mb-1">
+                FESTIVAL DATES:
+              </span>
+              <p className="text-[#CCFF00] font-black text-sm">
+                DECEMBER 10, 11 &amp; 12, 2026
+              </p>
+            </div>
+
+            <div>
+              <span className="text-white/40 uppercase tracking-widest text-[10px] block mb-1">
+                ADMISSION POLICY:
+              </span>
+              <p className="text-slate-300 text-[11px] leading-relaxed">
+                Registration is 100% free (₹0). Physical college/university ID card is strictly mandatory for campus entry.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Copyright strip */}
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-white/50">
+          <p>© 2026 YBN UNIVERSITY • YUNIFEST. ALL RIGHTS RESERVED.</p>
+          <div className="flex items-center gap-6">
+            <Link to="/regulations" className="hover:text-white transition-colors">
+              MANDATORY ID POLICY
+            </Link>
+            <Link to="/admin" className="hover:text-white transition-colors">
+              COMMITTEE LOGIN
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. GIGANTIC MDNT-STYLE CROPPED BOTTOM WORDMARK (Exactly like Screenshot 1) */}
+      <div className="w-full overflow-hidden select-none pointer-events-none -mb-6 sm:-mb-10 lg:-mb-16">
+        <h2 className="font-headline font-black text-[22vw] tracking-tighter text-white uppercase text-center leading-[0.72] opacity-95">
+          YUNIFEST
+        </h2>
+      </div>
+
     </footer>
   );
 };

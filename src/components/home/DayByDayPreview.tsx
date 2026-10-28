@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ArrowRight, Sparkles, MapPin, Clock } from 'lucide-react';
+import { ArrowUpRight, MapPin } from 'lucide-react';
+import { RollText } from '../ui/RollText';
 
 export const DayByDayPreview: React.FC = () => {
   const [activeDay, setActiveDay] = useState<'day_1' | 'day_2' | 'day_3'>('day_1');
@@ -148,17 +150,23 @@ export const DayByDayPreview: React.FC = () => {
   const current = daysData[activeDay];
 
   return (
-    <section className="py-24 bg-[#040814] relative border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-[#03060E] relative border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
+        >
           <div>
-            <div className="font-mono text-xs uppercase tracking-widest text-[#F5C451] mb-3">
+            <div className="font-mono text-xs uppercase tracking-widest text-[#CCFF00] mb-3">
               [ 02 // THREE-DAY ITINERARY ]
             </div>
             <h2 className="font-headline font-black text-3xl sm:text-5xl text-white uppercase tracking-tight">
-              THE FESTIVAL <span className="gold-gradient-text">PROGRAMME</span>
+              THE FESTIVAL <span className="text-[#CCFF00]">LINEUP</span>
             </h2>
             <p className="font-display text-slate-400 text-sm mt-2">
               Explore the multi-track timeline curated across technical, cultural and grand finale disciplines.
@@ -167,12 +175,12 @@ export const DayByDayPreview: React.FC = () => {
 
           <Link
             to="/schedule"
-            className="btn-outline-luxe text-xs font-mono py-2.5 px-5 self-start md:self-auto group"
+            className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 border border-white/20 text-white px-6 py-2.5 rounded-full font-headline text-xs font-bold uppercase tracking-wider transition-all self-start md:self-auto group"
           >
-            <span>FULL TIMELINE (PDF)</span>
-            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            <RollText text="VIEW FULL TIMELINE" highlightColor="text-[#CCFF00]" />
+            <ArrowUpRight className="w-4 h-4 text-white/50 group-hover:text-[#CCFF00] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </Link>
-        </div>
+        </motion.div>
 
         {/* Day Switcher - MDNT Pill Bar */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-10">
@@ -184,17 +192,17 @@ export const DayByDayPreview: React.FC = () => {
                 key={key}
                 type="button"
                 onClick={() => setActiveDay(key)}
-                className={`p-5 rounded-2xl text-left border transition-all duration-300 ${
+                className={`p-5 rounded-3xl text-left border transition-all duration-300 ${
                   isSelected
-                    ? 'bg-[#0A1530] border-[#F5C451] shadow-gold-glow'
-                    : 'bg-[#060B1A]/60 border-white/10 hover:border-white/20'
+                    ? 'bg-[#0E1528] border-[#CCFF00] shadow-[0_0_25px_rgba(204,255,0,0.12)]'
+                    : 'bg-white/[0.02] border-white/10 hover:border-white/20'
                 }`}
               >
                 <div className="flex items-center justify-between font-mono text-xs mb-2">
-                  <span className={isSelected ? 'text-[#F5C451] font-bold' : 'text-slate-400'}>
+                  <span className={isSelected ? 'text-[#CCFF00] font-bold' : 'text-white/40'}>
                     [ DAY {d.dayNum} ]
                   </span>
-                  <span className="text-[11px] text-slate-400 font-mono">
+                  <span className="text-[11px] text-white/40 font-mono">
                     {d.date.split(',')[0]}
                   </span>
                 </div>
@@ -207,9 +215,9 @@ export const DayByDayPreview: React.FC = () => {
         </div>
 
         {/* Selected Day Banner */}
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-[#081024] to-[#040814] border border-white/10 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="p-6 rounded-3xl bg-gradient-to-r from-white/[0.04] to-black border border-white/10 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <span className="font-mono text-xs text-[#F5C451] font-bold uppercase tracking-widest block mb-1">
+            <span className="font-mono text-xs text-[#CCFF00] font-bold uppercase tracking-widest block mb-1">
               [ DAY {current.dayNum} // {current.date} ]
             </span>
             <h3 className="font-headline font-extrabold text-2xl text-white">
@@ -222,9 +230,9 @@ export const DayByDayPreview: React.FC = () => {
 
           <Link
             to="/register"
-            className="btn-voltage text-xs py-2.5 px-6 self-start md:self-auto shrink-0"
+            className="inline-flex items-center gap-2 bg-[#CCFF00] hover:bg-white text-black px-6 py-2.5 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all self-start md:self-auto shrink-0 group"
           >
-            CLAIM PASS (₹0)
+            <RollText text="CLAIM PASS (₹0)" highlightColor="text-black" />
           </Link>
         </div>
 
@@ -233,7 +241,7 @@ export const DayByDayPreview: React.FC = () => {
           {current.events.map((evt, i) => (
             <div
               key={i}
-              className="mdnt-card crosshair-corner p-6 rounded-2xl flex flex-col justify-between group"
+              className="mdnt-card crosshair-corner p-6 rounded-3xl flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
@@ -252,7 +260,7 @@ export const DayByDayPreview: React.FC = () => {
                   )}
                 </div>
 
-                <h4 className="font-headline font-bold text-xl text-white group-hover:text-[#F5C451] transition-colors mb-2">
+                <h4 className="font-headline font-bold text-xl text-white group-hover:text-[#CCFF00] transition-colors mb-2">
                   {evt.name}
                 </h4>
 
@@ -261,7 +269,7 @@ export const DayByDayPreview: React.FC = () => {
                 </p>
 
                 {('highlight' in evt) && (evt as any).highlight && (
-                  <div className="mb-4 font-mono text-[11px] font-bold text-[#F5C451] p-2 rounded-lg bg-[#F5C451]/10 border border-[#F5C451]/30">
+                  <div className="mb-4 font-mono text-[11px] font-bold text-[#CCFF00] p-2 rounded-xl bg-[#CCFF00]/10 border border-[#CCFF00]/30">
                     {(evt as any).highlight}
                   </div>
                 )}
@@ -269,37 +277,15 @@ export const DayByDayPreview: React.FC = () => {
 
               <div className="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[11px] text-slate-400">
                 <div className="flex items-center gap-1.5 truncate max-w-[180px]">
-                  <MapPin className="w-3.5 h-3.5 text-[#F5C451] shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-[#CCFF00] shrink-0" />
                   <span className="truncate">{evt.venue}</span>
                 </div>
-                <span className="text-[#F5C451] font-bold shrink-0">
+                <span className="text-[#CCFF00] font-bold shrink-0">
                   TBA
                 </span>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Schedule TBA Notice for Quiz & Poster Making */}
-        <div className="mt-8 p-6 rounded-2xl bg-[#060B1A] border border-dashed border-[#F5C451]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <span className="font-mono text-xs text-[#F5C451] font-bold tracking-wider">
-              [ SPECIAL LINEUP ADDITION ]
-            </span>
-            <p className="text-sm font-bold text-white">
-              Quiz Competition & Poster Making Competition:
-            </p>
-            <p className="text-xs text-slate-400">
-              Both inter-college competitions are confirmed. Exact day & hall timings are being scheduled and will appear in real time on this portal.
-            </p>
-          </div>
-
-          <Link
-            to="/register"
-            className="btn-voltage text-xs py-2 px-5 shrink-0 self-start sm:self-auto"
-          >
-            Pre-register Now
-          </Link>
         </div>
 
       </div>

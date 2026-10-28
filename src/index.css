@@ -186,4 +186,49 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
+  /* Glitch Text & Hover Animations */
+  @keyframes glitch-anim {
+    0% {
+      transform: translate(0);
+      text-shadow: none;
+    }
+    20% {
+      transform: translate(-2px, 1px);
+      text-shadow: -2px 0 #CCFF00, 2px 0 #8B5CF6;
+    }
+    40% {
+      transform: translate(2px, -1px);
+      text-shadow: 2px 0 #CCFF00, -2px 0 #06B6D4;
+    }
+    60% {
+      transform: translate(-1px, -1px);
+      text-shadow: -1px 0 #CCFF00, 1px 0 #EC4899;
+    }
+    80% {
+      transform: translate(1px, 1px);
+      text-shadow: 1px 0 #CCFF00, -1px 0 #8B5CF6;
+    }
+    100% {
+      transform: translate(0);
+      text-shadow: none;
+    }
+  }
+
+  .hover-glitch:hover {
+    animation: glitch-anim 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 22s linear infinite;
+  }
 }

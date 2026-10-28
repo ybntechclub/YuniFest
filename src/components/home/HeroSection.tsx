@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
-import { CountdownTimer } from './CountdownTimer';
+import { RollText } from '../ui/RollText';
 
 export const HeroSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -9,9 +8,7 @@ export const HeroSection: React.FC = () => {
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.95;
-      videoRef.current.play().catch(() => {
-        // Autoplay policy fallback
-      });
+      videoRef.current.play().catch(() => {});
     }
   }, []);
 
@@ -24,7 +21,7 @@ export const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-between pt-28 pb-10 overflow-hidden bg-black text-white">
+    <section className="relative min-h-[92vh] sm:min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-8 overflow-hidden bg-black text-white">
       
       {/* 1. Background Video Play Effect (Exact MDNT Concert Crowd Video) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -41,39 +38,38 @@ export const HeroSection: React.FC = () => {
         </video>
 
         {/* Cinematic Film Overlays */}
-        {/* Darkening gradient from bottom to top so text & logos pop */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
-        {/* Subtle radial vignette */}
         <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/30 to-black/70" />
       </div>
 
-      {/* 2. Top Padding Spacer for Fixed Floating Nav */}
-      <div className="relative z-10 w-full h-4 sm:h-8" />
+      {/* 2. Top Spacer */}
+      <div className="relative z-10 w-full h-2 sm:h-6" />
 
-      {/* 3. Hero Main Headline (Left-Aligned, Massive All-Caps matching screenshot) */}
-      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 my-auto">
-        <div className="max-w-5xl">
-          <h1 className="font-headline font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5.4rem] xl:text-[6.2rem] tracking-tight text-white uppercase leading-[0.92] select-none">
-            WE CONNECT YOUTH &amp;{' '}
-            CULTURE THROUGH{' '}
+      {/* 3. Hero Main Headline (Proportional, Balanced, Left-Aligned) */}
+      <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 py-4 sm:py-6 my-auto">
+        <div className="max-w-4xl">
+          <h1 className="font-headline font-black text-3xl sm:text-5xl md:text-6xl lg:text-[3.8rem] xl:text-[4.5rem] tracking-tight text-white uppercase leading-[0.96] select-none">
+            WE CONNECT YOUTH &amp;<br className="hidden sm:inline" />
+            CULTURE THROUGH<br className="hidden sm:inline" />
             UNIQUE{' '}
             <span className="text-[#CCFF00] inline">
-              IN-REAL-LIFE EXPERIENCES
+              IN-REAL-LIFE<br className="hidden sm:inline" />
+              EXPERIENCES
             </span>
           </h1>
         </div>
       </div>
 
-      {/* 4. Bottom Hero Row: Left Logos + Right Copy & Buttons (Exact Screenshot Layout) */}
+      {/* 4. Bottom Hero Row: Left Logos + Right Copy & Rolling Buttons */}
       <div className="relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-8 pt-4 pb-2">
-        <div className="flex flex-col lg:flex-row items-end justify-between gap-8 pt-6 border-t border-white/10">
+        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 sm:gap-8 pt-6 border-t border-white/10">
           
-          {/* Left: Monochromatic Sponsor / Department Marks */}
+          {/* Left: Monochromatic Marks */}
           <div className="w-full lg:w-auto">
-            <div className="flex items-center flex-wrap gap-6 sm:gap-10 opacity-75 hover:opacity-100 transition-opacity">
+            <div className="flex items-center flex-wrap gap-6 sm:gap-8 opacity-70 hover:opacity-100 transition-opacity">
               {sponsorLogos.map((brand, i) => (
-                <div key={i} className="flex flex-col select-none">
-                  <span className="font-headline font-black text-sm sm:text-base tracking-wider text-white uppercase">
+                <div key={i} className="flex flex-col select-none hover-glitch cursor-default">
+                  <span className="font-headline font-black text-xs sm:text-sm tracking-wider text-white uppercase">
                     {brand.name}
                   </span>
                   <span className="font-mono text-[9px] text-white/50 tracking-widest uppercase">
@@ -84,28 +80,28 @@ export const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Copy & Dual Action Buttons (Exactly like screenshot) */}
+          {/* Right: Copy & Dual Action Rolling Buttons */}
           <div className="w-full lg:max-w-md space-y-4">
             <p className="font-display text-xs sm:text-sm text-white/80 leading-relaxed">
               <strong className="text-white">YUNIFEST 2026</strong> (YBN University, Ranchi) translates campus energy into moments people actually talk about. One Campus. Three Days. Endless Possibilities.
             </p>
 
             <div className="flex items-center gap-3">
-              {/* Button 1: Dark pill with purple/gold dot */}
+              {/* Button 1: Dark pill with purple/gold dot and rolling text */}
               <Link
                 to="/register"
                 className="inline-flex items-center gap-2 bg-[#181818]/90 hover:bg-white hover:text-black border border-white/20 text-white px-6 py-2.5 rounded-full font-headline text-xs font-bold uppercase tracking-wider transition-all active:scale-95 group shadow-lg"
               >
-                <span>GET PASS</span>
+                <RollText text="GET PASS" highlightColor="text-black group-hover:text-black" />
                 <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] group-hover:scale-125 transition-transform" />
               </Link>
 
-              {/* Button 2: Transparent outline button */}
+              {/* Button 2: Transparent outline button with rolling text */}
               <Link
                 to="/events"
-                className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 border border-white/30 text-white px-6 py-2.5 rounded-full font-headline text-xs font-bold uppercase tracking-wider transition-all active:scale-95"
+                className="inline-flex items-center gap-2 bg-transparent hover:bg-white/10 border border-white/30 text-white px-6 py-2.5 rounded-full font-headline text-xs font-bold uppercase tracking-wider transition-all active:scale-95 group"
               >
-                <span>VIEW OUR WORK</span>
+                <RollText text="VIEW EVENTS" highlightColor="text-[#CCFF00]" />
               </Link>
             </div>
           </div>
