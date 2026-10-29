@@ -12,10 +12,12 @@
 
 | Route | Page / Feature | Description |
 | :--- | :--- | :--- |
-| `/` | **Festival Home** | Cinematic animated hero, live countdown to Dec 10 2026, fest overview, 3-day preview, coordinators list, official rules, campus venue/transit map, and FAQs. |
+| `/` | **Festival Home** | Cinematic animated video hero, kinetic ticker, stage countdown, flagship showcase cards, interactive 3-day lineup preview, leadership preview, regulations banner, campus arena maps, FAQ, and MDNT-grade rotating circular arch footer with cropped bottom wordmark. |
 | `/events` | **Events Explorer** | Complete catalogue of 15+ official events. Real-time search, filters by eligibility (Inter-College vs YBN only), day, and category. Modal with full rules and direct registration link. |
 | `/schedule` | **Three-Day Programme** | Interactive timeline with tabs for Day 1 (Tech & Innovation), Day 2 (Cultural Showcases), Day 3 (Grand Finale & DJ), and Schedule TBA (Quiz & Poster Making). |
-| `/register` | **Participant Registration** | **Step 1:** Prominent selection between **Option A (YBN Student)** and **Option B (Other College Student)**.<br>**Step 2:** Form with auto-filtered eligible events, dynamic fields (Solo/Duo/Group for Dance/Singing, BGMI/Free Fire IGN & ID for Gaming, Team roster for Treasure Hunting), validation, and duplicate prevention. |
+| `/regulations` | **Campus Regulations & ID** | Complete institutional code of conduct, proctorial mandate on physical ID cards, disciplinary policies, and eligibility rules. |
+| `/leadership` | **Leadership & Mentors** | Full roster of all 18 official coordinators and faculty mentors across all 9 event verticals. |
+| `/register` | **Participant Registration** | **Step 1:** Institutional affiliation selection between **Option A (YBN Student)** and **Option B (Other College Student)**.<br>**Step 2:** Form with auto-filtered eligible events, dynamic fields (Solo/Duo/Group for Dance/Singing, BGMI/Free Fire IGN & ID for Gaming, Team roster for Treasure Hunting), validation, and duplicate prevention. |
 | `/register/success` | **Pass & Confirmation** | Celebratory confetti, official Registration Reference (`YUNI-2026-XXXX`), scannable verification QR Code badge, participant summary, and one-click PDF print/save. |
 | `/admin/login` | **Organizer Portal Login** | Secure authentication for committee and faculty mentors. Compatible with Supabase Auth with quick evaluation switcher (`organizer@ybn.edu.in` / `yunifest2026`). |
 | `/admin` | **Protected Organizer Dashboard** | Real-time metric cards (total entries, YBN vs visiting college split, status counts), **Treasure Hunting capacity tracker (capped at 25 entries)**, search & multi-filter table, detail inspect modal, status toggles (Confirmed/Pending/Waitlisted/Rejected), Excel-compatible CSV export, event controls (schedule/venue/capacity/gate toggles), and downloadable live registration vector QR generator. |
@@ -52,7 +54,7 @@ The complete SQL schema script is located at `supabase/schema.sql`.
 
 ---
 
-## 4. Setup & Running Locally
+## 4. Setup, Local Run & Building
 
 ### Step 1: Install Dependencies
 ```bash
@@ -63,6 +65,7 @@ npm install
 ```bash
 npm run dev
 ```
+*(Runs on `http://127.0.0.1:3000`)*
 
 ### Step 3: Production Build
 ```bash
@@ -72,20 +75,36 @@ npm run preview
 
 ---
 
-## 5. Steps to Create the First Authorized Admin Account
+## 5. Deployment Guide (Vercel & Lovable)
 
-1. Go to your [Supabase Dashboard](https://supabase.com/dashboard).
-2. Open the **SQL Editor** and run the contents of `supabase/schema.sql`.
-3. Open **Authentication** -> **Users** and click **Add User** -> **Create User** with an official organizer email (e.g. `organizer@ybn.edu.in`) and a secure password.
-4. Copy the generated `User UID` from the Auth table.
-5. In the **SQL Editor**, execute:
-   ```sql
-   INSERT INTO public.admin_users (user_id, email, role)
-   VALUES ('<COPIED_USER_UID>', 'organizer@ybn.edu.in', 'superadmin');
-   ```
-6. Add your Supabase project keys to `.env`:
-   ```env
-   VITE_SUPABASE_URL=https://your-project.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-anon-key
-   ```
-7. Log in via `/admin/login` using those credentials.
+### Deploying to Vercel:
+1. Push your repository to GitHub.
+2. Sign in to [Vercel](https://vercel.com) and click **Add New Project**.
+3. Import your GitHub repository.
+4. Set Build Settings:
+   - **Framework Preset:** Vite
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+5. (Optional) Set Environment Variables in Vercel:
+   - `VITE_SUPABASE_URL` = `https://your-project.supabase.co`
+   - `VITE_SUPABASE_ANON_KEY` = `your-anon-key`
+6. Click **Deploy**.
+7. The included `vercel.json` already contains SPA client-side routing rewrites (`/(.*) -> /index.html`), ensuring page refreshes on `/events`, `/schedule`, `/regulations`, etc. will never produce 404 errors.
+
+---
+
+## 6. How Student Maintainers Can Update the Application
+
+1. **Update Events, Rules, Venues or Timings:**
+   - Edit `src/data/initialEvents.ts` — contains all 15+ event items, categories, descriptions, capacities, and rules.
+   - Alternatively, edit them live via the Organizer Dashboard at `/admin` (Events tab).
+
+2. **Update Coordinators and Faculty Mentors:**
+   - Edit `src/data/coordinators.ts` — cleanly structured array of all event coordinator pairs.
+
+3. **Update FAQs:**
+   - Edit `src/data/faqs.ts` — question and answer list.
+
+4. **Change Brand Colors or Styling:**
+   - Tailwind configuration: `tailwind.config.js`
+   - Global animations, button styles, film grain noise: `src/index.css`

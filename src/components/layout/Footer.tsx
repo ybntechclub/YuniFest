@@ -7,12 +7,12 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-black text-white relative overflow-hidden pt-20">
       
-      {/* 1. Interactive Rotating Text Arch Callout (Matching Screenshot 1) */}
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 mb-20">
-        <div className="relative w-full max-w-[540px] sm:max-w-[620px] aspect-square mx-auto flex items-center justify-center">
+      {/* 1. Rotating Text Arch Callout - Cropped at the lime line like MDNT */}
+      <div className="relative w-full overflow-hidden pt-12 sm:pt-20">
+        <div className="relative max-w-4xl mx-auto h-[290px] sm:h-[380px] flex items-center justify-center overflow-hidden">
           
           {/* Rotating Circular Text SVG */}
-          <div className="absolute inset-0 w-full h-full animate-spin-slow pointer-events-none select-none">
+          <div className="absolute -top-10 sm:-top-16 left-1/2 -translate-x-1/2 w-[460px] h-[460px] sm:w-[620px] sm:h-[620px] animate-spin-slow pointer-events-none select-none">
             <svg viewBox="0 0 500 500" className="w-full h-full">
               <defs>
                 <path
@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
                   fill="none"
                 />
               </defs>
-              <text className="font-headline font-black text-[22px] tracking-[0.22em] uppercase">
+              <text className="font-headline font-black text-[20px] sm:text-[23px] tracking-[0.24em] uppercase">
                 <textPath href="#circlePath" startOffset="0%">
                   <tspan fill="#CCFF00">LET'S CELEBRATE </tspan>
                   <tspan fill="#FFFFFF">TOGETHER • YUNIFEST 2026 • ONE CAMPUS • </tspan>
@@ -32,21 +32,21 @@ export const Footer: React.FC = () => {
             </svg>
           </div>
 
-          {/* Center Callout Box inside the Rotating Arch */}
-          <div className="relative z-10 text-center max-w-sm px-6 py-8 flex flex-col items-center">
-            <h3 className="font-headline font-black text-2xl sm:text-3xl lg:text-4xl text-white uppercase leading-[1.05] tracking-tight mb-3">
-              Ready to claim your spot at Jharkhand's biggest fest?
+          {/* Center Callout Box inside the Arch */}
+          <div className="relative z-10 text-center max-w-md px-6 flex flex-col items-center mt-6 sm:mt-12">
+            <h3 className="font-headline font-black text-2xl sm:text-4xl text-white uppercase leading-[1.05] tracking-tight mb-2 sm:mb-3">
+              One Campus. Three Days.<br />Endless Possibilities.
             </h3>
-            <p className="font-display text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
-              Join thousands of students on December 10, 11 & 12, 2026 at YBN University, Ranchi.
+            <p className="font-display text-xs sm:text-sm text-slate-300 mb-5 max-w-sm leading-relaxed">
+              Dec 10, 11 &amp; 12, 2026 • YBN University, Ranchi • Free ₹0 Pass
             </p>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group"
+              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-2.5 sm:py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group"
             >
               <RollText text="CLAIM PASS (₹0)" highlightColor="text-black" />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
+              <span className="w-2 h-2 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
 

@@ -1,126 +1,182 @@
 import React from 'react';
-import { ShieldAlert, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { ShieldAlert, CheckCircle2, AlertTriangle, ArrowRight, Sparkles } from 'lucide-react';
+import { RollText } from '../ui/RollText';
 
 export const RulesSection: React.FC = () => {
   return (
-    <section id="rules" className="py-24 bg-[#040814] relative border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="rules" className="py-20 sm:py-24 bg-black relative border-t border-white/10">
+      
+      {/* Background glow */}
+      <div className="absolute top-1/3 left-10 w-[500px] h-[350px] bg-[#CCFF00]/5 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
         {/* Header */}
-        <div className="max-w-3xl mb-16">
-          <div className="font-mono text-xs uppercase tracking-widest text-[#F5C451] mb-3">
-            [ 04 // PROTOCOLS & ELIGIBILITY ]
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+          <div className="max-w-3xl">
+            <div className="font-mono text-xs uppercase tracking-widest text-[#CCFF00] mb-3 flex items-center gap-2">
+              <span>[ 04 // PROTOCOLS &amp; ELIGIBILITY ]</span>
+            </div>
+            <h2 className="font-headline font-black text-3xl sm:text-5xl text-white uppercase tracking-tight">
+              CAMPUS REGULATIONS &amp; <span className="text-[#CCFF00]">ENTRY PROTOCOLS</span>
+            </h2>
+            <p className="font-display text-slate-300 text-sm mt-3 leading-relaxed max-w-xl">
+              Formulated by the Proctorial Board of YBN University. All attendees are bound by festival rules, zero-ragging mandates, and entry checks.
+            </p>
           </div>
-          <h2 className="font-headline font-black text-3xl sm:text-5xl text-white uppercase tracking-tight">
-            OFFICIAL REGULATIONS & <span className="gold-gradient-text">ADMISSION RULES</span>
-          </h2>
-          <p className="font-display text-slate-400 text-sm mt-3 leading-relaxed">
-            Formulated by the Proctorial Board and Fest Steering Committee of YBN University. All attendees are bound by campus decorum.
-          </p>
+
+          <Link
+            to="/regulations"
+            className="inline-flex items-center gap-2 text-xs font-headline font-bold uppercase tracking-wider text-[#CCFF00] hover:text-white transition-colors group shrink-0"
+          >
+            <RollText text="READ FULL REGULATIONS POLICY" highlightColor="text-white" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+          </Link>
         </div>
 
-        {/* Mandatory ID Clause - Huge High-Impact Industrial Banner */}
-        <div className="mb-14 p-8 rounded-3xl bg-gradient-to-r from-[#1A1002] via-[#261704] to-[#120B02] border-2 border-[#F5C451] shadow-card-elevated">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="font-mono text-xs uppercase tracking-widest text-[#F5C451] font-bold">
-                [ STRICT PROCTORIAL MANDATE ]
-              </div>
-              <h3 className="font-headline font-black text-2xl sm:text-3xl text-white">
-                ORIGINAL PHYSICAL ID CARD MANDATORY AT GATES
+        {/* Mandatory ID Clause - High-Impact Industrial Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="mb-10 p-8 sm:p-10 rounded-3xl bg-gradient-to-r from-[#171202] via-[#241B04] to-[#120D02] border-2 border-[#CCFF00] shadow-2xl relative overflow-hidden"
+        >
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-3xl">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#CCFF00] font-bold">
+                [ STRICT MANDATORY ADMISSION MANDATE ]
+              </span>
+              <h3 className="font-headline font-black text-2xl sm:text-3xl text-white uppercase">
+                ORIGINAL PHYSICAL ID CARD MANDATORY AT ALL CAMPUS GATES
               </h3>
-              <p className="font-display text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-                Every registered participant (YBN University students and external college delegates) must produce their physical institutional ID card at Campus Gate 1 & 2. Digital photos alone are not admitted.
+              <p className="font-display text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Every registered participant (both YBN University students and external college delegates) must produce their physical institutional ID card at Campus Gate 1 &amp; 2. Digital photos, phone gallery screenshots, or unverified photocopies will not be accepted.
               </p>
             </div>
 
             <Link
               to="/register"
-              className="btn-voltage text-xs py-3 px-6 shrink-0 self-start md:self-auto"
+              className="inline-flex items-center gap-2 bg-[#CCFF00] hover:bg-white text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 shrink-0 self-start md:self-auto group"
             >
-              REGISTER PASS
+              <RollText text="CLAIM PASS (₹0)" highlightColor="text-black" />
+              <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </motion.div>
 
-        {/* 2-Column High Contrast Comparison */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* 2 Streamlined High-Contrast Eligibility Summaries */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
           
-          {/* Card A: Other College Participants */}
-          <div className="mdnt-card crosshair-corner p-8 rounded-3xl border-cyan-500/30">
-            <div className="flex items-center justify-between mb-6">
-              <span className="font-mono text-xs font-bold text-cyan-400">
-                [ CATEGORY A // INTER-COLLEGE ]
-              </span>
-              <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 uppercase">
-                OPEN ENTRY
-              </span>
+          {/* Card A: Visiting College Students */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mdnt-card crosshair-corner p-8 rounded-3xl border-cyan-500/30 flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between font-mono text-xs font-bold text-cyan-400 mb-4">
+                <span>[ OPTION B // VISITING DELEGATES ]</span>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-500/40 uppercase">
+                  OPEN NATIONWIDE
+                </span>
+              </div>
+
+              <h4 className="font-headline font-bold text-2xl text-white uppercase mb-2">
+                External College Students
+              </h4>
+
+              <p className="font-display text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+                Students from any recognized college or university across India can register with ₹0 fee. Open to 9 flagship events:
+              </p>
+
+              <div className="grid grid-cols-2 gap-2 text-xs font-display text-slate-200">
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> Dance Competition
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> Singing Showdown
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> BGMI &amp; Free Fire
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> Treasure Hunt (Cap: 25)
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> Quiz Battle
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" /> Stand-up Comedy
+                </span>
+              </div>
             </div>
 
-            <h3 className="font-headline font-bold text-2xl text-white mb-2">
-              Visiting College Students
-            </h3>
+            <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Required: College Student ID</span>
+              <Link to="/regulations" className="text-cyan-400 hover:text-white font-bold flex items-center gap-1">
+                VIEW RULES →
+              </Link>
+            </div>
+          </motion.div>
 
-            <p className="text-xs text-slate-400 mb-6 leading-relaxed">
-              Students from any recognized university or college in India are eligible to register and compete in these 9 flagship events:
-            </p>
+          {/* Card B: Bonafide YBN Students */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mdnt-card crosshair-corner p-8 rounded-3xl border-[#CCFF00]/30 flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between font-mono text-xs font-bold text-[#CCFF00] mb-4">
+                <span>[ OPTION A // YBN STUDENTS ]</span>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#CCFF00]/20 text-[#CCFF00] border border-[#CCFF00]/40 uppercase">
+                  ALL ACCESS
+                </span>
+              </div>
 
-            <ul className="space-y-3 font-display text-xs sm:text-sm text-slate-200">
-              {[
-                "Dance Competition (Solo, Duo, Group)",
-                "Singing Competition (Solo & Duo)",
-                "Quiz Competition (Teams of 2)",
-                "Poster Making Competition",
-                "Reel Making Competition (30-60s)",
-                "Mimicry Competition",
-                "Stand-up Comedy",
-                "Gaming Tournament — Free Fire or BGMI",
-                "Treasure Hunting (Strictly Capped to 25 Teams)"
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <h4 className="font-headline font-bold text-2xl text-white uppercase mb-2">
+                YBN University Students
+              </h4>
 
-          {/* Card B: YBN University Students */}
-          <div className="mdnt-card crosshair-corner p-8 rounded-3xl border-[#F5C451]/30">
-            <div className="flex items-center justify-between mb-6">
-              <span className="font-mono text-xs font-bold text-[#F5C451]">
-                [ CATEGORY B // INTERNAL ACCESS ]
-              </span>
-              <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#F5C451]/20 text-[#F5C451] border border-[#F5C451]/40 uppercase">
-                ALL ACCESS
-              </span>
+              <p className="font-display text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+                Students enrolled in any YBN University faculty, school, or department enjoy unrestricted access across all fest categories:
+              </p>
+
+              <div className="grid grid-cols-2 gap-2 text-xs font-display text-slate-200">
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]" /> Model Presentation
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]" /> Fashion Runway
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]" /> Rangoli &amp; Craft
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]" /> Reel Making Contest
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]" /> Mega DJ Night Access
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]" /> Stage Ceremonies
+                </span>
+              </div>
             </div>
 
-            <h3 className="font-headline font-bold text-2xl text-white mb-2">
-              YBN University Students
-            </h3>
-
-            <p className="text-xs text-slate-400 mb-6 leading-relaxed">
-              Enrolled students across all faculties of YBN University can compete in all inter-college competitions plus exclusive internal showcases:
-            </p>
-
-            <ul className="space-y-3 font-display text-xs sm:text-sm text-slate-200">
-              {[
-                "All 9 Open Inter-College Competitions",
-                "Model Presentation Competition (Engineering & Agri)",
-                "Face Painting Competition",
-                "Creative Craft Workshop Masterclass",
-                "Ramp Walk / Grand Fashion Show Runway",
-                "Food Fest & Flea Market Exhibitions"
-              ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#F5C451] shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <div className="mt-8 pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
+              <span>Required: University Roll No</span>
+              <Link to="/regulations" className="text-[#CCFF00] hover:text-white font-bold flex items-center gap-1">
+                VIEW RULES →
+              </Link>
+            </div>
+          </motion.div>
 
         </div>
 
