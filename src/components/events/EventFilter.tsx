@@ -30,34 +30,34 @@ export const EventFilter: React.FC<EventFilterProps> = ({
   const isFiltered = searchQuery !== '' || selectedEligibility !== 'all' || selectedDay !== 'all' || selectedCategory !== 'all';
 
   return (
-    <div className="bg-[#0D2345]/80 border border-slate-700/80 rounded-2xl p-5 mb-8 shadow-card-elevated">
+    <div className="bg-white border-[1.5px] border-slate-900 rounded-[28px] p-6 mb-8 shadow-solid-pop text-slate-950">
       {/* Top Search & Reset Row */}
       <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between mb-5">
         
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search events, competitions, games, or coordinators..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#07152F] border border-slate-700 focus:border-[#F5C451] focus:outline-none text-white text-xs sm:text-sm placeholder:text-slate-400"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] focus:outline-none text-slate-950 text-xs sm:text-sm placeholder:text-slate-500 font-medium"
           />
         </div>
 
         {/* Counter & Clear Button */}
         <div className="flex items-center justify-between md:justify-end gap-3 text-xs">
-          <span className="text-slate-300">
-            Showing <strong className="text-[#F5C451]">{totalFiltered}</strong> events
+          <span className="font-mono text-slate-600 font-bold">
+            Showing <strong className="text-[#2B59FF]">{totalFiltered}</strong> events
           </span>
           {isFiltered && (
             <button
               type="button"
               onClick={onReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#07152F] hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FEF08A] hover:bg-yellow-300 text-slate-950 font-display font-bold border border-slate-900 transition-colors shadow-sm"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#F5C451]" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filters</span>
             </button>
           )}
@@ -66,17 +66,17 @@ export const EventFilter: React.FC<EventFilterProps> = ({
       </div>
 
       {/* Filter Selectors Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         
         {/* Eligibility Filter */}
         <div>
-          <label className="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[11px] uppercase font-mono font-bold tracking-wider text-slate-600 mb-1.5">
             Participant Eligibility
           </label>
           <select
             value={selectedEligibility}
             onChange={(e) => onEligibilityChange(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-xs sm:text-sm text-slate-200 focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none shadow-sm"
           >
             <option value="all">All Eligibility Types</option>
             <option value="outside_eligible">Open to Other College Students</option>
@@ -86,39 +86,39 @@ export const EventFilter: React.FC<EventFilterProps> = ({
 
         {/* Day Filter */}
         <div>
-          <label className="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">
+          <label className="block text-[11px] uppercase font-mono font-bold tracking-wider text-slate-600 mb-1.5">
             Programme Day
           </label>
           <select
             value={selectedDay}
             onChange={(e) => onDayChange(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-xs sm:text-sm text-slate-200 focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none shadow-sm"
           >
-            <option value="all">All Days (Dec 10-12 & TBA)</option>
-            <option value="day_1">Day 1 — Dec 10 (Tech & Innovation)</option>
-            <option value="day_2">Day 2 — Dec 11 (Cultural & Showcases)</option>
-            <option value="day_3">Day 3 — Dec 12 (Finale & DJ Night)</option>
-            <option value="tbd">Schedule to be announced</option>
+            <option value="all">All Days (Dec 10-12 &amp; TBA)</option>
+            <option value="day_1">Day 1 — Dec 10 (Tech &amp; Innovation)</option>
+            <option value="day_2">Day 2 — Dec 11 (Cultural &amp; Showcases)</option>
+            <option value="day_3">Day 3 — Dec 12 (Finale &amp; DJ Night)</option>
+            <option value="tbd">Schedule TBA (Quiz, Poster Making, etc.)</option>
           </select>
         </div>
 
         {/* Category Filter */}
         <div>
-          <label className="block text-[11px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">
-            Event Category
+          <label className="block text-[11px] uppercase font-mono font-bold tracking-wider text-slate-600 mb-1.5">
+            Discipline Category
           </label>
           <select
             value={selectedCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-xs sm:text-sm text-slate-200 focus:outline-none"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none shadow-sm"
           >
-            <option value="all">All Categories</option>
-            <option value="gaming">Gaming & Esports</option>
-            <option value="technical">Technical & Innovation</option>
-            <option value="cultural">Cultural & Performing Arts</option>
-            <option value="creative">Creative & Fine Arts</option>
-            <option value="competition">Quizzes & Competitions</option>
-            <option value="special">Special Showcases & DJ</option>
+            <option value="all">All Disciplines (15+ Events)</option>
+            <option value="technical">Technical &amp; Innovation</option>
+            <option value="cultural">Performing Arts (Dance, Singing, Mimicry)</option>
+            <option value="gaming">Esports &amp; Gaming (BGMI, Free Fire)</option>
+            <option value="competition">Competitions &amp; Treasure Hunt</option>
+            <option value="creative">Creative Arts &amp; Design</option>
+            <option value="special">Grand Finale &amp; Special Showcases</option>
           </select>
         </div>
 

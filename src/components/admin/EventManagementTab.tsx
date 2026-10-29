@@ -60,19 +60,18 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
       name,
       description,
       event_day: eventDay,
-      timing_display: timingDisplay.trim() || 'Schedule to be announced',
-      venue: venue.trim(),
+      timing_display: timingDisplay,
+      venue,
       eligible_participant_types: eligibleTypes,
-      capacity: isNaN(parsedCapacity as any) ? null : parsedCapacity,
+      capacity: parsedCapacity,
       capacity_unit: capacityUnit,
-      student_coordinator: studentCoord.trim(),
-      faculty_coordinator: facultyCoord.trim(),
+      student_coordinator: studentCoord,
+      faculty_coordinator: facultyCoord,
       registration_open: isOpen,
     };
 
     await registrationStore.updateEvent(updated);
     await onRefreshEvents();
-
     setSaveSuccess(true);
     setTimeout(() => {
       setSaveSuccess(false);
@@ -81,20 +80,20 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-slate-950">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="font-display font-bold text-white text-xl">
-            Event Controls, Capacities & Schedules
+          <h3 className="font-headline font-black text-slate-950 text-2xl uppercase">
+            Event Controls, Capacities &amp; Schedules
           </h3>
-          <p className="text-xs text-slate-300 mt-1">
+          <p className="text-xs text-slate-600 mt-1 font-display">
             Configure registration caps (e.g. 25 slots for Treasure Hunting), update timings from "TBA", or open/close entry gates.
           </p>
         </div>
       </div>
 
       {/* Events Table / Card List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.map((evt) => {
           const regCount = registrationStore.getRegistrationCount(evt.id);
           const isFull = evt.capacity !== null && regCount >= evt.capacity;
@@ -102,74 +101,73 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
           return (
             <div
               key={evt.id}
-              className="p-5 rounded-2xl bg-[#0D2345] border border-slate-700/80 hover:border-[#F5C451]/40 transition-all flex flex-col justify-between"
+              className="p-6 rounded-[28px] bg-white border-[1.5px] border-slate-900 shadow-sm hover:shadow-solid-pop transition-all flex flex-col justify-between"
             >
               <div>
                 {/* Header status */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#07152F] text-slate-300 border border-slate-700">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-300">
                     {evt.event_day === 'tbd' ? 'Date TBA' : evt.event_day.replace('_', ' ').toUpperCase()}
                   </span>
 
                   <button
                     type="button"
                     onClick={() => handleToggleOpen(evt)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border transition-colors ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border transition-colors ${
                       evt.registration_open
-                        ? 'bg-emerald-950 text-emerald-300 border-emerald-500/40'
-                        : 'bg-red-950 text-red-300 border-red-500/40'
+                        ? 'bg-emerald-100 text-emerald-900 border-emerald-400'
+                        : 'bg-red-100 text-red-900 border-red-400'
                     }`}
                   >
                     <span>{evt.registration_open ? 'Gate Open' : 'Gate Closed'}</span>
                   </button>
                 </div>
 
-                <h4 className="font-display font-bold text-white text-base mb-1">
+                <h4 className="font-headline font-bold text-slate-950 text-lg mb-1 leading-snug">
                   {evt.name}
                 </h4>
 
-                <p className="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
+                <p className="text-xs text-slate-600 line-clamp-2 mb-4 leading-relaxed font-display">
                   {evt.description}
                 </p>
 
                 {/* Capacity Counter */}
-                <div className="p-3 rounded-xl bg-[#07152F] border border-slate-800 text-xs space-y-1 mb-4">
+                <div className="p-3.5 rounded-2xl bg-[#F6F7F9] border border-slate-300 text-xs font-mono space-y-1 mb-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Current Registrations:</span>
-                    <strong className={`font-mono ${isFull ? 'text-red-400 font-bold' : 'text-[#F5C451]'}`}>
+                    <span className="text-slate-500 font-bold">Registrations:</span>
+                    <strong className={`font-mono ${isFull ? 'text-red-600 font-bold' : 'text-[#2B59FF]'}`}>
                       {regCount} {evt.capacity ? `/ ${evt.capacity} ${evt.capacity_unit}` : '(No Cap)'}
                     </strong>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Eligibility:</span>
-                    <span className="text-slate-300 font-semibold">
+                    <span className="text-slate-500 font-bold">Eligibility:</span>
+                    <span className="text-slate-800 font-semibold">
                       {evt.eligible_participant_types === 'all' ? 'All Colleges' : 'YBN Internal Only'}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Timing:</span>
-                    <span className="text-slate-300">{evt.timing_display}</span>
+                    <span className="text-slate-500 font-bold">Timing:</span>
+                    <span className="text-slate-800">{evt.timing_display}</span>
                   </div>
                 </div>
 
                 {/* Coordinators */}
-                <div className="text-[11px] text-slate-400 space-y-0.5 mb-4">
-                  <div>Student: <span className="text-slate-200">{evt.student_coordinator}</span></div>
-                  <div>Faculty: <span className="text-slate-200">{evt.faculty_coordinator}</span></div>
+                <div className="text-[11px] font-mono text-slate-600 space-y-0.5 mb-4">
+                  <div>Student: <span className="text-slate-950 font-bold">{evt.student_coordinator}</span></div>
+                  <div>Faculty: <span className="text-slate-950 font-bold">{evt.faculty_coordinator}</span></div>
                 </div>
               </div>
 
-              {/* Edit button */}
-              <div className="pt-3 border-t border-slate-800">
+              <div className="pt-3 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => handleStartEdit(evt)}
-                  className="w-full py-2 px-3 rounded-lg text-xs font-semibold text-white bg-[#112C57] hover:bg-[#1A3660] border border-[#F5C451]/30 hover:border-[#F5C451] flex items-center justify-center gap-1.5 transition-colors"
+                  className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-display font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-300 transition-colors"
                 >
-                  <Edit3 className="w-3.5 h-3.5 text-[#F5C451]" />
-                  <span>Configure Settings & Schedule</span>
+                  <Edit3 className="w-3.5 h-3.5 text-[#2B59FF]" />
+                  <span>Edit Event &amp; Capacity</span>
                 </button>
               </div>
             </div>
@@ -177,195 +175,198 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
         })}
       </div>
 
-      {/* Edit Event Configuration Modal */}
+      {/* Edit Modal */}
       {editingEvent && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-          <div className="relative w-full max-w-2xl bg-[#0D2345] border border-[#F5C451]/40 rounded-2xl shadow-2xl p-6 sm:p-8">
-            <button
-              type="button"
-              onClick={() => setEditingEvent(null)}
-              className="absolute top-5 right-5 p-2 rounded-lg bg-[#07152F] text-slate-300 hover:text-white border border-slate-700"
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+            
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
+              <h3 className="font-headline font-black text-xl text-slate-950 uppercase">
+                Edit Event Parameters
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingEvent(null)}
+                className="p-1 rounded-lg text-slate-500 hover:text-slate-950"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            <h3 className="font-display font-bold text-xl text-white mb-1">
-              Edit Event: {editingEvent.name}
-            </h3>
-            <p className="text-xs text-slate-300 mb-6">
-              Update capacity limits, schedule timings, eligibility restrictions, and coordinators.
-            </p>
-
-            <form onSubmit={handleSaveModal} className="space-y-4 text-xs">
-              
+            <form onSubmit={handleSaveModal} className="space-y-4">
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Event Title</label>
+                <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                  Event Title
+                </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F6F7F9] border border-slate-300 focus:border-[#2B59FF] text-xs font-bold text-slate-950"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Description</label>
+                <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                  Description
+                </label>
                 <textarea
                   rows={2}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#F6F7F9] border border-slate-300 focus:border-[#2B59FF] text-xs text-slate-950"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Programme Day</label>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Event Day
+                  </label>
                   <select
                     value={eventDay}
                     onChange={(e) => setEventDay(e.target.value as EventDay)}
-                    className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs font-bold text-slate-950"
                   >
-                    <option value="day_1">Day 1 (Dec 10) — Technical & Innovation</option>
-                    <option value="day_2">Day 2 (Dec 11) — Cultural & Showcases</option>
-                    <option value="day_3">Day 3 (Dec 12) — Grand Finale</option>
-                    <option value="tbd">Schedule to be announced (TBD)</option>
+                    <option value="day_1">Day 1 (Dec 10)</option>
+                    <option value="day_2">Day 2 (Dec 11)</option>
+                    <option value="day_3">Day 3 (Dec 12)</option>
+                    <option value="tbd">Schedule TBA</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Timing Display</label>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Eligibility
+                  </label>
+                  <select
+                    value={eligibleTypes}
+                    onChange={(e) => setEligibleTypes(e.target.value as EligibilityType)}
+                    className="w-full px-3 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs font-bold text-slate-950"
+                  >
+                    <option value="all">All Colleges Open</option>
+                    <option value="ybn_only">YBN Students Only</option>
+                    <option value="outside_only">Visiting Only</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Timing Display
+                  </label>
                   <input
                     type="text"
                     value={timingDisplay}
                     onChange={(e) => setTimingDisplay(e.target.value)}
-                    placeholder="e.g. 10:00 AM - 1:00 PM or Schedule to be announced"
-                    className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                    placeholder="e.g. 10:00 AM - 01:00 PM"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs text-slate-950"
                   />
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Venue Location</label>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Venue
+                  </label>
                   <input
                     type="text"
                     value={venue}
                     onChange={(e) => setVenue(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                    placeholder="e.g. Amphitheatre Stage"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs text-slate-950"
                   />
-                </div>
-
-                <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Eligibility</label>
-                  <select
-                    value={eligibleTypes}
-                    onChange={(e) => setEligibleTypes(e.target.value as EligibilityType)}
-                    className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
-                  >
-                    <option value="all">Open to Both YBN & Outside Colleges</option>
-                    <option value="ybn_only">YBN University Students Only</option>
-                    <option value="outside_only">Visiting Colleges Only</option>
-                  </select>
                 </div>
               </div>
 
-              {/* Capacity settings */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-xl bg-[#07152F] border border-slate-800">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">
-                    Maximum Capacity Limit (e.g. 25 for Treasure Hunt)
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Max Capacity (Leave blank for unlimited)
                   </label>
                   <input
                     type="number"
                     value={capacity}
                     onChange={(e) => setCapacity(e.target.value)}
-                    placeholder="Leave empty for unlimited attendance"
-                    className="w-full px-3 py-2 rounded-lg bg-[#0D2345] border border-slate-700 focus:border-[#F5C451] text-white text-xs font-mono"
+                    placeholder="e.g. 25"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs text-slate-950 font-bold"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Count Unit</label>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Capacity Unit
+                  </label>
                   <select
                     value={capacityUnit}
-                    onChange={(e) => setCapacityUnit(e.target.value as any)}
-                    className="w-full px-3 py-2 rounded-lg bg-[#0D2345] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                    onChange={(e) => setCapacityUnit(e.target.value as 'participants' | 'teams')}
+                    className="w-full px-3 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs font-bold text-slate-950"
                   >
-                    <option value="participants">Individual Participants</option>
                     <option value="teams">Teams</option>
+                    <option value="participants">Participants</option>
                   </select>
                 </div>
               </div>
 
-              {/* Coordinators */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Student Coordinator</label>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Student Coordinator
+                  </label>
                   <input
                     type="text"
                     value={studentCoord}
                     onChange={(e) => setStudentCoord(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs text-slate-950 font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Faculty Coordinator</label>
+                  <label className="block text-xs font-mono font-bold text-slate-700 mb-1">
+                    Faculty Coordinator
+                  </label>
                   <input
                     type="text"
                     value={facultyCoord}
                     onChange={(e) => setFacultyCoord(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-white text-xs"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#F6F7F9] border border-slate-300 text-xs text-slate-950 font-medium"
                   />
                 </div>
               </div>
 
-              {/* Open / Close Registration checkbox */}
-              <div className="pt-2">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div className="pt-2 flex items-center justify-between">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-mono font-bold text-slate-900">
                   <input
                     type="checkbox"
                     checked={isOpen}
                     onChange={(e) => setIsOpen(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#F5C451] bg-[#07152F] border-slate-700"
+                    className="w-4 h-4 rounded text-slate-950"
                   />
-                  <span className="text-slate-200 font-bold">
-                    Registration Gate is Open for this Event
-                  </span>
+                  <span>Registration Open for this Event</span>
                 </label>
               </div>
 
-              {/* Footer Buttons */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setEditingEvent(null)}
-                  className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 bg-[#07152F] hover:bg-slate-800 border border-slate-700"
+                  className="px-4 py-2 rounded-xl text-xs font-display font-bold text-slate-600 hover:text-slate-950"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-lg text-xs font-bold text-[#07152F] bg-gradient-to-r from-[#FDE047] to-[#F5C451] hover:brightness-110 shadow-gold-glow flex items-center gap-1.5"
+                  className="btn-voltage text-xs py-2 px-6"
                 >
-                  {saveSuccess ? (
-                    <>
-                      <Check className="w-4 h-4 text-emerald-950" />
-                      <span>Changes Saved!</span>
-                    </>
-                  ) : (
-                    <span>Save Event Changes</span>
-                  )}
+                  {saveSuccess ? 'Changes Saved!' : 'Save Parameters'}
                 </button>
               </div>
-
             </form>
+
           </div>
         </div>
       )}
-
     </div>
   );
 };

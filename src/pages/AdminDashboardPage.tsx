@@ -56,7 +56,7 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#07152F] text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#F6F7F9] text-slate-950 flex flex-col">
       <AdminNavbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -67,8 +67,8 @@ export const AdminDashboardPage: React.FC = () => {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {isLoading ? (
           <div className="py-24 text-center">
-            <div className="w-8 h-8 border-2 border-[#F5C451] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-slate-400 text-sm">Loading organizer dashboard...</p>
+            <div className="w-8 h-8 border-2 border-slate-900 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-slate-600 text-sm font-mono">Loading organizer dashboard...</p>
           </div>
         ) : (
           <>

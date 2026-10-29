@@ -26,159 +26,135 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-      <div className="relative w-full max-w-xl bg-[#0D2345] border border-[#F5C451]/40 rounded-2xl shadow-2xl p-6 sm:p-8">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+      <div className="relative w-full max-w-xl bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg p-6 sm:p-8 text-slate-950">
         
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-lg bg-[#07152F] text-slate-300 hover:text-white border border-slate-700"
+          className="absolute top-6 right-6 p-2 rounded-full bg-white text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Modal Header */}
         <div className="mb-6">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-mono text-sm font-bold text-[#F5C451] px-2 py-0.5 rounded bg-[#07152F] border border-[#F5C451]/30">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="font-mono text-sm font-black text-[#2B59FF] px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200">
               {registration.registration_code}
             </span>
-            <span className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+            <span className={`text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
               registration.participant_type === 'ybn_student'
-                ? 'bg-[#112C57] text-[#F5C451]'
-                : 'bg-cyan-950 text-cyan-300'
+                ? 'bg-[#FEF08A] text-slate-950 border-slate-900'
+                : 'bg-[#E0E7FF] text-[#2B59FF] border-blue-300'
             }`}>
-              {registration.participant_type === 'ybn_student' ? 'YBN Student' : 'Outside College'}
+              {registration.participant_type === 'ybn_student' ? "YBN Internal Student" : "Visiting Delegate"}
             </span>
           </div>
 
-          <h3 className="font-display font-bold text-xl text-white">
+          <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950">
             {registration.full_name}
-          </h3>
-          <p className="text-xs text-slate-300">
-            Registered on {new Date(registration.created_at).toLocaleString()}
+          </h2>
+          <p className="font-mono text-xs text-slate-500 mt-1">
+            Student ID / Roll No: <strong>{registration.student_id_number}</strong>
           </p>
         </div>
 
-        {/* Details List */}
-        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1 text-xs">
+        {/* Details Grid */}
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
           
-          {/* Event Name */}
-          <div className="p-3.5 rounded-xl bg-[#07152F] border border-slate-800">
-            <span className="text-slate-400 block mb-0.5">Event / Competition:</span>
-            <span className="font-bold text-white text-sm">{registration.event_name || registration.event_id}</span>
-          </div>
-
-          {/* Contact Details */}
-          <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-[#07152F] border border-slate-800">
-            <div>
-              <span className="text-slate-400 block mb-0.5">Email:</span>
-              <span className="font-semibold text-white break-all">{registration.email}</span>
-            </div>
-            <div>
-              <span className="text-slate-400 block mb-0.5">Mobile:</span>
-              <span className="font-semibold text-white">{registration.mobile}</span>
-            </div>
-          </div>
-
-          {/* Academic Details */}
-          <div className="p-3.5 rounded-xl bg-[#07152F] border border-slate-800 space-y-2">
-            <div>
-              <span className="text-slate-400 block mb-0.5">College / Institution:</span>
-              <span className="font-semibold text-slate-200">{registration.institution_name}</span>
-              {registration.institution_location && (
-                <span className="text-slate-400 block text-[11px]">{registration.institution_location}</span>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-800">
-              <div>
-                <span className="text-slate-400 block mb-0.5">Course & Year:</span>
-                <span className="font-semibold text-slate-200">{registration.course} ({registration.academic_year})</span>
-              </div>
-              <div>
-                <span className="text-slate-400 block mb-0.5">Student ID / Roll No:</span>
-                <span className="font-mono font-bold text-cyan-300">{registration.student_id_number}</span>
-              </div>
-            </div>
-
-            {registration.department && (
-              <div className="pt-2 border-t border-slate-800">
-                <span className="text-slate-400 block mb-0.5">Department / Faculty:</span>
-                <span className="font-semibold text-slate-200">{registration.department}</span>
-              </div>
+          {/* Event Allocation */}
+          <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300">
+            <span className="font-mono text-[10px] uppercase font-bold text-slate-500 block">
+              REGISTERED EVENT
+            </span>
+            <span className="font-headline font-black text-lg text-slate-950 block mt-0.5">
+              {registration.event_name}
+            </span>
+            {registration.participation_category && (
+              <span className="text-xs font-mono text-[#2B59FF] font-bold block mt-1">
+                Category: {registration.participation_category}
+              </span>
             )}
           </div>
 
-          {/* Team / Category Details */}
-          {(registration.team_name || registration.team_details || registration.participation_category) && (
-            <div className="p-3.5 rounded-xl bg-[#07152F] border border-slate-800 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Category:</span>
-                <span className="font-bold text-[#F5C451]">{registration.participation_category || 'Standard'}</span>
-              </div>
-
-              {registration.team_name && (
-                <div>
-                  <span className="text-slate-400 block mb-0.5">Team / Crew Name:</span>
-                  <span className="font-bold text-white">{registration.team_name}</span>
-                </div>
-              )}
-
-              {registration.team_details && (
-                <div>
-                  <span className="text-slate-400 block mb-0.5">Members:</span>
-                  <p className="text-slate-300 whitespace-pre-line bg-[#0A1B3B] p-2 rounded border border-slate-700">
-                    {registration.team_details}
-                  </p>
-                </div>
-              )}
+          {/* Academic Info */}
+          <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300 space-y-2 text-xs font-mono">
+            <div>
+              <span className="text-slate-500 block">Institution / College:</span>
+              <span className="font-bold text-slate-950">{registration.institution_name}</span>
             </div>
-          )}
-
-          {/* Event Specific Data (e.g. BGMI ID) */}
-          {registration.event_specific_data && Object.keys(registration.event_specific_data).length > 0 && (
-            <div className="p-3.5 rounded-xl bg-[#07152F] border border-cyan-500/30">
-              <span className="text-cyan-300 font-bold block mb-1.5 uppercase tracking-wider text-[10px]">
-                Event Specific Configuration
-              </span>
-              <div className="space-y-1">
-                {Object.entries(registration.event_specific_data).map(([k, v]) => (
-                  <div key={k} className="flex items-center justify-between">
-                    <span className="text-slate-400 uppercase text-[10px]">{k}:</span>
-                    <span className="font-semibold text-white">{String(v)}</span>
-                  </div>
-                ))}
+            {registration.department && (
+              <div>
+                <span className="text-slate-500 block">Department / Faculty:</span>
+                <span className="font-bold text-slate-950">{registration.department}</span>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <span className="text-slate-500 block">Course:</span>
+                <span className="font-bold text-slate-950">{registration.course}</span>
+              </div>
+              <div>
+                <span className="text-slate-500 block">Year:</span>
+                <span className="font-bold text-slate-950">{registration.academic_year}</span>
               </div>
             </div>
-          )}
-
-          {/* ID Card Confirmation Status */}
-          <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/30 flex items-center gap-2 text-emerald-300">
-            <ShieldCheck className="w-4 h-4 shrink-0" />
-            <span>Physical ID Card acknowledgment confirmed during registration.</span>
           </div>
 
-        </div>
+          {/* Contact Details */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+            <div className="p-3.5 rounded-xl bg-white border border-slate-300">
+              <span className="text-slate-500 block text-[10px]">EMAIL:</span>
+              <span className="font-bold text-slate-950 truncate block mt-0.5">{registration.email}</span>
+            </div>
+            <div className="p-3.5 rounded-xl bg-white border border-slate-300">
+              <span className="text-slate-500 block text-[10px]">PHONE:</span>
+              <span className="font-bold text-slate-950 truncate block mt-0.5">{registration.mobile}</span>
+            </div>
+          </div>
 
-        {/* Change Status Footer Bar */}
-        <div className="mt-6 pt-5 border-t border-slate-800">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-              Change Status:
-            </span>
+          {/* Team / Dynamic Fields */}
+          {registration.team_name && (
+            <div className="p-4 rounded-2xl bg-[#FEF08A]/40 border border-slate-900 text-xs font-mono">
+              <span className="text-slate-700 uppercase font-bold block text-[10px]">TEAM NAME:</span>
+              <span className="font-bold text-slate-950 text-sm">{registration.team_name}</span>
+              {registration.team_details && (
+                <div className="mt-2 text-slate-800 whitespace-pre-wrap text-[11px] bg-white/70 p-2.5 rounded-xl border border-slate-300">
+                  {registration.team_details}
+                </div>
+              )}
+            </div>
+          )}
 
-            <div className="flex flex-wrap items-center gap-2">
+          {/* Gaming Data */}
+          {registration.event_specific_data?.gameIgn && (
+            <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 text-xs font-mono space-y-1">
+              <span className="text-blue-900 uppercase font-bold block text-[10px]">ESPORTS CREDENTIALS</span>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Game: <strong>{registration.event_specific_data.gameChoice}</strong></div>
+                <div>IGN: <strong>{registration.event_specific_data.gameIgn}</strong></div>
+                <div>Player ID: <strong>{registration.event_specific_data.gameId}</strong></div>
+              </div>
+            </div>
+          )}
+
+          {/* Status Controls */}
+          <div className="pt-3 border-t border-slate-200">
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-2">
+              Update Registration Status:
+            </label>
+            <div className="grid grid-cols-4 gap-2">
               {(['confirmed', 'pending', 'waitlisted', 'rejected'] as RegistrationStatus[]).map((st) => (
                 <button
                   key={st}
                   type="button"
                   disabled={isUpdating}
                   onClick={() => handleStatusChange(st)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${
+                  className={`py-2 px-2 rounded-xl text-xs font-mono font-bold uppercase transition-all border ${
                     currentStatus === st
-                      ? 'bg-[#F5C451] text-[#07152F] border-[#F5C451] shadow-sm'
-                      : 'bg-[#07152F] text-slate-300 border-slate-700 hover:border-slate-500'
+                      ? 'bg-slate-950 text-white border-slate-950 shadow-sm'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   {st}
@@ -186,6 +162,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               ))}
             </div>
           </div>
+
         </div>
 
       </div>

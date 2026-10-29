@@ -24,97 +24,109 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({ registrations, eve
   const treasurePercent = Math.min(100, Math.round((treasureHuntingCount / treasureMaxCapacity) * 100));
 
   return (
-    <div className="space-y-6 mb-8">
+    <div className="space-y-6 mb-8 text-slate-950">
       
       {/* 4 Primary Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Card 1: Total Registrations */}
-        <div className="p-5 rounded-2xl bg-gradient-to-b from-[#0D2345] to-[#07152F] border border-[#F5C451]/30 shadow-card-elevated">
+        <div className="p-6 rounded-[28px] bg-white border-[1.5px] border-slate-900 shadow-sm hover:shadow-solid-pop transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Entries</span>
-            <div className="w-8 h-8 rounded-lg bg-[#F5C451]/15 text-[#F5C451] flex items-center justify-center">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-600">Total Entries</span>
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#2B59FF] border border-blue-200 flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-extrabold text-white font-display">
+          <div className="text-3xl font-black text-slate-950 font-headline">
             {total}
           </div>
-          <p className="text-[11px] text-[#F5C451] font-semibold mt-1">
+          <p className="text-[11px] text-[#2B59FF] font-bold mt-1">
             Official Festival Passes Issued
           </p>
         </div>
 
         {/* Card 2: Participant Type Distribution */}
-        <div className="p-5 rounded-2xl bg-gradient-to-b from-[#0D2345] to-[#07152F] border border-cyan-500/30 shadow-card-elevated">
+        <div className="p-6 rounded-[28px] bg-white border-[1.5px] border-slate-900 shadow-sm hover:shadow-solid-pop transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Participant Split</span>
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-600">Participant Split</span>
+            <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="flex items-center gap-4 text-2xl font-bold text-white">
+          <div className="flex items-center gap-4 text-2xl font-black text-slate-950 font-headline">
             <div>
-              <span className="text-xs text-slate-400 block font-normal">YBN Students</span>
+              <span className="text-[10px] font-mono text-slate-500 block font-normal">YBN</span>
               <span>{ybnCount}</span>
             </div>
-            <div className="h-8 w-px bg-slate-700" />
+            <span className="text-slate-300">/</span>
             <div>
-              <span className="text-xs text-cyan-400 block font-normal">Visiting Colleges</span>
-              <span className="text-cyan-300">{outsideCount}</span>
+              <span className="text-[10px] font-mono text-slate-500 block font-normal">Visiting</span>
+              <span className="text-[#2B59FF]">{outsideCount}</span>
             </div>
           </div>
+          <p className="text-[11px] text-slate-500 font-mono mt-1">
+            Internal vs External ratio
+          </p>
         </div>
 
-        {/* Card 3: Verification Status */}
-        <div className="p-5 rounded-2xl bg-gradient-to-b from-[#0D2345] to-[#07152F] border border-slate-700 shadow-card-elevated">
+        {/* Card 3: Status Tracking */}
+        <div className="p-6 rounded-[28px] bg-white border-[1.5px] border-slate-900 shadow-sm hover:shadow-solid-pop transition-all">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Status Overview</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-600">Verification Status</span>
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center">
               <CheckCircle className="w-4 h-4" />
             </div>
           </div>
-          <div className="flex items-center gap-4 text-2xl font-bold text-white">
+          <div className="flex items-center gap-4 text-2xl font-black text-slate-950 font-headline">
             <div>
-              <span className="text-xs text-emerald-400 block font-normal">Confirmed</span>
-              <span className="text-emerald-300">{confirmedCount}</span>
+              <span className="text-[10px] font-mono text-emerald-700 block font-normal">Confirmed</span>
+              <span>{confirmedCount}</span>
             </div>
-            <div className="h-8 w-px bg-slate-700" />
+            <span className="text-slate-300">/</span>
             <div>
-              <span className="text-xs text-amber-400 block font-normal">Pending Review</span>
-              <span className="text-amber-300">{pendingCount}</span>
+              <span className="text-[10px] font-mono text-amber-700 block font-normal">Pending</span>
+              <span>{pendingCount}</span>
             </div>
           </div>
+          <p className="text-[11px] text-slate-500 font-mono mt-1">
+            Pre-verified for check-in gates
+          </p>
         </div>
 
-        {/* Card 4: Treasure Hunting Capacity (Strict 25 Cap) */}
-        <div className="p-5 rounded-2xl bg-gradient-to-b from-[#180E04] via-[#2A1705] to-[#07152F] border border-[#F5C451]/50 shadow-card-elevated">
+        {/* Card 4: Treasure Hunting Quota Tracker */}
+        <div className="p-6 rounded-[28px] bg-[#FEF08A] border-[1.5px] border-slate-900 shadow-solid-pop">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#F5C451] flex items-center gap-1">
-              <Flame className="w-3.5 h-3.5" />
-              <span>Treasure Hunt Cap</span>
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">Treasure Hunt Cap</span>
+            <div className="w-8 h-8 rounded-xl bg-white border border-slate-900 text-slate-950 flex items-center justify-center font-bold">
+              <Flame className="w-4 h-4 text-[#2B59FF]" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-black text-slate-950 font-headline">
+              {treasureHuntingCount}
             </span>
-            <span className="text-xs font-mono font-bold text-white">
-              {treasureHuntingCount} / {treasureMaxCapacity}
+            <span className="text-xs font-mono font-bold text-slate-700">
+              / {treasureMaxCapacity} TEAMS
             </span>
           </div>
-
-          <div className="w-full bg-[#07152F] rounded-full h-2.5 mb-2 overflow-hidden border border-slate-700">
+          
+          {/* Progress Bar */}
+          <div className="w-full bg-white/70 border border-slate-900 h-2.5 rounded-full overflow-hidden mt-2">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                treasurePercent >= 90 ? 'bg-red-500' : 'bg-gradient-to-r from-[#FDE047] to-[#F5C451]'
+              className={`h-full transition-all duration-500 ${
+                treasurePercent >= 90 ? 'bg-red-600' : 'bg-slate-950'
               }`}
               style={{ width: `${treasurePercent}%` }}
             />
           </div>
-
-          <div className="flex items-center justify-between text-[11px] text-slate-400">
-            <span>{treasureMaxCapacity - treasureHuntingCount} slots remaining</span>
-            <span className="text-[#F5C451] font-semibold">{treasurePercent}% filled</span>
-          </div>
+          <p className="text-[10px] font-mono font-bold text-slate-800 mt-1.5 flex justify-between">
+            <span>{treasurePercent}% Capacity</span>
+            <span>{Math.max(0, treasureMaxCapacity - treasureHuntingCount)} slots left</span>
+          </p>
         </div>
 
       </div>
+
     </div>
   );
 };

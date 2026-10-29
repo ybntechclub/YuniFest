@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Shield, Lock, Mail, ArrowRight, AlertCircle, Key, CheckCircle2 } from 'lucide-react';
+import { Shield, Lock, Mail, ArrowRight, AlertCircle, Key, CheckCircle2, ArrowUpRight } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 export const AdminLoginPage: React.FC = () => {
@@ -23,7 +23,6 @@ export const AdminLoginPage: React.FC = () => {
 
     try {
       if (isSupabaseConfigured) {
-        // Authenticate with Supabase Auth
         const { data, error: authError } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password: password.trim(),
@@ -35,7 +34,6 @@ export const AdminLoginPage: React.FC = () => {
           return;
         }
 
-        // Check if user is in admin_users table
         const { data: adminData, error: roleError } = await supabase
           .from('admin_users')
           .select('role')
@@ -43,7 +41,6 @@ export const AdminLoginPage: React.FC = () => {
           .single();
 
         if (roleError || !adminData) {
-          // Fallback if superadmin just logged in
           sessionStorage.setItem('yunifest_admin_auth', JSON.stringify({ email: data.user.email, role: 'organizer' }));
         } else {
           sessionStorage.setItem('yunifest_admin_auth', JSON.stringify({ email: data.user.email, role: adminData.role }));
@@ -51,7 +48,6 @@ export const AdminLoginPage: React.FC = () => {
 
         navigate('/admin');
       } else {
-        // Local evaluation mode
         if (
           (email.trim().toLowerCase() === 'organizer@ybn.edu.in' && password === 'yunifest2026') ||
           (email.trim().toLowerCase() === 'admin@ybn.edu.in' && password === 'yunifest2026')
@@ -78,33 +74,33 @@ export const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-[#07152F] flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-gradient-to-b from-[#0D2345] to-[#07152F] border border-[#F5C451]/30 rounded-2xl shadow-card-elevated p-8">
+    <div className="min-h-screen pt-28 pb-20 bg-[#F6F7F9] text-slate-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg p-8 sm:p-10">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-xl bg-[#07152F] border border-[#F5C451]/50 p-2 mx-auto mb-3 shadow-gold-glow flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-[#FEF08A] border-[1.5px] border-slate-900 p-2 mx-auto mb-4 shadow-sm flex items-center justify-center">
             <img src="/yuni-crest.svg" alt="YBN" className="w-full h-full object-contain" />
           </div>
-          <h2 className="font-display font-black text-2xl text-white">
-            Organizer Portal Login
+          <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 uppercase tracking-tight">
+            Organizer Portal
           </h2>
-          <p className="text-xs text-slate-300 mt-1">
-            YUNIFEST 2026 Committee & Faculty Access
+          <p className="text-xs text-slate-600 mt-1 font-display">
+            YUNIFEST 2026 Committee &amp; Faculty Access
           </p>
         </div>
 
         {error && (
-          <div className="mb-5 p-3.5 rounded-xl bg-red-950/70 border border-red-500/40 text-red-200 text-xs flex items-start gap-2.5">
-            <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+          <div className="mb-5 p-3.5 rounded-2xl bg-red-50 border-[1.5px] border-red-500 text-red-900 text-xs flex items-start gap-2.5">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
-              Organizer Email Address
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              Official Email Address
             </label>
             <div className="relative">
               <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -113,14 +109,14 @@ export const AdminLoginPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="organizer@ybn.edu.in"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-xs sm:text-sm text-white focus:outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-medium focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
-              Organizer Password
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              Portal Password
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -129,46 +125,46 @@ export const AdminLoginPage: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#07152F] border border-slate-700 focus:border-[#F5C451] text-xs sm:text-sm text-white focus:outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-medium focus:outline-none"
               />
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full mt-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-[#07152F] bg-gradient-to-r from-[#FDE047] via-[#F5C451] to-[#D4A017] hover:brightness-110 active:scale-98 transition-all shadow-gold-glow flex items-center justify-center gap-2"
-          >
-            {isLoading ? (
-              <span>Authenticating...</span>
-            ) : (
-              <>
-                <Shield className="w-4 h-4 text-[#07152F]" />
-                <span>Enter Organizer Dashboard</span>
-                <ArrowRight className="w-4 h-4 text-[#07152F]" />
-              </>
-            )}
-          </button>
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn-voltage w-full py-3.5 text-xs justify-center font-bold"
+            >
+              <span>{isLoading ? 'AUTHENTICATING...' : 'SIGN IN TO DASHBOARD'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </form>
 
-        {/* Demo Switcher for Instant Evaluation */}
-        <div className="mt-6 pt-5 border-t border-slate-800 text-center">
-          <p className="text-[11px] text-slate-400 mb-2.5">
-            Testing credentials for review:
-          </p>
-          <button
-            type="button"
-            onClick={handleFillDemo}
-            className="w-full py-2 px-3 rounded-lg text-xs font-semibold text-slate-300 bg-[#07152F] hover:bg-[#112C57] border border-slate-700 transition-colors flex items-center justify-center gap-2"
-          >
-            <Key className="w-3.5 h-3.5 text-[#F5C451]" />
-            <span>Fill Demo Credentials (organizer@ybn.edu.in)</span>
-          </button>
+        {/* Demo Fast Login Switcher */}
+        <div className="mt-6 pt-6 border-t border-slate-200">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-mono text-[10px] text-slate-500 uppercase font-bold">
+              EVALUATION CREDENTIALS
+            </span>
+            <button
+              type="button"
+              onClick={handleFillDemo}
+              className="text-[11px] font-mono font-bold text-[#2B59FF] hover:underline"
+            >
+              Fill Demo Credentials
+            </button>
+          </div>
+          <div className="p-3 rounded-xl bg-[#F6F7F9] border border-slate-300 font-mono text-[11px] text-slate-600 space-y-0.5">
+            <div><strong className="text-slate-950">Email:</strong> organizer@ybn.edu.in</div>
+            <div><strong className="text-slate-950">Password:</strong> yunifest2026</div>
+          </div>
         </div>
 
-        <div className="mt-4 text-center">
-          <Link to="/" className="text-xs text-slate-400 hover:text-white transition-colors">
-            ← Return to Festival Website
+        <div className="mt-6 text-center">
+          <Link to="/" className="text-xs font-mono font-bold text-slate-500 hover:text-slate-950">
+            ← Back to Public Website
           </Link>
         </div>
 

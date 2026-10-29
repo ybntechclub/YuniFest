@@ -40,25 +40,24 @@ export const CountdownTimer: React.FC = () => {
   }, []);
 
   const timeUnits = [
-    { label: 'DAYS', value: timeLeft.days },
-    { label: 'HOURS', value: timeLeft.hours },
-    { label: 'MINUTES', value: timeLeft.minutes },
-    { label: 'SECONDS', value: timeLeft.seconds },
+    { label: 'DAYS', value: timeLeft.days, color: 'text-slate-950' },
+    { label: 'HOURS', value: timeLeft.hours, color: 'text-[#2B59FF]' },
+    { label: 'MINUTES', value: timeLeft.minutes, color: 'text-slate-950' },
+    { label: 'SECONDS', value: timeLeft.seconds, color: 'text-slate-950' },
   ];
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-4 gap-2 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {timeUnits.map((unit) => (
           <div
             key={unit.label}
-            className="mdnt-card crosshair-corner flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl"
+            className="bg-white border-[1.5px] border-slate-900 crosshair-corner flex flex-col items-center justify-center p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-solid-pop transition-all"
           >
-            <div className="font-headline text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight">
+            <div className={`font-headline text-3xl sm:text-5xl md:text-6xl font-black ${unit.color} tracking-tight`}>
               {String(unit.value).padStart(2, '0')}
             </div>
-            
-            <div className="font-mono text-[9px] sm:text-[11px] font-bold tracking-widest text-[#F5C451] uppercase mt-1">
+            <div className="font-mono text-[10px] sm:text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">
               {unit.label}
             </div>
           </div>

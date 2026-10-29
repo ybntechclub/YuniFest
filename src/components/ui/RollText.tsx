@@ -9,7 +9,7 @@ interface RollTextProps {
 export const RollText: React.FC<RollTextProps> = ({
   text,
   className = "",
-  highlightColor = "text-[#CCFF00]"
+  highlightColor = "text-[#2B59FF]"
 }) => {
   return (
     <span className={`relative inline-flex overflow-hidden h-[1.3em] align-top group ${className}`}>

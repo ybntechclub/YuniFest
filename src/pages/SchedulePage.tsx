@@ -55,40 +55,40 @@ export const SchedulePage: React.FC = () => {
   const currentDayEvents = events.filter((e) => e.event_day === activeTab);
 
   return (
-    <div className="min-h-screen pt-28 pb-20 bg-[#07152F]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen pt-28 pb-20 bg-[#F6F7F9] text-slate-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D2345] border border-[#F5C451]/30 text-xs font-semibold text-[#F5C451] uppercase tracking-wider mb-3">
-            <Calendar className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
+            <Calendar className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Festival Timeline</span>
           </div>
-          <h1 className="font-display font-extrabold text-3xl sm:text-5xl text-white tracking-tight mb-4">
-            Official <span className="gold-gradient-text">Three-Day Programme</span>
+          <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight mb-4">
+            Official <span className="text-[#2B59FF]">Three-Day Programme</span>
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
             December 10, 11 and 12, 2026 • YBN University Campus, Ranchi, Jharkhand
           </p>
         </div>
 
         {/* Day Selector Tabs */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10">
           {scheduleDays.map((d) => (
             <button
               key={d.id}
               type="button"
               onClick={() => setActiveTab(d.id)}
-              className={`p-4 rounded-xl text-left border transition-all ${
+              className={`p-5 rounded-[24px] border-[1.5px] border-slate-900 text-left transition-all ${
                 activeTab === d.id
-                  ? 'bg-gradient-to-r from-[#F5C451] to-[#D4A017] text-[#07152F] border-[#F5C451] shadow-gold-glow'
-                  : 'bg-[#0D2345] text-slate-300 border-slate-700/80 hover:border-[#F5C451]/40'
+                  ? 'bg-[#FEF08A] text-slate-950 shadow-solid-pop -translate-y-1'
+                  : 'bg-white text-slate-700 hover:bg-slate-50 shadow-sm'
               }`}
             >
-              <div className="text-[10px] uppercase font-bold tracking-wider opacity-90">
+              <div className="text-[10px] font-mono uppercase font-bold tracking-wider opacity-80">
                 {d.dayNumber} • {d.date}
               </div>
-              <div className="text-sm font-extrabold truncate mt-0.5">
+              <div className="font-headline font-black text-sm sm:text-base truncate mt-1 text-slate-950">
                 {d.title}
               </div>
             </button>
@@ -99,128 +99,107 @@ export const SchedulePage: React.FC = () => {
         {(() => {
           const selectedMeta = scheduleDays.find((d) => d.id === activeTab)!;
           return (
-            <div className="p-5 rounded-2xl bg-[#0D2345] border border-[#F5C451]/20 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="mb-8 p-6 sm:p-8 rounded-[28px] border-[1.5px] border-slate-900 bg-white shadow-solid-pop flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#F5C451]">
-                  {selectedMeta.dayNumber} • {selectedMeta.date}
+                <span className="font-mono text-xs font-bold text-[#2B59FF] uppercase tracking-wider">
+                  {selectedMeta.date.toUpperCase()} PROGRAMME
                 </span>
-                <h2 className="font-display font-extrabold text-white text-xl sm:text-2xl mt-0.5">
+                <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 uppercase mt-0.5">
                   {selectedMeta.title}
                 </h2>
-                <p className="text-xs text-slate-300 mt-1">
+                <p className="font-display text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
                   {selectedMeta.subtitle}
                 </p>
               </div>
 
-              <Link
-                to="/register"
-                className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-[#07152F] bg-gradient-to-r from-[#FDE047] to-[#F5C451] hover:brightness-110 shadow-sm"
-              >
-                <span>Register for Events (₹0)</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              <div className="shrink-0 flex items-center gap-2">
+                <Link
+                  to="/register"
+                  className="btn-voltage text-xs py-2.5 px-6"
+                >
+                  <span>CLAIM PASS (₹0)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           );
         })()}
 
-        {/* Timeline Events List */}
-        <div className="space-y-4">
-          {currentDayEvents.length === 0 ? (
-            <div className="p-12 text-center rounded-2xl bg-[#0D2345]/50 border border-slate-800 text-slate-400 text-sm">
-              No events scheduled for this tab.
-            </div>
-          ) : (
-            currentDayEvents.map((evt, idx) => (
+        {/* Events Grid for Active Day */}
+        {currentDayEvents.length === 0 ? (
+          <div className="p-12 text-center rounded-[28px] bg-white border-[1.5px] border-slate-900 shadow-sm">
+            <Info className="w-8 h-8 text-[#2B59FF] mx-auto mb-2" />
+            <p className="font-headline font-bold text-slate-950 text-base">Schedule to be announced</p>
+            <p className="text-xs text-slate-600 mt-1 font-display">
+              Timings for this section are being finalized by the organizing committee.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentDayEvents.map((evt) => (
               <div
                 key={evt.id}
-                className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#0D2345] via-[#091B38] to-[#07152F] border border-slate-700/80 hover:border-[#F5C451]/50 shadow-card-elevated transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group"
+                className="p-7 rounded-[28px] border-[1.5px] border-slate-900 bg-white shadow-sm hover:shadow-solid-pop hover:-translate-y-1 transition-all flex flex-col justify-between group"
               >
-                {/* Left Block: Time & Title */}
-                <div className="space-y-2 max-w-2xl">
-                  <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#07152F] text-[#F5C451] font-semibold border border-[#F5C451]/30">
-                      <Clock className="w-3.5 h-3.5 text-[#F5C451]" />
-                      <span>{evt.timing_display}</span>
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2B59FF] border border-blue-200 uppercase">
+                      {evt.category}
                     </span>
-
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#07152F] text-slate-300 border border-slate-700">
-                      <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>{evt.venue}</span>
+                    <span className="font-mono text-[10px] font-bold text-slate-500">
+                      {evt.eligible_participant_types === 'all' ? 'ALL COLLEGES' : 'YBN ONLY'}
                     </span>
-
-                    {evt.eligible_participant_types === 'all' ? (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-300 border border-cyan-500/30">
-                        Open to All Colleges
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-500/30">
-                        YBN Internal Only
-                      </span>
-                    )}
                   </div>
 
-                  <h3 className="font-display font-bold text-white text-lg sm:text-xl group-hover:text-[#F5C451] transition-colors">
+                  <h3 className="font-headline font-bold text-xl text-slate-950 group-hover:text-[#2B59FF] transition-colors leading-snug mb-2">
                     {evt.name}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <p className="font-display text-xs text-slate-600 leading-relaxed mb-4">
                     {evt.description}
                   </p>
-
-                  <div className="text-xs text-slate-400 pt-1 flex flex-wrap items-center gap-3">
-                    <span>
-                      Student Coord: <strong className="text-slate-200">{evt.student_coordinator}</strong>
-                    </span>
-                    <span>•</span>
-                    <span>
-                      Faculty: <strong className="text-slate-200">{evt.faculty_coordinator}</strong>
-                    </span>
-                    {evt.capacity && (
-                      <>
-                        <span>•</span>
-                        <span className="text-[#F5C451] font-semibold">
-                          Max Cap: {evt.capacity} {evt.capacity_unit}
-                        </span>
-                      </>
-                    )}
-                  </div>
                 </div>
 
-                {/* Right Action Buttons */}
-                <div className="flex items-center gap-2.5 shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setActiveModalEvent(evt)}
-                    className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-300 bg-[#07152F] hover:bg-[#112C57] border border-slate-700 hover:border-slate-500 transition-colors flex items-center gap-1.5"
-                  >
-                    <Info className="w-3.5 h-3.5" />
-                    <span>View Rules</span>
-                  </button>
+                <div className="space-y-4 pt-4 border-t border-slate-200">
+                  <div className="flex items-center justify-between font-mono text-xs text-slate-600">
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#2B59FF]" />
+                      <span>{evt.timing_display}</span>
+                    </span>
+                    <span className="flex items-center gap-1.5 truncate max-w-[150px]">
+                      <MapPin className="w-3.5 h-3.5 text-[#2B59FF] shrink-0" />
+                      <span className="truncate">{evt.venue}</span>
+                    </span>
+                  </div>
 
-                  {evt.registration_open ? (
+                  <div className="flex items-center justify-between pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveModalEvent(evt)}
+                      className="text-xs font-display font-bold text-slate-600 hover:text-slate-950 uppercase"
+                    >
+                      Rules &amp; Info
+                    </button>
+
                     <Link
                       to={`/register?event=${evt.slug}`}
-                      className="px-5 py-2 rounded-lg text-xs font-bold text-[#07152F] bg-gradient-to-r from-[#FDE047] to-[#F5C451] hover:brightness-110 shadow-sm transition-all"
+                      className="inline-flex items-center gap-1 text-xs font-display font-black text-[#2B59FF] hover:underline"
                     >
-                      Register Pass (₹0)
+                      <span>REGISTER</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
-                  ) : (
-                    <span className="px-3 py-2 rounded-lg text-xs text-slate-400 bg-slate-800/60 border border-slate-700">
-                      Entry Closed
-                    </span>
-                  )}
+                  </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
 
       </div>
 
       {/* Modal */}
       <EventDetailModal
         event={activeModalEvent}
-        registeredCount={activeModalEvent ? registrationStore.getRegistrationCount(activeModalEvent.id) : 0}
         onClose={() => setActiveModalEvent(null)}
       />
     </div>

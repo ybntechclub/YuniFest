@@ -23,19 +23,19 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* 1. Full-Screen Video Background Hero (Exact MDNT Template) */}
+    <div className="min-h-screen bg-[#F6F7F9] text-slate-900">
+      {/* 1. Minimalist Editorial Hero Section */}
       <HeroSection />
 
-      {/* 2. Kinetic Ticker Tape */}
-      <div className="relative z-10 border-y border-white/10 bg-[#060B1A] py-3.5 ticker-tape">
+      {/* 2. Kinetic Ticker Tape (Light Neo-Brutalist Strip) */}
+      <div className="relative z-10 border-y-[1.5px] border-slate-900 bg-[#FEF08A] py-3.5 ticker-tape">
         <div className="flex whitespace-nowrap animate-marquee">
           {[...tickerItems, ...tickerItems].map((item, idx) => (
             <div key={idx} className="flex items-center mx-5">
-              <span className="font-headline font-black text-sm tracking-wider uppercase text-slate-300 hover:text-[#CCFF00] transition-colors">
+              <span className="font-headline font-black text-sm tracking-wider uppercase text-slate-950 hover:text-[#2B59FF] transition-colors">
                 {item}
               </span>
-              <span className="font-mono text-xs text-[#CCFF00] mx-4 font-bold">
+              <span className="font-mono text-xs text-slate-950 mx-4 font-black">
                 ///
               </span>
             </div>
@@ -44,17 +44,17 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 3. Stage Activation Countdown Banner */}
-      <section className="py-12 bg-[#02050D] border-b border-white/10">
+      <section className="py-12 bg-white border-b-[1.5px] border-slate-900/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-[#CCFF00] mb-4 px-2">
-            <span>[ STAGE ACTIVATION COUNTDOWN ]</span>
-            <span className="text-slate-400">DEC 10, 2026 // 09:00 IST</span>
+          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-slate-600 mb-4 px-2 font-bold">
+            <span className="text-[#2B59FF]">[ STAGE ACTIVATION COUNTDOWN ]</span>
+            <span>DEC 10, 2026 // 09:00 IST</span>
           </div>
           <CountdownTimer />
         </div>
       </section>
 
-      {/* 4. Manifesto & Work Showcases */}
+      {/* 4. Manifesto & Work Showcases (Exact 6-Card Neo-Brutalist Layout) */}
       <FestOverview />
 
       {/* 5. Three-Day Itinerary */}
