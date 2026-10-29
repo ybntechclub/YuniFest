@@ -79,8 +79,8 @@ export const AdminLoginPage: React.FC = () => {
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-[#FEF08A] border-[1.5px] border-slate-900 p-2 mx-auto mb-4 shadow-sm flex items-center justify-center">
-            <img src="/yuni-crest.svg" alt="YBN" className="w-full h-full object-contain" />
+          <div className="w-16 h-16 rounded-full bg-white border-[1.5px] border-slate-900 p-1 mx-auto mb-4 shadow-sm flex items-center justify-center overflow-hidden">
+            <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain" />
           </div>
           <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 uppercase tracking-tight">
             Organizer Portal

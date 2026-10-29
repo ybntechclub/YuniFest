@@ -39,8 +39,8 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
         {/* Top Header */}
         <div className="flex items-center justify-between pb-6 border-b-[1.5px] border-slate-900/10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-white border-[1.5px] border-slate-900 p-2 shadow-sm flex items-center justify-center">
-              <img src="/yuni-crest.svg" alt="YBN Emblem" className="w-full h-full object-contain" />
+            <div className="w-12 h-12 rounded-full bg-white border-[1.5px] border-slate-900 p-0.5 shadow-sm flex items-center justify-center overflow-hidden">
+              <img src="/ybn-logo.png" alt="YBN University Emblem" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-2">

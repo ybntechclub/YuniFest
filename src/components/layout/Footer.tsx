@@ -172,14 +172,32 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* Copyright strip */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-white/50">
-          <p>© 2026 YBN UNIVERSITY • YUNIFEST. ALL RIGHTS RESERVED.</p>
-          <div className="flex items-center gap-6">
+        {/* Copyright & Engineering Attribution Strip */}
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col lg:flex-row items-center justify-between gap-5 font-mono text-xs">
+          
+          {/* Official University Identity */}
+          <div className="flex items-center gap-3">
+            <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-7 h-7 rounded-full border border-white/20 bg-white object-contain p-0.5" />
+            <p className="text-white/60 text-[11px]">
+              © 2026 YBN UNIVERSITY • YUNIFEST. ALL RIGHTS RESERVED.
+            </p>
+          </div>
+
+          {/* Student Engineering Attribution */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/15 text-[11px] text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] animate-pulse shrink-0" />
+            <span className="text-white/60">Designed by:</span>
+            <span className="text-white font-bold tracking-wide">
+              Students of Computer Science (Sachin K, Satyam, Sachin V)
+            </span>
+          </div>
+
+          {/* Quick Compliance Links */}
+          <div className="flex items-center gap-6 text-[11px] text-white/50">
             <Link to="/regulations" className="hover:text-white transition-colors">
               MANDATORY ID POLICY
             </Link>
-            <Link to="/admin" className="hover:text-white transition-colors">
+            <Link to="/admin" className="hover:text-[#CCFF00] transition-colors">
               COMMITTEE LOGIN
             </Link>
           </div>

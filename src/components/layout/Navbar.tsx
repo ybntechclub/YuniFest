@@ -39,10 +39,10 @@ export const Navbar: React.FC = () => {
     }`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        {/* Left: Minimalist Bold Brand Logo */}
+        {/* Left: Minimalist Bold Brand Logo with Official YBN University Emblem */}
         <Link to="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
-          <div className="w-10 h-10 rounded-2xl bg-white border-[1.5px] border-slate-900 shadow-sm flex items-center justify-center p-1.5 group-hover:rotate-6 transition-transform">
-            <img src="/yuni-crest.svg" alt="YBN" className="w-full h-full object-contain" />
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-[1.5px] border-slate-900 shadow-sm flex items-center justify-center p-0.5 overflow-hidden group-hover:rotate-6 transition-transform">
+            <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-full h-full object-contain" />
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="font-headline font-black text-2xl sm:text-3xl tracking-tighter text-slate-950 uppercase group-hover:text-[#2B59FF] transition-colors">
