@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Sparkles, Calendar, MapPin, Play } from 'lucide-react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { RollText } from '../ui/RollText';
 
 export const HeroSection: React.FC = () => {
@@ -22,83 +22,129 @@ export const HeroSection: React.FC = () => {
     { name: "CULTURAL WING", sub: "JHARKHAND" },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
   const lineVariants = {
-    hidden: { y: "40%", opacity: 0 },
-    visible: {
+    hidden: { y: "115%", opacity: 0, rotate: 1 },
+    visible: (i: number) => ({
       y: "0%",
       opacity: 1,
+      rotate: 0,
       transition: {
-        duration: 0.7,
+        duration: 0.75,
+        delay: 0.1 + i * 0.12,
         ease: [0.16, 1, 0.3, 1],
       },
-    },
+    }),
   };
 
   return (
-    <section className="relative pt-28 sm:pt-32 pb-12 sm:pb-16 bg-[#F6F7F9] text-slate-950 overflow-hidden">
+    <section className="relative pt-24 sm:pt-28 pb-12 sm:pb-16 bg-[#F6F7F9] text-slate-950 overflow-hidden">
       
-      {/* Decorative Minimalist Geometric Accent in Background */}
-      <div className="absolute top-10 right-1/4 w-96 h-96 bg-[#FEF08A]/40 rounded-full blur-3xl pointer-events-none" />
+      {/* Decorative Minimalist Geometric Ambient Glows */}
+      <div className="absolute top-10 right-1/4 w-96 h-96 bg-[#FEF08A]/40 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
       <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#2B59FF]/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
-        {/* Top Editorial Status Pill */}
+        {/* Top Editorial Status Badges */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-wrap items-center gap-3 mb-6"
+          className="flex flex-wrap items-center gap-3 mb-5 sm:mb-6"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#2B59FF] animate-pulse" />
             <span>YBN UNIVERSITY, RANCHI • DEC 10-12, 2026</span>
           </div>
 
-          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF08A] border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900">
+          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF08A] border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 shadow-sm">
+            <Sparkles className="w-3 h-3 text-slate-900" />
             <span>OFFICIAL PASS: ₹0 (FREE ENTRY)</span>
           </div>
         </motion.div>
 
-        {/* Hero Main Headline (Bold Minimalist & Editorial Style) */}
-        <div className="mb-10 sm:mb-12">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="max-w-5xl"
-          >
-            <div className="overflow-hidden">
+        {/* Hero Main Headline (Balanced Editorial Typography & Cinematic Masked Reveal) */}
+        <div className="mb-8 sm:mb-10">
+          <div className="max-w-5xl">
+            
+            {/* Line 1: WE CONNECT YOUTH & CULTURE */}
+            <div className="overflow-hidden py-0.5">
               <motion.h1
+                custom={0}
                 variants={lineVariants}
-                className="font-headline font-black text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] tracking-tight text-slate-950 uppercase leading-[0.94] select-none"
+                initial="hidden"
+                animate="visible"
+                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
               >
-                WE CONNECT YOUTH &amp;<br className="hidden sm:inline" />
-                CULTURE THROUGH<br className="hidden sm:inline" />
-                UNIQUE{' '}
-                <span className="inline-block px-3 py-0.5 my-1 bg-[#2B59FF] text-white rounded-2xl border-[1.5px] border-slate-900 shadow-solid-pop">
-                  IN-REAL-LIFE
+                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                  WE CONNECT
                 </span>{' '}
-                EXPERIENCES
+                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                  YOUTH &amp; CULTURE
+                </span>
               </motion.h1>
             </div>
-          </motion.div>
 
+            {/* Line 2: THROUGH UNIQUE [IN-REAL-LIFE] */}
+            <div className="overflow-hidden py-1 sm:py-1.5">
+              <motion.div
+                custom={1}
+                variants={lineVariants}
+                initial="hidden"
+                animate="visible"
+                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] flex flex-wrap items-center gap-x-3 gap-y-2 select-none"
+              >
+                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                  THROUGH UNIQUE
+                </span>
+                
+                {/* Electric Blue Pill with Continuous Shimmer Sweep Reflection */}
+                <span className="relative inline-flex items-center gap-2 px-3.5 sm:px-4 py-0.5 sm:py-1 bg-[#2B59FF] text-white rounded-2xl border-[1.5px] border-slate-900 shadow-solid-pop hover:shadow-solid-pop-lg hover:-translate-y-0.5 hover:scale-105 active:scale-95 transition-all duration-300 group cursor-default overflow-hidden">
+                  <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/35 to-transparent -skew-x-12 animate-shimmer pointer-events-none" />
+                  <span className="relative z-10 font-black tracking-normal text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] xl:text-[3rem] leading-none">
+                    IN-REAL-LIFE
+                  </span>
+                  <span className="relative z-10 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#FEF08A] animate-pulse shrink-0" />
+                </span>
+              </motion.div>
+            </div>
+
+            {/* Line 3: EXPERIENCES + Neo-Brutalist Floating Sticker */}
+            <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-4">
+              <motion.h1
+                custom={2}
+                variants={lineVariants}
+                initial="hidden"
+                animate="visible"
+                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
+              >
+                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                  EXPERIENCES
+                </span>
+              </motion.h1>
+
+              {/* Floating Animated Sticker Badge */}
+              <motion.div
+                initial={{ scale: 0, rotate: -8 }}
+                animate={{ scale: 1, rotate: [-2, 2, -2] }}
+                transition={{
+                  scale: { duration: 0.5, delay: 0.45 },
+                  rotate: { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
+                }}
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 bg-[#FEF08A] text-slate-900 text-xs font-mono font-black uppercase rounded-full border-[1.5px] border-slate-900 shadow-solid-pop select-none hover:scale-110 transition-transform cursor-default"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#2B59FF]" />
+                <span>DEC 10-12 • RAJAULATU ARENA</span>
+              </motion.div>
+            </div>
+
+          </div>
+
+          {/* Supporting Text & CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
             className="mt-6 flex flex-col md:flex-row md:items-center justify-between gap-6 pt-4 border-t-[1.5px] border-slate-900/15"
           >
             <p className="font-display text-sm sm:text-base text-slate-700 max-w-xl leading-relaxed">
@@ -130,7 +176,7 @@ export const HeroSection: React.FC = () => {
           initial={{ opacity: 0, scale: 0.98, y: 25 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="relative rounded-[32px] sm:rounded-[40px] border-[1.5px] border-slate-900 overflow-hidden bg-slate-950 shadow-solid-pop-lg h-[340px] sm:h-[480px] lg:h-[560px]"
+          className="relative rounded-[32px] sm:rounded-[40px] border-[1.5px] border-slate-900 overflow-hidden bg-slate-950 shadow-solid-pop-lg h-[340px] sm:h-[460px] lg:h-[540px]"
         >
           {/* Looping Authentic Concert Crowd Video */}
           <video
