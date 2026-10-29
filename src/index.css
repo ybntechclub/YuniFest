@@ -186,6 +186,7 @@
   }
 
   .animate-spin-slow {
-    animation: spin-slow 22s linear infinite;
+    animation: spin-slow 24s linear infinite;
+    transform-origin: center center;
   }
 }

@@ -1,50 +1,62 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-black text-white relative overflow-hidden pt-12 sm:pt-16">
+    <footer className="bg-black text-white relative overflow-hidden pt-10 sm:pt-16">
       
-      {/* 1. Rotating Text Arch Callout - High Clearance, Exact MDNT Recreation */}
+      {/* 1. Iconic MDNT Semicircular Rotating Text Arch Dome (Zero Collision Architecture) */}
       <div className="relative w-full overflow-hidden flex flex-col items-center">
-        <div className="relative w-full max-w-5xl h-[340px] sm:h-[420px] lg:h-[460px] flex items-center justify-center overflow-hidden">
+        
+        {/* Dome Container: Bottom edge aligns with the neon lime divider */}
+        <div className="relative w-full max-w-5xl h-[370px] sm:h-[440px] lg:h-[520px] overflow-hidden flex flex-col justify-end items-center">
           
-          {/* Rotating Circular Text SVG (Huge Radius so it orbits around the text without colliding) */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] sm:w-[820px] sm:h-[820px] lg:w-[940px] lg:h-[940px] animate-spin-slow pointer-events-none select-none">
-            <svg viewBox="0 0 1000 1000" className="w-full h-full">
-              <defs>
-                <path
-                  id="circlePath"
-                  d="M 500, 500 m -430, 0 a 430,430 0 1,1 860,0 a 430,430 0 1,1 -860,0"
-                  fill="none"
-                />
-              </defs>
-              <text className="font-headline font-black text-[40px] tracking-[0.24em] uppercase">
-                <textPath href="#circlePath" startOffset="0%">
-                  <tspan fill="#CCFF00">LET'S BUILD SOMETHING </tspan>
-                  <tspan fill="#FFFFFF">• YUNIFEST 2026 • ONE CAMPUS • </tspan>
-                  <tspan fill="#CCFF00">THREE DAYS </tspan>
-                  <tspan fill="#FFFFFF">• ENDLESS POSSIBILITIES • </tspan>
-                </textPath>
-              </text>
-            </svg>
+          {/* Rotating Circular Text SVG:
+              Positioning wrapper is firmly anchored at left-1/2 -translate-x-1/2 with negative bottom offset.
+              The child div handles ONLY the pure spin animation, preventing any CSS transform translation conflicts.
+              Radius and offset are calculated so:
+              - Top arch is fully visible below the container top with 40px+ breathing room.
+              - Bottom ~35% of the circle sinks past the bottom edge and is cropped cleanly by the lime line.
+              - Center callout has 160px+ to 280px+ of open clearance overhead and on both sides at all times.
+          */}
+          <div className="absolute left-1/2 -translate-x-1/2 -bottom-[200px] sm:-bottom-[250px] lg:-bottom-[300px] w-[580px] h-[580px] sm:w-[720px] h-[720px] lg:w-[840px] lg:h-[840px] pointer-events-none select-none">
+            <div className="w-full h-full animate-spin-slow">
+              <svg viewBox="0 0 1000 1000" className="w-full h-full">
+                <defs>
+                  <path
+                    id="circlePath"
+                    d="M 500, 500 m -420, 0 a 420,420 0 1,1 840,0 a 420,420 0 1,1 -840,0"
+                    fill="none"
+                  />
+                </defs>
+                <text className="font-headline font-black text-[38px] tracking-[0.24em] uppercase">
+                  <textPath href="#circlePath" startOffset="0%">
+                    <tspan fill="#CCFF00">LET'S BUILD </tspan>
+                    <tspan fill="#FFFFFF">SOMETHING • </tspan>
+                    <tspan fill="#CCFF00">YUNIFEST 2026 </tspan>
+                    <tspan fill="#FFFFFF">• ONE CAMPUS • </tspan>
+                  </textPath>
+                </text>
+              </svg>
+            </div>
           </div>
 
-          {/* Center Callout Box inside the Arch (Spacious, perfectly framed) */}
-          <div className="relative z-10 text-center max-w-[300px] sm:max-w-md px-4 flex flex-col items-center justify-center">
-            <h3 className="font-headline font-black text-2xl sm:text-3xl lg:text-4xl text-white uppercase leading-[1.08] tracking-tight mb-2 sm:mb-3">
+          {/* Center Callout Box:
+              Safely framed inside the dome with >240px overhead clearance to the rotating arch.
+          */}
+          <div className="relative z-10 text-center max-w-[280px] sm:max-w-sm lg:max-w-md px-4 pb-8 sm:pb-10 lg:pb-12 flex flex-col items-center">
+            <h3 className="font-headline font-black text-xl sm:text-2xl lg:text-3xl text-white uppercase leading-[1.12] tracking-tight mb-2 sm:mb-3">
               Tell us what you're bringing.<br />We'll show you what's possible.
             </h3>
-            <p className="font-display text-xs sm:text-sm text-slate-300 mb-6 max-w-xs leading-relaxed">
+            <p className="font-display text-xs sm:text-sm text-slate-300 mb-5 sm:mb-6 max-w-xs leading-relaxed">
               Dec 10, 11 &amp; 12, 2026 • YBN University, Ranchi • Free ₹0 Pass
             </p>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
+              className="inline-flex items-center gap-2.5 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
             >
-              <span>CLAIM PASS</span>
+              <span>CLAIM PASS (₹0)</span>
               <span className="w-2 h-2 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
@@ -52,10 +64,10 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. MDNT Iconic Lime Divider Line */}
+      {/* 2. MDNT Iconic Neon Lime Divider Line */}
       <div className="w-full h-[2px] bg-[#CCFF00]" />
 
-      {/* 3. Footer Metadata & Navigation Columns */}
+      {/* 3. Footer Metadata & Navigation Columns (Exact MDNT Layout) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 text-xs font-mono">
           
@@ -83,31 +95,31 @@ export const Footer: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-4 text-white pt-2">
-              <span className="hover-glitch cursor-pointer font-bold hover:text-[#CCFF00]">[ INSTAGRAM ]</span>
-              <span className="hover-glitch cursor-pointer font-bold hover:text-[#CCFF00]">[ LINKEDIN ]</span>
+            <div className="flex items-center gap-4 text-white pt-2 font-bold text-[11px]">
+              <span className="cursor-pointer hover:text-[#CCFF00] transition-colors">[ INSTAGRAM ]</span>
+              <span className="cursor-pointer hover:text-[#CCFF00] transition-colors">[ LINKEDIN ]</span>
             </div>
           </div>
 
           {/* Quick Nav Col 1 */}
           <div className="space-y-3 font-headline font-bold text-sm tracking-wider uppercase">
             <div>
-              <Link to="/" className="text-[#8B5CF6] hover:text-white transition-colors hover-glitch block">
+              <Link to="/" className="text-[#8B5CF6] hover:text-white transition-colors block">
                 HOME
               </Link>
             </div>
             <div>
-              <Link to="/events" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <Link to="/events" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 EVENTS EXPLORER
               </Link>
             </div>
             <div>
-              <Link to="/schedule" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <Link to="/schedule" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 3-DAY SCHEDULE
               </Link>
             </div>
             <div>
-              <Link to="/regulations" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <Link to="/regulations" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 REGULATIONS &amp; ID
               </Link>
             </div>
@@ -116,22 +128,22 @@ export const Footer: React.FC = () => {
           {/* Quick Nav Col 2 */}
           <div className="space-y-3 font-headline font-bold text-sm tracking-wider uppercase">
             <div>
-              <Link to="/leadership" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <Link to="/leadership" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 LEADERSHIP &amp; MENTORS
               </Link>
             </div>
             <div>
-              <Link to="/register" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <Link to="/register" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 GET PASS (₹0 ENTRY)
               </Link>
             </div>
             <div>
-              <Link to="/admin" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <Link to="/admin" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 ORGANIZER PORTAL
               </Link>
             </div>
             <div>
-              <a href="#rules" className="text-white/80 hover:text-[#CCFF00] transition-colors hover-glitch block">
+              <a href="#rules" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 ID VERIFICATION DESK
               </a>
             </div>
@@ -174,10 +186,10 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. GIGANTIC MDNT-STYLE CROPPED BOTTOM WORDMARK (Exactly like Reference) */}
-      <div className="w-full overflow-hidden select-none pointer-events-none -mb-6 sm:-mb-10 lg:-mb-16">
-        <h2 className="font-headline font-black text-[22vw] tracking-tighter text-white uppercase text-center leading-[0.72] opacity-95">
-          YUNIFEST
+      {/* 4. GIGANTIC MDNT-STYLE CROPPED BOTTOM WORDMARK: YBNU (Exactly matching 4-letter MDNT styling) */}
+      <div className="w-full overflow-hidden select-none pointer-events-none -mb-8 sm:-mb-14 lg:-mb-24">
+        <h2 className="font-headline font-black text-[27vw] sm:text-[28vw] tracking-tighter text-white uppercase text-center leading-[0.66] opacity-95 select-none">
+          YBNU
         </h2>
       </div>
 
