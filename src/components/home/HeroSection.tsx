@@ -63,7 +63,7 @@ export const HeroSection: React.FC = () => {
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 text-slate-700">
-            <span className="font-script text-base sm:text-lg text-[#2B59FF] font-bold">✨ three days of pure magic ~</span>
+            <span className="font-editorial italic text-sm sm:text-base text-[#2B59FF] font-semibold">✨ Three Days of Pure Energy</span>
           </div>
         </motion.div>
 
@@ -71,19 +71,19 @@ export const HeroSection: React.FC = () => {
         <div className="mb-8 sm:mb-10">
           <div className="max-w-5xl">
             
-            {/* Line 1: WE CONNECT + Attractive Cursive Youth & Culture */}
+            {/* Line 1: WE CONNECT + Luxury Editorial Youth & Culture */}
             <div className="overflow-hidden py-0.5">
               <motion.h1
                 custom={0}
                 variants={lineVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
+                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
               >
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   WE CONNECT
                 </span>{' '}
-                <span className="font-script text-[#2B59FF] font-bold text-[1.24em] sm:text-[1.32em] normal-case tracking-wide inline-block -rotate-2 hover:rotate-0 transition-transform cursor-default drop-shadow-sm">
+                <span className="font-editorial italic font-normal text-[#2B59FF] text-[1.12em] sm:text-[1.18em] normal-case tracking-normal inline-block hover:scale-105 transition-transform cursor-default">
                   Youth &amp; Culture
                 </span>
               </motion.h1>
@@ -96,7 +96,7 @@ export const HeroSection: React.FC = () => {
                 variants={lineVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] flex flex-wrap items-center gap-x-3 gap-y-2 select-none"
+                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] flex flex-wrap items-center gap-x-3 gap-y-2 select-none"
               >
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   THROUGH UNIQUE
@@ -113,26 +113,26 @@ export const HeroSection: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Line 3: EXPERIENCES + Cursive Accent Note + Floating Sticker */}
+            {/* Line 3: EXPERIENCES + Editorial Accent Note + Floating Sticker */}
             <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-3 sm:gap-4">
               <motion.h1
                 custom={2}
                 variants={lineVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
+                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
               >
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   EXPERIENCES
                 </span>
               </motion.h1>
 
-              {/* Attractive Cursive Accent Note */}
+              {/* Attractive Editorial Accent Note */}
               <motion.span
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="font-script text-slate-500 hover:text-slate-900 font-bold text-2xl sm:text-3xl normal-case tracking-normal inline-block select-none transition-colors"
+                className="font-editorial italic text-slate-500 hover:text-slate-900 text-xl sm:text-2xl normal-case tracking-normal inline-block select-none transition-colors"
               >
                 ~ live at YBN campus
               </motion.span>

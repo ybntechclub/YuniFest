@@ -31,12 +31,13 @@ export const RegisterPage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Official Festival Admission</span>
-            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ instant ₹0 pass</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-[#2B59FF] font-bold">Instant Pass Generation</span>
           </div>
-          <h1 className="font-headline font-black text-3xl sm:text-5xl text-slate-950 tracking-tight uppercase mb-3">
+          <h1 className="font-headline font-extrabold text-3xl sm:text-5xl text-slate-950 tracking-tight mb-3">
             PARTICIPANT{' '}
-            <span className="font-script text-[#2B59FF] normal-case text-[1.14em] font-bold block sm:inline">
-              registration ~
+            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal block sm:inline text-[1.05em]">
+              Registration Pass
             </span>
           </h1>
           <p className="font-display text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">

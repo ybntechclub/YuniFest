@@ -1,6 +1,6 @@
 import React from 'react';
 import { OFFICIAL_COORDINATORS } from '../data/coordinators';
-import { ShieldCheck, UserCheck, GraduationCap, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ShieldCheck, UserCheck, GraduationCap, ArrowRight, ArrowUpRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RollText } from '../components/ui/RollText';
 
@@ -9,20 +9,21 @@ export const LeadershipPage: React.FC = () => {
     <div className="min-h-screen pt-28 pb-20 bg-[#F6F7F9] text-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
-        {/* Header */}
+        {/* Header (Tall, Crisp, Non-Flattened Typography) */}
         <div className="max-w-4xl mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <span>[ LEADERSHIP &amp; STEERING COMMITTEE ]</span>
-            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ 11 core divisions</span>
+            <span className="text-slate-500 font-bold">•</span>
+            <span className="text-[#2B59FF] font-bold">11 Core Divisions</span>
           </div>
-          <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight">
-            ORGANIZING COMMITTEE &amp;{' '}
-            <span className="font-script text-[#2B59FF] normal-case text-[1.12em] font-bold block sm:inline">
-              faculty mentors ~
+          <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight">
+            ORGANIZING COMMITTEE{' '}
+            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal block sm:inline text-[1.05em]">
+              &amp; Faculty Mentors
             </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base mt-4 leading-relaxed max-w-2xl">
-            The official academic advisors and student conveners spearheading the operational execution, competition judging, and arena logistics of <strong className="text-slate-900 font-serifItalic italic text-lg">YUNIFEST 2026</strong>.
+            The official academic advisors and student conveners spearheading the operational execution, competition judging, and arena logistics of <strong className="text-slate-900 font-editorial italic text-lg">YUNIFEST 2026</strong>.
           </p>
         </div>
 
@@ -44,10 +45,22 @@ export const LeadershipPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-slate-300 space-y-1">
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#2B59FF] block font-bold">
-                      [ Student Coordinator ]
-                    </span>
+                  <div className="p-4 rounded-2xl bg-[#E0E7FF]/70 border border-slate-300 space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-[#2B59FF] block font-bold">
+                        [ Student Coordinator ]
+                      </span>
+                      {item.studentPhone && (
+                        <a
+                          href={`tel:${item.studentPhone.replace(/\s+/g, '')}`}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white border border-slate-300 text-slate-900 font-mono text-[11px] font-bold hover:bg-[#2B59FF] hover:text-white hover:border-[#2B59FF] transition-all shadow-sm group/phone"
+                          title={`Call ${item.studentCoordinator}`}
+                        >
+                          <Phone className="w-3 h-3 text-[#2B59FF] group-hover/phone:text-white transition-colors" />
+                          <span>{item.studentPhone}</span>
+                        </a>
+                      )}
+                    </div>
                     <span className="font-headline font-bold text-slate-950 text-base block">
                       {item.studentCoordinator}
                     </span>

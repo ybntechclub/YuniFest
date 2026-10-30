@@ -32,7 +32,7 @@ export default {
         }
       },
       fontFamily: {
-        headline: ['"Syne"', 'sans-serif'],
+        headline: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
         anton: ['"Anton"', 'sans-serif'],
         editorial: ['"Playfair Display"', '"Fraunces"', 'serif'],
         script: ['"Caveat"', 'cursive'],

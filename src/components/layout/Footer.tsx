@@ -44,18 +44,18 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Center Callout Box: Compact, Clean sentence-case text (Exact match to 2nd Screenshot) */}
-          <div className="relative z-10 text-center max-w-[210px] sm:max-w-[250px] px-3 pb-5 sm:pb-7 lg:pb-8 flex flex-col items-center">
-            <h3 className="font-sans font-bold text-xs sm:text-sm md:text-base text-white leading-snug tracking-tight mb-2.5 sm:mb-3 select-none">
-              Tell us what you're<br />working on. We'll show<br />you what's possible.
+          {/* Center Callout Box: Prominent & Readable Size Inside the Arch */}
+          <div className="relative z-10 text-center max-w-[280px] sm:max-w-md lg:max-w-xl px-4 pb-6 sm:pb-8 lg:pb-10 flex flex-col items-center">
+            <h3 className="font-sans font-extrabold text-base sm:text-xl md:text-2xl lg:text-[1.85rem] text-white leading-snug tracking-tight mb-3.5 sm:mb-4 select-none">
+              Tell us what you're working on.<br />We'll show you what's possible.
             </h3>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-sans text-[11px] sm:text-xs font-bold transition-all duration-300 hover:scale-105 shadow-xl group border border-transparent"
+              className="inline-flex items-center gap-2.5 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-6 py-2.5 sm:px-7 sm:py-3 rounded-full font-sans text-xs sm:text-sm font-bold transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
             >
               <span>CLAIM PASS</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
+              <span className="w-2 h-2 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
 

@@ -63,16 +63,17 @@ export const SchedulePage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Calendar className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Festival Timeline</span>
-            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ day by day</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-[#2B59FF] font-bold">Dec 10 - 12, 2026</span>
           </div>
-          <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight mb-4">
+          <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight mb-4">
             OFFICIAL{' '}
-            <span className="font-script text-[#2B59FF] normal-case text-[1.12em] font-bold block sm:inline">
-              three-day programme ~
+            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal block sm:inline text-[1.05em]">
+              Three-Day Programme
             </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
-            December 10, 11 and 12, 2026 • <strong className="text-slate-900 font-serifItalic italic text-lg">YBN University Campus, Ranchi</strong>
+            December 10, 11 and 12, 2026 • <strong className="text-slate-900 font-editorial italic text-lg">YBN University Campus, Ranchi</strong>
           </p>
         </div>
 

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EventItem } from '../../types/database';
-import { X, Calendar, Clock, MapPin, Users, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { OFFICIAL_COORDINATORS } from '../../data/coordinators';
+import { X, Calendar, Clock, MapPin, Users, ShieldCheck, ArrowRight, CheckCircle2, Phone } from 'lucide-react';
 
 interface EventDetailModalProps {
   event: EventItem | null;
@@ -100,7 +101,27 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
               <div>
                 <span className="text-slate-500 block">Student Coordinator:</span>
-                <span className="font-bold text-slate-950 text-sm">{event.student_coordinator}</span>
+                <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                  <span className="font-bold text-slate-950 text-sm">{event.student_coordinator}</span>
+                  {(() => {
+                    const matchedCoord = OFFICIAL_COORDINATORS.find(
+                      (c) =>
+                        c.studentCoordinator.toLowerCase().includes(event.student_coordinator.toLowerCase()) ||
+                        event.student_coordinator.toLowerCase().includes(c.studentCoordinator.toLowerCase())
+                    );
+                    if (!matchedCoord?.studentPhone) return null;
+                    return (
+                      <a
+                        href={`tel:${matchedCoord.studentPhone.replace(/\s+/g, '')}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-[10px] font-bold text-slate-900 hover:bg-[#2B59FF] hover:text-white hover:border-[#2B59FF] transition-all shadow-sm"
+                        title={`Call ${event.student_coordinator}`}
+                      >
+                        <Phone className="w-2.5 h-2.5 text-[#2B59FF] group-hover:text-white" />
+                        <span>{matchedCoord.studentPhone}</span>
+                      </a>
+                    );
+                  })()}
+                </div>
               </div>
               <div>
                 <span className="text-slate-500 block">Faculty Mentor:</span>

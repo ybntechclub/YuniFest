@@ -74,16 +74,17 @@ export const EventsPage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Layers className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Event Catalogue</span>
-            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ live lineup</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-[#2B59FF] font-bold">15+ Live Arenas</span>
           </div>
-          <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight mb-4">
-            COMPETITIONS, WORKSHOPS &amp;{' '}
-            <span className="font-script text-[#2B59FF] normal-case text-[1.12em] font-bold block sm:inline">
-              showcases ~
+          <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight mb-4">
+            COMPETITIONS, WORKSHOPS{' '}
+            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal block sm:inline text-[1.05em]">
+              &amp; Showcases
             </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
-            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your <strong className="text-slate-900 font-serifItalic italic text-lg">₹0 entry pass</strong>.
+            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your <strong className="text-slate-900 font-editorial italic text-lg">₹0 entry pass</strong>.
           </p>
         </div>
 

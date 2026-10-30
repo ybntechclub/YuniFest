@@ -49,7 +49,7 @@ export const HomePage: React.FC = () => {
           <div className="flex flex-wrap items-center justify-between font-mono text-xs uppercase tracking-widest text-slate-600 mb-4 px-2 font-bold gap-2">
             <div className="flex items-center gap-2">
               <span className="text-[#2B59FF]">[ STAGE ACTIVATION COUNTDOWN ]</span>
-              <span className="font-script text-base text-slate-500 font-bold normal-case">~ live ticking ~</span>
+              <span className="font-editorial italic text-sm text-slate-500 font-semibold">• Live Ticking</span>
             </div>
             <span>DEC 10, 2026 // 09:00 IST</span>
           </div>
