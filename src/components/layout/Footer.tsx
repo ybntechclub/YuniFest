@@ -11,18 +11,18 @@ export const Footer: React.FC = () => {
         {/* Dome Container: Bottom edge aligns with the neon lime divider */}
         <div className="relative w-full max-w-5xl h-[370px] sm:h-[440px] lg:h-[520px] overflow-hidden flex flex-col justify-end items-center">
           
-          {/* Rotating Circular Text SVG (Matching MDNT Screenshot Style) */}
-          <div className="absolute left-1/2 -translate-x-1/2 -bottom-[200px] sm:-bottom-[250px] lg:-bottom-[300px] w-[580px] h-[580px] sm:w-[720px] h-[720px] lg:w-[840px] lg:h-[840px] pointer-events-none select-none">
+          {/* Rotating Circular Text SVG (Exact MDNT Reference Styling: Huge, Chunky, High-Impact) */}
+          <div className="absolute left-1/2 -translate-x-1/2 -bottom-[210px] sm:-bottom-[260px] lg:-bottom-[310px] w-[600px] h-[600px] sm:w-[740px] sm:h-[740px] lg:w-[880px] lg:h-[880px] pointer-events-none select-none">
             <div className="w-full h-full animate-spin-slow">
               <svg viewBox="0 0 1000 1000" className="w-full h-full">
                 <defs>
                   <path
                     id="circlePath"
-                    d="M 500, 500 m -420, 0 a 420,420 0 1,1 840,0 a 420,420 0 1,1 -840,0"
+                    d="M 500, 500 m -390, 0 a 390,390 0 1,1 780,0 a 390,390 0 1,1 -780,0"
                     fill="none"
                   />
                 </defs>
-                <text className="font-headline font-black text-[42px] tracking-[0.24em] uppercase">
+                <text className="font-headline font-black text-[64px] sm:text-[72px] tracking-[0.05em] uppercase">
                   <textPath href="#circlePath" startOffset="0%">
                     <tspan fill="#FFFFFF">LET'S </tspan>
                     <tspan fill="#CCFF00">BUILD </tspan>
@@ -36,18 +36,18 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Center Callout Box: Clean & reduced per screenshot */}
-          <div className="relative z-10 text-center max-w-[280px] sm:max-w-sm lg:max-w-md px-4 pb-8 sm:pb-10 lg:pb-12 flex flex-col items-center">
-            <h3 className="font-headline font-black text-xl sm:text-2xl lg:text-3xl text-white uppercase leading-[1.12] tracking-tight mb-4">
-              Tell us what you're working on.<br />We'll show you what's possible.
+          {/* Center Callout Box: Compact, Clean sentence-case text (Exact match to 2nd Screenshot) */}
+          <div className="relative z-10 text-center max-w-[260px] sm:max-w-xs px-4 pb-8 sm:pb-10 lg:pb-12 flex flex-col items-center">
+            <h3 className="font-sans font-bold text-base sm:text-lg md:text-xl text-white leading-snug tracking-tight mb-3 sm:mb-4 select-none">
+              Tell us what you're<br />working on. We'll show<br />you what's possible.
             </h3>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2.5 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
+              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-5 py-2 sm:px-6 sm:py-2 rounded-full font-sans text-xs font-bold transition-all duration-300 hover:scale-105 shadow-xl group border border-transparent"
             >
               <span>CLAIM PASS</span>
-              <span className="w-2 h-2 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
 
