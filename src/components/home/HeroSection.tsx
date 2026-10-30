@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Sparkles, FileText } from 'lucide-react';
 import { RollText } from '../ui/RollText';
 
 export const HeroSection: React.FC = () => {
@@ -61,26 +61,30 @@ export const HeroSection: React.FC = () => {
             <Sparkles className="w-3 h-3 text-slate-900" />
             <span>OFFICIAL PASS: ₹0 (FREE ENTRY)</span>
           </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 text-slate-700">
+            <span className="font-editorial italic text-sm sm:text-base text-[#2B59FF] font-semibold">✨ Three Days of Pure Energy</span>
+          </div>
         </motion.div>
 
         {/* Hero Main Headline (Balanced Editorial Typography & Cinematic Masked Reveal) */}
         <div className="mb-8 sm:mb-10">
           <div className="max-w-5xl">
             
-            {/* Line 1: WE CONNECT YOUTH & CULTURE */}
+            {/* Line 1: WE CONNECT + Luxury Editorial Youth & Culture */}
             <div className="overflow-hidden py-0.5">
               <motion.h1
                 custom={0}
                 variants={lineVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
+                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
               >
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   WE CONNECT
                 </span>{' '}
-                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
-                  YOUTH &amp; CULTURE
+                <span className="font-editorial italic font-normal text-[#2B59FF] text-[1.12em] sm:text-[1.18em] normal-case tracking-normal inline-block hover:scale-105 transition-transform cursor-default">
+                  Youth &amp; Culture
                 </span>
               </motion.h1>
             </div>
@@ -92,7 +96,7 @@ export const HeroSection: React.FC = () => {
                 variants={lineVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] flex flex-wrap items-center gap-x-3 gap-y-2 select-none"
+                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] flex flex-wrap items-center gap-x-3 gap-y-2 select-none"
               >
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   THROUGH UNIQUE
@@ -109,19 +113,29 @@ export const HeroSection: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Line 3: EXPERIENCES + Neo-Brutalist Floating Sticker */}
-            <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-4">
+            {/* Line 3: EXPERIENCES + Editorial Accent Note + Floating Sticker */}
+            <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-3 sm:gap-4">
               <motion.h1
                 custom={2}
                 variants={lineVariants}
                 initial="hidden"
                 animate="visible"
-                className="font-headline font-black text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
+                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
               >
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   EXPERIENCES
                 </span>
               </motion.h1>
+
+              {/* Attractive Editorial Accent Note */}
+              <motion.span
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="font-editorial italic text-slate-500 hover:text-slate-900 text-xl sm:text-2xl normal-case tracking-normal inline-block select-none transition-colors"
+              >
+                ~ live at YBN campus
+              </motion.span>
 
               {/* Floating Animated Sticker Badge */}
               <motion.div
@@ -151,10 +165,10 @@ export const HeroSection: React.FC = () => {
               <strong className="text-slate-950">YUNIFEST 2026</strong> translates university spirit into unforgettable moments. Three relentless days of competitions, innovation galleries, battle royale gaming, and live concerts.
             </p>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
               <Link
                 to="/register"
-                className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-7"
+                className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-6 sm:px-7"
               >
                 <RollText text="CLAIM PASS (₹0)" highlightColor="text-white" />
                 <span className="w-2 h-2 rounded-full bg-[#FEF08A]" />
@@ -162,11 +176,23 @@ export const HeroSection: React.FC = () => {
 
               <Link
                 to="/events"
-                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3.5 px-6"
+                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3.5 px-5 sm:px-6"
               >
                 <RollText text="VIEW EVENTS" highlightColor="text-[#2B59FF]" />
                 <ArrowUpRight className="w-4 h-4 text-slate-900" />
               </Link>
+
+              <a
+                href="/yunifest-2026-brochure.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs py-3.5 px-5 rounded-full bg-white hover:bg-[#FEF08A] text-slate-900 border-[1.5px] border-slate-900 font-display font-bold uppercase tracking-wider transition-all shadow-sm hover:-translate-y-0.5 group"
+                title="Open Official Festival Schedule & Brochure (PDF)"
+              >
+                <FileText className="w-4 h-4 text-[#2B59FF]" />
+                <span>SCHEDULE PDF</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
             </div>
           </motion.div>
         </div>
@@ -211,12 +237,12 @@ export const HeroSection: React.FC = () => {
 
           {/* Video Bottom Overlays */}
           <div className="absolute bottom-6 left-6 right-6 sm:bottom-10 sm:left-10 sm:right-10 z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
-            <div className="max-w-md">
+            <div className="max-w-lg">
               <span className="font-mono text-[10px] text-[#FEF08A] uppercase font-bold tracking-widest block mb-1">
                 [ ANNUAL MEGA FESTIVAL ]
               </span>
               <h3 className="font-headline font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
-                ONE CAMPUS. THREE DAYS.<br />ENDLESS POSSIBILITIES.
+                YUNIFEST – One fest, endless vibes.
               </h3>
             </div>
 

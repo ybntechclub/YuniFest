@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Shield, ArrowUpRight } from 'lucide-react';
+import { Menu, X, Shield, ArrowUpRight, FileText } from 'lucide-react';
 import { RollText } from '../ui/RollText';
 
 export const Navbar: React.FC = () => {
@@ -39,10 +39,10 @@ export const Navbar: React.FC = () => {
     }`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        {/* Left: Minimalist Bold Brand Logo with Official YBN University Emblem */}
+        {/* Left: Minimalist Bold Brand Logo with Official YBN University Emblem (Smooth Rotated Design) */}
         <Link to="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-[1.5px] border-slate-900 shadow-sm flex items-center justify-center p-0.5 overflow-hidden group-hover:rotate-6 transition-transform">
-            <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-full h-full object-contain" />
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-[1.5px] border-slate-900 shadow-sm flex items-center justify-center p-0.5 overflow-hidden -rotate-6 group-hover:rotate-12 transition-all duration-300">
+            <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-full h-full object-contain animate-spin-slow" />
           </div>
           <div className="flex items-baseline gap-1.5">
             <span className="font-headline font-black text-2xl sm:text-3xl tracking-tighter text-slate-950 uppercase group-hover:text-[#2B59FF] transition-colors">
@@ -73,6 +73,18 @@ export const Navbar: React.FC = () => {
 
         {/* Right: Solid Black Pill Button with Accent Dot */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
+          <a
+            href="/yunifest-2026-brochure.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#FEF08A] hover:bg-[#CCFF00] text-slate-950 font-mono text-xs font-bold border-[1.5px] border-slate-900 transition-all shadow-sm hover:scale-105"
+            title="Open Festival Schedule Poster & Brochure (PDF)"
+          >
+            <FileText className="w-3.5 h-3.5 text-slate-950" />
+            <span>BROCHURE PDF</span>
+            <ArrowUpRight className="w-3 h-3 text-slate-950" />
+          </a>
+
           <Link
             to="/admin"
             className="font-display text-xs uppercase tracking-wider text-slate-600 hover:text-slate-950 px-3 py-2 rounded-full hover:bg-slate-200/50 transition-colors flex items-center gap-1.5 font-bold"
@@ -136,6 +148,19 @@ export const Navbar: React.FC = () => {
               <Shield className="w-4 h-4 text-[#2B59FF]" />
               <span>ORGANIZER PORTAL</span>
             </Link>
+
+            <a
+              href="/yunifest-2026-brochure.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="py-2.5 px-3 rounded-xl bg-[#FEF08A]/70 border border-slate-900 text-slate-950 flex items-center justify-between font-bold text-xs font-mono"
+            >
+              <span className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#2B59FF]" />
+                <span>OFFICIAL BROCHURE &amp; SCHEDULE (PDF)</span>
+              </span>
+              <ArrowUpRight className="w-4 h-4 text-slate-900" />
+            </a>
           </div>
 
           <div className="pt-4 border-t border-slate-200">

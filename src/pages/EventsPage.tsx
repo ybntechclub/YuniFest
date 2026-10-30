@@ -4,7 +4,7 @@ import { registrationStore } from '../lib/registrationStore';
 import { EventCard } from '../components/events/EventCard';
 import { EventFilter } from '../components/events/EventFilter';
 import { EventDetailModal } from '../components/events/EventDetailModal';
-import { Sparkles, Calendar, Layers, ShieldCheck, Flame } from 'lucide-react';
+import { Sparkles, Calendar, Layers, ShieldCheck, Flame, FileText, ArrowUpRight } from 'lucide-react';
 
 export const EventsPage: React.FC = () => {
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -74,13 +74,31 @@ export const EventsPage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Layers className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Event Catalogue</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-[#2B59FF] font-bold">15+ Live Arenas</span>
           </div>
-          <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight mb-4">
-            Competitions, Workshops &amp; <span className="text-[#2B59FF]">Showcases</span>
+          <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight mb-4">
+            COMPETITIONS, WORKSHOPS{' '}
+            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal block sm:inline text-[1.05em]">
+              &amp; Showcases
+            </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
-            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your registration pass.
+            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your <strong className="text-slate-900 font-editorial italic text-lg">₹0 entry pass</strong>.
           </p>
+
+          <div className="mt-5 flex justify-center">
+            <a
+              href="/yunifest-2026-brochure.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FEF08A] hover:bg-[#CCFF00] text-slate-950 font-display text-xs font-bold uppercase tracking-wider border-[1.5px] border-slate-900 shadow-sm hover:-translate-y-0.5 transition-all group"
+            >
+              <FileText className="w-3.5 h-3.5 text-slate-950" />
+              <span>Download Official Festival Schedule &amp; Brochure (PDF)</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-950 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
         </div>
 
         {/* Filters */}

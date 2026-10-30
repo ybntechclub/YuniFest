@@ -32,8 +32,11 @@ export default {
         }
       },
       fontFamily: {
-        headline: ['"Syne"', 'sans-serif'],
+        headline: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
+        anton: ['"Anton"', 'sans-serif'],
         editorial: ['"Playfair Display"', '"Fraunces"', 'serif'],
+        script: ['"Caveat"', 'cursive'],
+        serifItalic: ['"Instrument Serif"', '"Playfair Display"', 'serif'],
         display: ['"Space Grotesk"', 'sans-serif'],
         mono: ['"Space Mono"', 'monospace'],
         sans: ['"Inter"', 'sans-serif'],

@@ -69,8 +69,8 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Theme will be announced by the coordinators 15 minutes before start.",
       "Every participant must be accompanied by their model."
     ],
-    student_coordinator: "Anmol Kumar",
-    faculty_coordinator: "Dr. Chinnmaya Mam",
+    student_coordinator: "Shreya Shukla",
+    faculty_coordinator: "Mrs. Pinky Kumari",
     icon_name: "Palette",
     accent_color: "magenta",
   },
@@ -92,8 +92,8 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Participants must carry scissors, adhesives, and measuring tools.",
       "Certificates of participation awarded upon project submission."
     ],
-    student_coordinator: "Anmol Kumar",
-    faculty_coordinator: "Dr. Chinnmaya Mam",
+    student_coordinator: "Sanjana Kumari",
+    faculty_coordinator: "Preeti Soni Mam",
     icon_name: "Scissors",
     accent_color: "gold",
   },
@@ -115,7 +115,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Strict food safety and cleanliness hygiene standards must be upheld.",
       "All registered YUNIFEST attendees enjoy open entry."
     ],
-    student_coordinator: "Meenu Mahato",
+    student_coordinator: "Meenu Mahto",
     faculty_coordinator: "Dr. Rachna Kumari",
     icon_name: "Utensils",
     accent_color: "gold",
@@ -141,7 +141,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Tampering with physical clue markers results in disqualification.",
       "Physical student ID card verification required before start packet release."
     ],
-    student_coordinator: "Agrani Shrivastava",
+    student_coordinator: "Agrani Sriwastava",
     faculty_coordinator: "Dr. Sapna Kasari",
     icon_name: "Compass",
     accent_color: "gold",
@@ -166,7 +166,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Judged on rhythm, expression, choreography, and stage presence."
     ],
     student_coordinator: "Antara Chakraborty",
-    faculty_coordinator: "Sheetal Sir",
+    faculty_coordinator: "Dr. Sheetal Oraon",
     icon_name: "Music",
     accent_color: "magenta",
   },
@@ -356,8 +356,8 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Negative marking for wrong answers in buzzer rounds.",
       "Timing will be officially announced and notified on this dashboard."
     ],
-    student_coordinator: "Core Academic Committee",
-    faculty_coordinator: "Dr. Asha Puran Mam",
+    student_coordinator: "Kamil husan",
+    faculty_coordinator: "Dr. Subhashish Sinha",
     icon_name: "HelpCircle",
     accent_color: "gold",
   },

@@ -66,7 +66,10 @@ export const RegisterSuccessPage: React.FC = () => {
             <span>Registration Confirmed</span>
           </div>
           <h1 className="font-headline font-black text-3xl sm:text-5xl text-slate-950 tracking-tight uppercase mb-2">
-            You're In for <span className="text-[#2B59FF]">YUNIFEST 2026!</span>
+            YOU'RE IN FOR{' '}
+            <span className="font-script text-[#2B59FF] normal-case text-[1.15em] font-bold block sm:inline">
+              YUNIFEST 2026 ~
+            </span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-display">
             Your registration has been securely logged. Save, print or screenshot the official QR pass below for campus check-in.

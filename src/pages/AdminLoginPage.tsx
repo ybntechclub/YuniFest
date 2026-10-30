@@ -79,11 +79,11 @@ export const AdminLoginPage: React.FC = () => {
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-white border-[1.5px] border-slate-900 p-1 mx-auto mb-4 shadow-sm flex items-center justify-center overflow-hidden">
-            <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain" />
+          <div className="w-16 h-16 rounded-full bg-white border-[1.5px] border-slate-900 p-1 mx-auto mb-4 shadow-sm flex items-center justify-center overflow-hidden -rotate-6">
+            <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain animate-spin-slow" />
           </div>
           <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 uppercase tracking-tight">
-            Organizer Portal
+            ORGANIZER <span className="font-script text-[#2B59FF] normal-case text-[1.15em] font-bold">portal ~</span>
           </h2>
           <p className="text-xs text-slate-600 mt-1 font-display">
             YUNIFEST 2026 Committee &amp; Faculty Access

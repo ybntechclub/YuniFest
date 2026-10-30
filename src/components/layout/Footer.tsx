@@ -5,58 +5,56 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-black text-white relative overflow-hidden pt-10 sm:pt-16">
       
-      {/* 1. Iconic MDNT Semicircular Rotating Text Arch Dome (Zero Collision Architecture) */}
+      {/* 1. Iconic MDNT Semicircular Rotating Text Arch Dome (Mathematically Divided into 50% Visible & 50% Hidden) */}
       <div className="relative w-full overflow-hidden flex flex-col items-center">
         
-        {/* Dome Container: Bottom edge aligns with the neon lime divider */}
-        <div className="relative w-full max-w-5xl h-[370px] sm:h-[440px] lg:h-[520px] overflow-hidden flex flex-col justify-end items-center">
+        {/* Dome Container: Height is EXACTLY half the circle diameter (D/2) so the lower 50% is submerged below the lime divider */}
+        <div className="relative w-full max-w-5xl h-[290px] sm:h-[360px] lg:h-[430px] overflow-hidden flex flex-col justify-end items-center">
           
-          {/* Rotating Circular Text SVG:
-              Positioning wrapper is firmly anchored at left-1/2 -translate-x-1/2 with negative bottom offset.
-              The child div handles ONLY the pure spin animation, preventing any CSS transform translation conflicts.
-              Radius and offset are calculated so:
-              - Top arch is fully visible below the container top with 40px+ breathing room.
-              - Bottom ~35% of the circle sinks past the bottom edge and is cropped cleanly by the lime line.
-              - Center callout has 160px+ to 280px+ of open clearance overhead and on both sides at all times.
+          {/* Rotating Circular Text:
+              Positioned at top-0 with width = height = D (580px mobile / 720px tablet / 860px desktop).
+              The circle's center sits PRECISELY on the container's bottom edge:
+              -> Exactly 50% (upper semicircle arch) is VISIBLE above the line.
+              -> Exactly 50% (lower semicircle) is HIDDEN and clipped below the line.
           */}
-          <div className="absolute left-1/2 -translate-x-1/2 -bottom-[200px] sm:-bottom-[250px] lg:-bottom-[300px] w-[580px] h-[580px] sm:w-[720px] h-[720px] lg:w-[840px] lg:h-[840px] pointer-events-none select-none">
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[580px] h-[580px] sm:w-[720px] sm:h-[720px] lg:w-[860px] lg:h-[860px] pointer-events-none select-none">
             <div className="w-full h-full animate-spin-slow">
               <svg viewBox="0 0 1000 1000" className="w-full h-full">
                 <defs>
                   <path
                     id="circlePath"
-                    d="M 500, 500 m -420, 0 a 420,420 0 1,1 840,0 a 420,420 0 1,1 -840,0"
+                    d="M 500, 500 m -390, 0 a 390,390 0 1,1 780,0 a 390,390 0 1,1 -780,0"
                     fill="none"
                   />
                 </defs>
-                <text className="font-headline font-black text-[38px] tracking-[0.24em] uppercase">
+                <text
+                  style={{ fontFamily: '"Anton", "Syne", sans-serif' }}
+                  className="font-black text-[70px] sm:text-[76px] tracking-[0.05em] uppercase"
+                >
                   <textPath href="#circlePath" startOffset="0%">
-                    <tspan fill="#CCFF00">LET'S BUILD </tspan>
-                    <tspan fill="#FFFFFF">SOMETHING • </tspan>
-                    <tspan fill="#CCFF00">YUNIFEST 2026 </tspan>
-                    <tspan fill="#FFFFFF">• ONE CAMPUS • </tspan>
+                    <tspan fill="#FFFFFF">LET'S </tspan>
+                    <tspan fill="#CCFF00">BUILD </tspan>
+                    <tspan fill="#FFFFFF">SOMETHING TOGETHER • </tspan>
+                    <tspan fill="#FFFFFF">LET'S </tspan>
+                    <tspan fill="#CCFF00">BUILD </tspan>
+                    <tspan fill="#FFFFFF">SOMETHING TOGETHER • </tspan>
                   </textPath>
                 </text>
               </svg>
             </div>
           </div>
 
-          {/* Center Callout Box:
-              Safely framed inside the dome with >240px overhead clearance to the rotating arch.
-          */}
-          <div className="relative z-10 text-center max-w-[280px] sm:max-w-sm lg:max-w-md px-4 pb-8 sm:pb-10 lg:pb-12 flex flex-col items-center">
-            <h3 className="font-headline font-black text-xl sm:text-2xl lg:text-3xl text-white uppercase leading-[1.12] tracking-tight mb-2 sm:mb-3">
-              Tell us what you're bringing.<br />We'll show you what's possible.
+          {/* Center Callout Box: Prominent & Readable Size Inside the Arch */}
+          <div className="relative z-10 text-center max-w-[280px] sm:max-w-md lg:max-w-xl px-4 pb-6 sm:pb-8 lg:pb-10 flex flex-col items-center">
+            <h3 className="font-sans font-extrabold text-base sm:text-xl md:text-2xl lg:text-[1.85rem] text-white leading-snug tracking-tight mb-3.5 sm:mb-4 select-none">
+              Tell us what you're working on.<br />We'll show you what's possible.
             </h3>
-            <p className="font-display text-xs sm:text-sm text-slate-300 mb-5 sm:mb-6 max-w-xs leading-relaxed">
-              Dec 10, 11 &amp; 12, 2026 • YBN University, Ranchi • Free ₹0 Pass
-            </p>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2.5 bg-white hover:bg-[#CCFF00] hover:text-black text-black px-7 py-3 rounded-full font-headline text-xs font-black uppercase tracking-wider transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
+              className="inline-flex items-center gap-2.5 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-6 py-2.5 sm:px-7 sm:py-3 rounded-full font-sans text-xs sm:text-sm font-bold transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
             >
-              <span>CLAIM PASS (₹0)</span>
+              <span>CLAIM PASS</span>
               <span className="w-2 h-2 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
@@ -119,6 +117,16 @@ export const Footer: React.FC = () => {
               </Link>
             </div>
             <div>
+              <a 
+                href="/yunifest-2026-brochure.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[#CCFF00] hover:text-white transition-colors flex items-center gap-1 text-xs"
+              >
+                <span>BROCHURE &amp; SCHEDULE (PDF) ↗</span>
+              </a>
+            </div>
+            <div>
               <Link to="/regulations" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 REGULATIONS &amp; ID
               </Link>
@@ -129,7 +137,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-3 font-headline font-bold text-sm tracking-wider uppercase">
             <div>
               <Link to="/leadership" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
-                LEADERSHIP &amp; MENTORS
+                STUDENT COORDINATORS
               </Link>
             </div>
             <div>
@@ -172,24 +180,15 @@ export const Footer: React.FC = () => {
 
         </div>
 
-        {/* Copyright & Engineering Attribution Strip */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col lg:flex-row items-center justify-between gap-5 font-mono text-xs">
+        {/* Copyright Strip */}
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-5 font-mono text-xs">
           
           {/* Official University Identity */}
           <div className="flex items-center gap-3">
-            <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-7 h-7 rounded-full border border-white/20 bg-white object-contain p-0.5" />
+            <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-7 h-7 rounded-full border border-white/20 bg-white object-contain p-0.5 animate-spin-slow" />
             <p className="text-white/60 text-[11px]">
               © 2026 YBN UNIVERSITY • YUNIFEST. ALL RIGHTS RESERVED.
             </p>
-          </div>
-
-          {/* Student Engineering Attribution */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/15 text-[11px] text-slate-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] animate-pulse shrink-0" />
-            <span className="text-white/60">Designed by:</span>
-            <span className="text-white font-bold tracking-wide">
-              Students of Computer Science (Sachin K, Satyam, Sachin V)
-            </span>
           </div>
 
           {/* Quick Compliance Links */}
@@ -204,9 +203,80 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. GIGANTIC MDNT-STYLE CROPPED BOTTOM WORDMARK: YBNU (Exactly matching 4-letter MDNT styling) */}
-      <div className="w-full overflow-hidden select-none pointer-events-none -mb-8 sm:-mb-14 lg:-mb-24">
-        <h2 className="font-headline font-black text-[27vw] sm:text-[28vw] tracking-tighter text-white uppercase text-center leading-[0.66] opacity-95 select-none">
+      {/* 3.5. ULTRA HIGH-VISIBILITY AUTO-SLIDING ENGINEERING TICKER TAPE (Continuous Right-to-Left Infinite Scroll with Neon Blinkers) */}
+      <div className="w-full bg-slate-950/95 border-y border-[#CCFF00]/40 py-3.5 relative overflow-hidden select-none backdrop-blur-md">
+        {/* Soft edge fade overlays */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
+
+        {/* Infinite scrolling marquee track running right-to-left */}
+        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] cursor-default">
+          {[1, 2].map((loopIndex) => (
+            <div key={loopIndex} className="flex items-center gap-8 sm:gap-12 px-6 shrink-0 font-mono text-xs sm:text-sm uppercase tracking-wider">
+              
+              {/* Glowing Neon Lime Blinker Beacon */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#CCFF00]/15 border border-[#CCFF00]/70 text-[#CCFF00]">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CCFF00] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#CCFF00] animate-blinker"></span>
+                </span>
+                <span className="font-black text-[11px] tracking-widest">LIVE DESK</span>
+              </div>
+
+              {/* Main Attribution Title */}
+              <span className="text-white font-extrabold flex items-center gap-2">
+                <span>⚡ DESIGNED BY STUDENTS OF</span>
+                <span className="text-[#CCFF00] font-black underline decoration-[#CCFF00]/40 underline-offset-4">
+                  DEPT OF ADVANCE COMPUTING
+                </span>
+              </span>
+
+              {/* Royal Blue Blinker Dot */}
+              <span className="w-2.5 h-2.5 rounded-full bg-[#2B59FF] animate-pulse" />
+
+              {/* Student Creators with Sachin K, Satyam, Sachin V, and Pawan K */}
+              <span className="text-slate-200 font-bold flex items-center gap-2">
+                <span className="text-slate-400">CREW:</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  SACHIN K.
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  SATYAM
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  SACHIN V.
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  PAWAN K.
+                </span>
+              </span>
+
+              {/* University Badge with Royal Blue Blinker Beacon */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2B59FF]/20 border border-[#2B59FF]/60 text-[#2B59FF]">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2B59FF] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2B59FF]"></span>
+                </span>
+                <span className="font-black text-[11px] tracking-widest text-white">YBN UNIVERSITY, RANCHI</span>
+              </div>
+
+              <span className="text-slate-400 font-bold">
+                YUNIFEST 2026 OFFICIAL DIGITAL PLATFORM
+              </span>
+
+              {/* Butter Yellow Blinker Dot */}
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FEF08A] animate-pulse" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. GIGANTIC MDNT-STYLE CROPPED BOTTOM WORDMARK: YBNU (Calibrated font size so all 4 letters are 100% visible) */}
+      <div className="w-full max-w-full overflow-hidden select-none pointer-events-none -mb-6 sm:-mb-10 lg:-mb-16 flex justify-center items-center">
+        <h2 className="font-headline font-black text-[20vw] sm:text-[21vw] lg:text-[22vw] tracking-tighter text-white uppercase text-center leading-[0.72] opacity-95 select-none w-full block px-2">
           YBNU
         </h2>
       </div>

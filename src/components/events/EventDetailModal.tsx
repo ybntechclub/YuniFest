@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EventItem } from '../../types/database';
-import { X, Calendar, Clock, MapPin, Users, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { OFFICIAL_COORDINATORS } from '../../data/coordinators';
+import { X, Calendar, Clock, MapPin, Users, ShieldCheck, ArrowRight, CheckCircle2, Phone } from 'lucide-react';
 
 interface EventDetailModalProps {
   event: EventItem | null;
@@ -95,16 +96,30 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
           {/* Coordinators Contact Details */}
           <div className="p-5 rounded-2xl bg-white border-[1.5px] border-slate-900 shadow-sm space-y-2">
             <h3 className="font-headline font-bold text-xs uppercase tracking-wider text-slate-900">
-              Department Coordinators
+              Student Event Coordinator
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-              <div>
-                <span className="text-slate-500 block">Student Coordinator:</span>
-                <span className="font-bold text-slate-950 text-sm">{event.student_coordinator}</span>
-              </div>
-              <div>
-                <span className="text-slate-500 block">Faculty Mentor:</span>
-                <span className="font-bold text-slate-950 text-sm">{event.faculty_coordinator}</span>
+            <div className="text-xs font-mono">
+              <span className="text-slate-500 block">Official Coordinator:</span>
+              <div className="flex flex-wrap items-center gap-2 mt-1">
+                <span className="font-bold text-slate-950 text-base">{event.student_coordinator}</span>
+                {(() => {
+                  const matchedCoord = OFFICIAL_COORDINATORS.find(
+                    (c) =>
+                      c.studentCoordinator.toLowerCase().includes(event.student_coordinator.toLowerCase()) ||
+                      event.student_coordinator.toLowerCase().includes(c.studentCoordinator.toLowerCase())
+                  );
+                  if (!matchedCoord?.studentPhone) return null;
+                  return (
+                    <a
+                      href={`tel:${matchedCoord.studentPhone.replace(/\s+/g, '')}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E0E7FF] border border-blue-300 text-xs font-bold text-[#2B59FF] hover:bg-[#2B59FF] hover:text-white transition-all shadow-sm"
+                      title={`Call ${event.student_coordinator}`}
+                    >
+                      <Phone className="w-3 h-3 text-[#2B59FF] group-hover:text-white" />
+                      <span>{matchedCoord.studentPhone}</span>
+                    </a>
+                  );
+                })()}
               </div>
             </div>
           </div>
