@@ -46,8 +46,11 @@ export const HomePage: React.FC = () => {
       {/* 3. Stage Activation Countdown Banner */}
       <section className="py-12 bg-white border-b-[1.5px] border-slate-900/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-slate-600 mb-4 px-2 font-bold">
-            <span className="text-[#2B59FF]">[ STAGE ACTIVATION COUNTDOWN ]</span>
+          <div className="flex flex-wrap items-center justify-between font-mono text-xs uppercase tracking-widest text-slate-600 mb-4 px-2 font-bold gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[#2B59FF]">[ STAGE ACTIVATION COUNTDOWN ]</span>
+              <span className="font-script text-base text-slate-500 font-bold normal-case">~ live ticking ~</span>
+            </div>
             <span>DEC 10, 2026 // 09:00 IST</span>
           </div>
           <CountdownTimer />

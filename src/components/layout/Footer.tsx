@@ -183,12 +183,15 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* Student Engineering Attribution */}
+          {/* Student Engineering Attribution (Dept of Advance Computing) */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/15 text-[11px] text-slate-300">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#CCFF00] animate-pulse shrink-0" />
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CCFF00] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#CCFF00] animate-blinker" />
+            </span>
             <span className="text-white/60">Designed by:</span>
             <span className="text-white font-bold tracking-wide">
-              Students of Computer Science (Sachin K, Satyam, Sachin V)
+              students of Dept of Advance Computing (Sachin K, Satyam, Sachin V)
             </span>
           </div>
 
@@ -201,6 +204,73 @@ export const Footer: React.FC = () => {
               COMMITTEE LOGIN
             </Link>
           </div>
+        </div>
+      </div>
+
+      {/* 3.5. ULTRA HIGH-VISIBILITY AUTO-SLIDING ENGINEERING TICKER TAPE (Continuous Right-to-Left Infinite Scroll with Neon Blinkers) */}
+      <div className="w-full bg-slate-950/95 border-y border-[#CCFF00]/40 py-3.5 relative overflow-hidden select-none backdrop-blur-md">
+        {/* Soft edge fade overlays */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
+
+        {/* Infinite scrolling marquee track running right-to-left */}
+        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] cursor-default">
+          {[1, 2].map((loopIndex) => (
+            <div key={loopIndex} className="flex items-center gap-8 sm:gap-12 px-6 shrink-0 font-mono text-xs sm:text-sm uppercase tracking-wider">
+              
+              {/* Glowing Neon Lime Blinker Beacon */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#CCFF00]/15 border border-[#CCFF00]/70 text-[#CCFF00]">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CCFF00] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#CCFF00] animate-blinker"></span>
+                </span>
+                <span className="font-black text-[11px] tracking-widest">LIVE DESK</span>
+              </div>
+
+              {/* Main Attribution Title */}
+              <span className="text-white font-extrabold flex items-center gap-2">
+                <span>⚡ DESIGNED BY STUDENTS OF</span>
+                <span className="text-[#CCFF00] font-black underline decoration-[#CCFF00]/40 underline-offset-4">
+                  DEPT OF ADVANCE COMPUTING
+                </span>
+              </span>
+
+              {/* Royal Blue Blinker Dot */}
+              <span className="w-2.5 h-2.5 rounded-full bg-[#2B59FF] animate-pulse" />
+
+              {/* Student Creators */}
+              <span className="text-slate-200 font-bold flex items-center gap-2">
+                <span className="text-slate-400">CREW:</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  SACHIN K.
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  SATYAM
+                </span>
+                <span className="text-slate-500">•</span>
+                <span className="text-white bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/20">
+                  SACHIN V.
+                </span>
+              </span>
+
+              {/* University Badge with Royal Blue Blinker Beacon */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2B59FF]/20 border border-[#2B59FF]/60 text-[#2B59FF]">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2B59FF] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2B59FF]"></span>
+                </span>
+                <span className="font-black text-[11px] tracking-widest text-white">YBN UNIVERSITY, RANCHI</span>
+              </div>
+
+              <span className="text-slate-400 font-bold">
+                YUNIFEST 2026 OFFICIAL DIGITAL PLATFORM
+              </span>
+
+              {/* Butter Yellow Blinker Dot */}
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FEF08A] animate-pulse" />
+            </div>
+          ))}
         </div>
       </div>
 

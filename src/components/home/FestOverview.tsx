@@ -18,7 +18,9 @@ export const FestOverview: React.FC = () => {
 
           <h2 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase leading-[1.02] tracking-tight">
             TRANSLATING YOUTH ENERGY INTO MOMENTS{' '}
-            <span className="text-[#2B59FF] underline decoration-[3px] underline-offset-4">PEOPLE REMEMBER.</span>
+            <span className="font-script text-[#2B59FF] normal-case tracking-normal block sm:inline text-[1.14em] font-bold">
+              people remember ~
+            </span>
           </h2>
 
           <p className="font-display text-sm sm:text-base text-slate-700 mt-4 leading-relaxed max-w-2xl">
@@ -187,7 +189,7 @@ export const FestOverview: React.FC = () => {
                 FESTIVAL SPECTRUM
               </span>
               <h3 className="font-editorial font-bold text-3xl sm:text-4xl text-slate-950 leading-[1.08] mt-2 mb-3">
-                Get Ready to Experience the Rhythm
+                Get Ready to <span className="font-script text-[#2B59FF] font-bold text-[1.15em] lowercase">experience</span> the Rhythm
               </h3>
               <p className="font-display text-xs text-slate-600 leading-relaxed max-w-[260px]">
                 Classical rhythms, high-energy Bollywood, hip-hop faceoffs, and viral 60-second festival reels.

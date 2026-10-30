@@ -61,13 +61,17 @@ export const HeroSection: React.FC = () => {
             <Sparkles className="w-3 h-3 text-slate-900" />
             <span>OFFICIAL PASS: ₹0 (FREE ENTRY)</span>
           </div>
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 text-slate-700">
+            <span className="font-script text-base sm:text-lg text-[#2B59FF] font-bold">✨ three days of pure magic ~</span>
+          </div>
         </motion.div>
 
         {/* Hero Main Headline (Balanced Editorial Typography & Cinematic Masked Reveal) */}
         <div className="mb-8 sm:mb-10">
           <div className="max-w-5xl">
             
-            {/* Line 1: WE CONNECT YOUTH & CULTURE */}
+            {/* Line 1: WE CONNECT + Attractive Cursive Youth & Culture */}
             <div className="overflow-hidden py-0.5">
               <motion.h1
                 custom={0}
@@ -79,8 +83,8 @@ export const HeroSection: React.FC = () => {
                 <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
                   WE CONNECT
                 </span>{' '}
-                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
-                  YOUTH &amp; CULTURE
+                <span className="font-script text-[#2B59FF] font-bold text-[1.24em] sm:text-[1.32em] normal-case tracking-wide inline-block -rotate-2 hover:rotate-0 transition-transform cursor-default drop-shadow-sm">
+                  Youth &amp; Culture
                 </span>
               </motion.h1>
             </div>
@@ -109,8 +113,8 @@ export const HeroSection: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Line 3: EXPERIENCES + Neo-Brutalist Floating Sticker */}
-            <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-4">
+            {/* Line 3: EXPERIENCES + Cursive Accent Note + Floating Sticker */}
+            <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-3 sm:gap-4">
               <motion.h1
                 custom={2}
                 variants={lineVariants}
@@ -122,6 +126,16 @@ export const HeroSection: React.FC = () => {
                   EXPERIENCES
                 </span>
               </motion.h1>
+
+              {/* Attractive Cursive Accent Note */}
+              <motion.span
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="font-script text-slate-500 hover:text-slate-900 font-bold text-2xl sm:text-3xl normal-case tracking-normal inline-block select-none transition-colors"
+              >
+                ~ live at YBN campus
+              </motion.span>
 
               {/* Floating Animated Sticker Badge */}
               <motion.div
