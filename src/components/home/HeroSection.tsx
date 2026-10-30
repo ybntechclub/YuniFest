@@ -225,12 +225,12 @@ export const HeroSection: React.FC = () => {
 
           {/* Video Bottom Overlays */}
           <div className="absolute bottom-6 left-6 right-6 sm:bottom-10 sm:left-10 sm:right-10 z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
-            <div className="max-w-md">
+            <div className="max-w-lg">
               <span className="font-mono text-[10px] text-[#FEF08A] uppercase font-bold tracking-widest block mb-1">
                 [ ANNUAL MEGA FESTIVAL ]
               </span>
               <h3 className="font-headline font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
-                ONE CAMPUS. THREE DAYS.<br />ENDLESS POSSIBILITIES.
+                YUNIFEST – One fest, endless vibes.
               </h3>
             </div>
 

@@ -12,12 +12,16 @@ export const RegulationsPage: React.FC = () => {
         <div className="max-w-4xl mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <span>[ PROTOCOLS &amp; ELIGIBILITY ]</span>
+            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ mandatory ID policy</span>
           </div>
           <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight">
-            CAMPUS REGULATIONS &amp; <span className="text-[#2B59FF]">ADMISSION POLICIES</span>
+            CAMPUS REGULATIONS &amp;{' '}
+            <span className="font-script text-[#2B59FF] normal-case text-[1.12em] font-bold block sm:inline">
+              admission policies ~
+            </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base mt-4 leading-relaxed max-w-2xl">
-            Established by the Proctorial Board and Fest Steering Committee of YBN University, Ranchi. All participants must abide by institutional code of conduct.
+            Established by the Proctorial Board and Fest Steering Committee of <strong className="text-slate-900 font-serifItalic italic text-lg">YBN University, Ranchi</strong>. All participants must abide by institutional code of conduct.
           </p>
         </div>
 

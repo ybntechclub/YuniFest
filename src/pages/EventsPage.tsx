@@ -74,12 +74,16 @@ export const EventsPage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Layers className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Event Catalogue</span>
+            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ live lineup</span>
           </div>
           <h1 className="font-headline font-black text-3xl sm:text-5xl lg:text-6xl text-slate-950 uppercase tracking-tight mb-4">
-            Competitions, Workshops &amp; <span className="text-[#2B59FF]">Showcases</span>
+            COMPETITIONS, WORKSHOPS &amp;{' '}
+            <span className="font-script text-[#2B59FF] normal-case text-[1.12em] font-bold block sm:inline">
+              showcases ~
+            </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
-            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your registration pass.
+            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your <strong className="text-slate-900 font-serifItalic italic text-lg">₹0 entry pass</strong>.
           </p>
         </div>
 

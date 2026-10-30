@@ -31,12 +31,16 @@ export const RegisterPage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Official Festival Admission</span>
+            <span className="font-script text-sm text-[#2B59FF] font-bold normal-case">~ instant ₹0 pass</span>
           </div>
           <h1 className="font-headline font-black text-3xl sm:text-5xl text-slate-950 tracking-tight uppercase mb-3">
-            Participant <span className="text-[#2B59FF]">Registration</span>
+            PARTICIPANT{' '}
+            <span className="font-script text-[#2B59FF] normal-case text-[1.14em] font-bold block sm:inline">
+              registration ~
+            </span>
           </h1>
           <p className="font-display text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
-            Admission Fee: <strong className="text-slate-950 font-bold bg-[#FEF08A] px-2 py-0.5 rounded border border-slate-900">₹0 (Free Entry)</strong> • Physical College/University ID Card is Mandatory at Check-in.
+            Admission Fee: <strong className="text-slate-950 font-bold bg-[#FEF08A] px-2 py-0.5 rounded border border-slate-900 font-mono">₹0 (Free Entry)</strong> • Physical College/University ID Card is Mandatory at Check-in.
           </p>
         </div>
 

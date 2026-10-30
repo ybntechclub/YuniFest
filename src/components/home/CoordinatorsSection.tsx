@@ -46,10 +46,10 @@ export const CoordinatorsSection: React.FC = () => {
               <span>[ 03 // LEADERSHIP &amp; MENTORS ]</span>
             </div>
             <h2 className="font-headline font-black text-3xl sm:text-5xl text-slate-950 uppercase tracking-tight">
-              STEERING COMMITTEE &amp; <span className="text-[#2B59FF]">FACULTY MENTORS</span>
+              STEERING COMMITTEE &amp; <span className="font-script text-[#2B59FF] normal-case font-bold text-[1.12em]">faculty mentors ~</span>
             </h2>
             <p className="font-display text-slate-600 text-sm mt-3 leading-relaxed max-w-xl">
-              18 dedicated faculty chairs and student conveners ensuring transparent scoring, arena management, and proctorial decorum for YUNIFEST 2026.
+              11 official event divisions with dedicated faculty chairs and student conveners ensuring transparent scoring, arena management, and proctorial decorum for YUNIFEST 2026.
             </p>
           </div>
 
@@ -57,7 +57,7 @@ export const CoordinatorsSection: React.FC = () => {
             to="/leadership"
             className="inline-flex items-center gap-2 text-xs font-display font-bold uppercase tracking-wider text-slate-950 hover:text-[#2B59FF] transition-colors group shrink-0"
           >
-            <RollText text="VIEW FULL 18-MEMBER COMMITTEE" highlightColor="text-[#2B59FF]" />
+            <RollText text="VIEW ALL 11 EVENT DIVISIONS" highlightColor="text-[#2B59FF]" />
             <ArrowUpRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
           </Link>
         </div>
@@ -111,7 +111,7 @@ export const CoordinatorsSection: React.FC = () => {
               Need to contact a specific event department?
             </h4>
             <p className="font-display text-xs text-slate-600">
-              Access the complete roster with 9 individual event coordinator pairs and faculty advisor desks.
+              Access the complete roster with 11 individual event coordinator pairs and faculty advisor desks.
             </p>
           </div>
 

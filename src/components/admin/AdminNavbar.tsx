@@ -24,8 +24,8 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
           {/* Brand & Badge */}
           <div className="flex items-center gap-4">
             <Link to="/" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-white border-[1.5px] border-slate-900 p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
-                <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain" />
+              <div className="w-8 h-8 rounded-full bg-white border-[1.5px] border-slate-900 p-0.5 flex items-center justify-center shadow-sm overflow-hidden -rotate-6">
+                <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain animate-spin-slow" />
               </div>
               <span className="font-headline font-black text-slate-950 text-base">
                 YUNIFEST <span className="text-[#2B59FF]">ADMIN</span>
