@@ -10,7 +10,7 @@ export const CoordinatorsSection: React.FC = () => {
       category: "CULTURAL & PERFORMING ARTS",
       tag: "AMPHITHEATRE & AUDITORIUM",
       description: "Managing staging, audio-visual technicals, and jury logistics for Solo/Group Dance, Classical/Bollywood Vocal, Mimicry, and Stand-up Comedy.",
-      coordinators: "Dr. Aradhana Kumari & Prof. Sumit Prasad",
+      coordinators: "Antara Chakraborty & Varshana Chatterjee",
       border: "border-slate-900",
       accent: "text-purple-700",
       bgCard: "bg-[#F3E8FF]",
@@ -19,7 +19,7 @@ export const CoordinatorsSection: React.FC = () => {
       category: "TECHNICAL INNOVATION & ESPORTS",
       tag: "DIGITAL ARENA & PAVILION",
       description: "Overseeing server infrastructure, telemetry, and refereeing for BGMI & Free Fire LAN battles, alongside working agri-tech model presentations.",
-      coordinators: "Er. Rahul Verma & Prof. Sneha Sen",
+      coordinators: "Rounak Dubey & Aryan Sharma",
       border: "border-slate-900",
       accent: "text-[#2B59FF]",
       bgCard: "bg-[#E0E7FF]",
@@ -28,7 +28,7 @@ export const CoordinatorsSection: React.FC = () => {
       category: "CAMPUS EXPEDITIONS & CREATIVE MEDIA",
       tag: "CAMPUS GROUNDS & MEDIA WING",
       description: "Conducting the 25-team restricted Treasure Hunt clue checkpoints, Poster Making adjudication, and viral festival reel judging.",
-      coordinators: "Dr. Vikas Singh & Prof. Pooja Sharma",
+      coordinators: "Agrani Shrivastava & Shreya Shukla",
       border: "border-slate-900",
       accent: "text-emerald-800",
       bgCard: "bg-[#D1FAE5]",
@@ -43,13 +43,13 @@ export const CoordinatorsSection: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-[1.5px] border-slate-900 font-mono text-xs font-bold text-slate-900 mb-3 shadow-sm">
-              <span>[ 03 // LEADERSHIP &amp; MENTORS ]</span>
+              <span>[ 03 // STUDENT CONVENERS ]</span>
             </div>
             <h2 className="font-headline font-black text-3xl sm:text-5xl text-slate-950 uppercase tracking-tight">
-              STEERING COMMITTEE &amp; <span className="font-script text-[#2B59FF] normal-case font-bold text-[1.12em]">faculty mentors ~</span>
+              STEERING COMMITTEE &amp; <span className="font-editorial italic font-normal text-[#2B59FF] normal-case text-[1.12em]">student conveners ~</span>
             </h2>
             <p className="font-display text-slate-600 text-sm mt-3 leading-relaxed max-w-xl">
-              11 official event divisions with dedicated faculty chairs and student conveners ensuring transparent scoring, arena management, and proctorial decorum for YUNIFEST 2026.
+              11 official event divisions with dedicated student conveners ensuring transparent scoring, arena management, and proctorial decorum for YUNIFEST 2026.
             </p>
           </div>
 
@@ -94,7 +94,7 @@ export const CoordinatorsSection: React.FC = () => {
 
               <div className="pt-4 border-t border-slate-900/15 space-y-1 bg-white/60 -mx-3 -mb-3 p-4 rounded-2xl border border-slate-900/10">
                 <span className="font-mono text-[10px] text-slate-500 uppercase tracking-wider block font-bold">
-                  FACULTY &amp; CONVENER BENCH:
+                  STUDENT CONVENER DESK:
                 </span>
                 <span className="font-headline font-bold text-sm text-slate-950 block">
                   {item.coordinators}
@@ -111,7 +111,7 @@ export const CoordinatorsSection: React.FC = () => {
               Need to contact a specific event department?
             </h4>
             <p className="font-display text-xs text-slate-600">
-              Access the complete roster with 11 individual event coordinator pairs and faculty advisor desks.
+              Access the complete roster with 11 individual event student coordinator desks and direct phone contacts.
             </p>
           </div>
 

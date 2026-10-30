@@ -1,6 +1,6 @@
 import React from 'react';
 import { OFFICIAL_COORDINATORS } from '../data/coordinators';
-import { ShieldCheck, UserCheck, GraduationCap, ArrowRight, ArrowUpRight, Phone } from 'lucide-react';
+import { ShieldCheck, UserCheck, GraduationCap, ArrowRight, ArrowUpRight, Phone, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RollText } from '../components/ui/RollText';
 
@@ -11,19 +11,34 @@ export const LeadershipPage: React.FC = () => {
         
         {/* Header (Tall, Crisp, Non-Flattened Typography) */}
         <div className="max-w-4xl mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
-            <span>[ LEADERSHIP &amp; STEERING COMMITTEE ]</span>
-            <span className="text-slate-500 font-bold">•</span>
-            <span className="text-[#2B59FF] font-bold">11 Core Divisions</span>
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider shadow-sm">
+              <span>[ LEADERSHIP &amp; STEERING COMMITTEE ]</span>
+              <span className="text-slate-500 font-bold">•</span>
+              <span className="text-[#2B59FF] font-bold">11 Core Divisions</span>
+            </div>
+
+            <a
+              href="/yunifest-2026-brochure.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FEF08A] hover:bg-[#CCFF00] border-[1.5px] border-slate-900 text-slate-950 font-mono text-xs font-bold transition-all shadow-sm hover:scale-105"
+              title="Open Official Festival Schedule & Brochure (PDF)"
+            >
+              <FileText className="w-3.5 h-3.5 text-slate-950" />
+              <span>OFFICIAL BROCHURE (PDF)</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-950" />
+            </a>
           </div>
+
           <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight">
             ORGANIZING COMMITTEE{' '}
             <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal block sm:inline text-[1.05em]">
-              &amp; Faculty Mentors
+              &amp; Student Coordinators
             </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base mt-4 leading-relaxed max-w-2xl">
-            The official academic advisors and student conveners spearheading the operational execution, competition judging, and arena logistics of <strong className="text-slate-900 font-editorial italic text-lg">YUNIFEST 2026</strong>.
+            The official student conveners spearheading the operational execution, competition judging, and arena logistics of <strong className="text-slate-900 font-editorial italic text-lg">YUNIFEST 2026</strong>.
           </p>
         </div>
 
@@ -45,7 +60,7 @@ export const LeadershipPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <div className="p-4 rounded-2xl bg-[#E0E7FF]/70 border border-slate-300 space-y-1.5">
+                  <div className="p-4 rounded-2xl bg-[#E0E7FF]/70 border border-slate-300 space-y-2">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-mono text-[10px] uppercase tracking-wider text-[#2B59FF] block font-bold">
                         [ Student Coordinator ]
@@ -64,21 +79,17 @@ export const LeadershipPage: React.FC = () => {
                     <span className="font-headline font-bold text-slate-950 text-base block">
                       {item.studentCoordinator}
                     </span>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-[#FEF08A]/50 border border-slate-300 space-y-1">
-                    <span className="font-mono text-[10px] uppercase tracking-wider text-amber-900 block font-bold">
-                      [ Faculty Mentor ]
-                    </span>
-                    <span className="font-headline font-bold text-slate-950 text-base block">
-                      {item.facultyCoordinator}
-                    </span>
+                    {item.roleNote && (
+                      <p className="font-display text-xs text-slate-600 leading-snug">
+                        {item.roleNote}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between font-mono text-[10px] text-slate-500 uppercase tracking-widest font-bold">
-                <span>YBN UNIVERSITY</span>
+                <span className="text-slate-400">STUDENT CONVENER</span>
                 <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300">VERIFIED DESK</span>
               </div>
             </div>

@@ -104,8 +104,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onOpenDetails, regi
 
         {/* Coordinators Quick Footnote */}
         <div className="text-[11px] font-mono text-slate-500 mb-6 flex flex-col gap-0.5">
-          <div><strong className="text-slate-800">Student:</strong> {event.student_coordinator}</div>
-          <div><strong className="text-slate-800">Faculty:</strong> {event.faculty_coordinator}</div>
+          <div><strong className="text-slate-800">Student Coordinator:</strong> {event.student_coordinator}</div>
         </div>
       </div>
 

@@ -5,7 +5,7 @@ import { registrationStore } from '../lib/registrationStore';
 import { EventDetailModal } from '../components/events/EventDetailModal';
 import { 
   Calendar, Clock, MapPin, Users, ArrowRight, Sparkles, 
-  ShieldCheck, HelpCircle, FileImage, Info 
+  ShieldCheck, HelpCircle, FileImage, Info, FileText, ArrowUpRight 
 } from 'lucide-react';
 
 export const SchedulePage: React.FC = () => {
@@ -59,7 +59,7 @@ export const SchedulePage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <Calendar className="w-3.5 h-3.5 text-[#2B59FF]" />
             <span>Festival Timeline</span>
@@ -72,9 +72,21 @@ export const SchedulePage: React.FC = () => {
               Three-Day Programme
             </span>
           </h1>
-          <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
+          <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
             December 10, 11 and 12, 2026 • <strong className="text-slate-900 font-editorial italic text-lg">YBN University Campus, Ranchi</strong>
           </p>
+
+          {/* Direct PDF View / Download Action */}
+          <a
+            href="/yunifest-2026-brochure.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#FEF08A] hover:bg-[#CCFF00] text-slate-950 font-display text-xs sm:text-sm font-bold uppercase tracking-wider border-[1.5px] border-slate-900 shadow-solid-pop hover:-translate-y-0.5 transition-all group"
+          >
+            <FileText className="w-4 h-4 text-slate-950" />
+            <span>Open Official Schedule &amp; Brochure (PDF)</span>
+            <ArrowUpRight className="w-4 h-4 text-slate-950 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </a>
         </div>
 
         {/* Day Selector Tabs */}

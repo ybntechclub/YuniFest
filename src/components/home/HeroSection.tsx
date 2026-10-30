@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Sparkles, FileText } from 'lucide-react';
 import { RollText } from '../ui/RollText';
 
 export const HeroSection: React.FC = () => {
@@ -165,10 +165,10 @@ export const HeroSection: React.FC = () => {
               <strong className="text-slate-950">YUNIFEST 2026</strong> translates university spirit into unforgettable moments. Three relentless days of competitions, innovation galleries, battle royale gaming, and live concerts.
             </p>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
               <Link
                 to="/register"
-                className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-7"
+                className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-6 sm:px-7"
               >
                 <RollText text="CLAIM PASS (₹0)" highlightColor="text-white" />
                 <span className="w-2 h-2 rounded-full bg-[#FEF08A]" />
@@ -176,11 +176,23 @@ export const HeroSection: React.FC = () => {
 
               <Link
                 to="/events"
-                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3.5 px-6"
+                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3.5 px-5 sm:px-6"
               >
                 <RollText text="VIEW EVENTS" highlightColor="text-[#2B59FF]" />
                 <ArrowUpRight className="w-4 h-4 text-slate-900" />
               </Link>
+
+              <a
+                href="/yunifest-2026-brochure.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs py-3.5 px-5 rounded-full bg-white hover:bg-[#FEF08A] text-slate-900 border-[1.5px] border-slate-900 font-display font-bold uppercase tracking-wider transition-all shadow-sm hover:-translate-y-0.5 group"
+                title="Open Official Festival Schedule & Brochure (PDF)"
+              >
+                <FileText className="w-4 h-4 text-[#2B59FF]" />
+                <span>SCHEDULE PDF</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
             </div>
           </motion.div>
         </div>

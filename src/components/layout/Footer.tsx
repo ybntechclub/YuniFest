@@ -117,6 +117,16 @@ export const Footer: React.FC = () => {
               </Link>
             </div>
             <div>
+              <a 
+                href="/yunifest-2026-brochure.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[#CCFF00] hover:text-white transition-colors flex items-center gap-1 text-xs"
+              >
+                <span>BROCHURE &amp; SCHEDULE (PDF) ↗</span>
+              </a>
+            </div>
+            <div>
               <Link to="/regulations" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
                 REGULATIONS &amp; ID
               </Link>
@@ -127,7 +137,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-3 font-headline font-bold text-sm tracking-wider uppercase">
             <div>
               <Link to="/leadership" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
-                LEADERSHIP &amp; MENTORS
+                STUDENT COORDINATORS
               </Link>
             </div>
             <div>
