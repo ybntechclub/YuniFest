@@ -5,14 +5,19 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-black text-white relative overflow-hidden pt-10 sm:pt-16">
       
-      {/* 1. Iconic MDNT Semicircular Rotating Text Arch Dome (Zero Collision Architecture) */}
+      {/* 1. Iconic MDNT Semicircular Rotating Text Arch Dome (Mathematically Divided into 50% Visible & 50% Hidden) */}
       <div className="relative w-full overflow-hidden flex flex-col items-center">
         
-        {/* Dome Container: Bottom edge aligns with the neon lime divider */}
-        <div className="relative w-full max-w-5xl h-[370px] sm:h-[440px] lg:h-[520px] overflow-hidden flex flex-col justify-end items-center">
+        {/* Dome Container: Height is EXACTLY half the circle diameter (D/2) so the lower 50% is submerged below the lime divider */}
+        <div className="relative w-full max-w-5xl h-[290px] sm:h-[360px] lg:h-[430px] overflow-hidden flex flex-col justify-end items-center">
           
-          {/* Rotating Circular Text SVG (Exact MDNT Reference Styling: Huge, Chunky, High-Impact) */}
-          <div className="absolute left-1/2 -translate-x-1/2 -bottom-[210px] sm:-bottom-[260px] lg:-bottom-[310px] w-[600px] h-[600px] sm:w-[740px] sm:h-[740px] lg:w-[880px] lg:h-[880px] pointer-events-none select-none">
+          {/* Rotating Circular Text:
+              Positioned at top-0 with width = height = D (580px mobile / 720px tablet / 860px desktop).
+              The circle's center sits PRECISELY on the container's bottom edge:
+              -> Exactly 50% (upper semicircle arch) is VISIBLE above the line.
+              -> Exactly 50% (lower semicircle) is HIDDEN and clipped below the line.
+          */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[580px] h-[580px] sm:w-[720px] sm:h-[720px] lg:w-[860px] lg:h-[860px] pointer-events-none select-none">
             <div className="w-full h-full animate-spin-slow">
               <svg viewBox="0 0 1000 1000" className="w-full h-full">
                 <defs>
@@ -22,7 +27,10 @@ export const Footer: React.FC = () => {
                     fill="none"
                   />
                 </defs>
-                <text className="font-headline font-black text-[64px] sm:text-[72px] tracking-[0.05em] uppercase">
+                <text
+                  style={{ fontFamily: '"Anton", "Syne", sans-serif' }}
+                  className="font-black text-[70px] sm:text-[76px] tracking-[0.05em] uppercase"
+                >
                   <textPath href="#circlePath" startOffset="0%">
                     <tspan fill="#FFFFFF">LET'S </tspan>
                     <tspan fill="#CCFF00">BUILD </tspan>
@@ -37,14 +45,14 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Center Callout Box: Compact, Clean sentence-case text (Exact match to 2nd Screenshot) */}
-          <div className="relative z-10 text-center max-w-[260px] sm:max-w-xs px-4 pb-8 sm:pb-10 lg:pb-12 flex flex-col items-center">
-            <h3 className="font-sans font-bold text-base sm:text-lg md:text-xl text-white leading-snug tracking-tight mb-3 sm:mb-4 select-none">
+          <div className="relative z-10 text-center max-w-[210px] sm:max-w-[250px] px-3 pb-5 sm:pb-7 lg:pb-8 flex flex-col items-center">
+            <h3 className="font-sans font-bold text-xs sm:text-sm md:text-base text-white leading-snug tracking-tight mb-2.5 sm:mb-3 select-none">
               Tell us what you're<br />working on. We'll show<br />you what's possible.
             </h3>
 
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-5 py-2 sm:px-6 sm:py-2 rounded-full font-sans text-xs font-bold transition-all duration-300 hover:scale-105 shadow-xl group border border-transparent"
+              className="inline-flex items-center gap-2 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-4 py-1.5 sm:px-5 sm:py-2 rounded-full font-sans text-[11px] sm:text-xs font-bold transition-all duration-300 hover:scale-105 shadow-xl group border border-transparent"
             >
               <span>CLAIM PASS</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
