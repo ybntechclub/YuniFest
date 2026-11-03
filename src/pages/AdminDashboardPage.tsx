@@ -50,6 +50,15 @@ export const AdminDashboardPage: React.FC = () => {
     }
   };
 
+  const handleDeleteRegistration = async (regId: string) => {
+    if (window.confirm("Are you sure you want to permanently delete this registration record?")) {
+      await registrationStore.deleteRegistration(regId);
+      const updated = await registrationStore.getRegistrations();
+      setRegistrations(updated);
+      setSelectedReg(null);
+    }
+  };
+
   const handleLogout = () => {
     sessionStorage.removeItem('yunifest_admin_auth');
     navigate('/admin/login');
@@ -80,6 +89,8 @@ export const AdminDashboardPage: React.FC = () => {
                   events={events}
                   onSelectRegistration={(reg) => setSelectedReg(reg)}
                   onStatusUpdate={handleStatusUpdate}
+                  onDeleteRegistration={handleDeleteRegistration}
+                  onRefresh={loadData}
                 />
               </div>
             )}
@@ -101,6 +112,7 @@ export const AdminDashboardPage: React.FC = () => {
         registration={selectedReg}
         onClose={() => setSelectedReg(null)}
         onStatusUpdate={handleStatusUpdate}
+        onDelete={handleDeleteRegistration}
       />
 
       {/* Live QR Modal */}

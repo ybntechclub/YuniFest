@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { RegistrationRecord, RegistrationStatus } from '../../types/database';
-import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage, ExternalLink, Folder } from 'lucide-react';
+import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage, ExternalLink, Folder, Trash2 } from 'lucide-react';
 import { isGoogleDriveUrl, getDriveDirectImageUrl, getDrivePreviewUrl, getDriveViewUrl, GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
 
 interface RegistrationDetailModalProps {
   registration: RegistrationRecord | null;
   onClose: () => void;
   onStatusUpdate: (regId: string, newStatus: RegistrationStatus) => Promise<void>;
+  onDelete?: (regId: string) => Promise<void>;
 }
 
 export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = ({
   registration,
   onClose,
   onStatusUpdate,
+  onDelete,
 }) => {
   if (!registration) return null;
 
@@ -347,6 +349,20 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               ))}
             </div>
           </div>
+
+          {/* Delete Action (Organizer) */}
+          {onDelete && (
+            <div className="pt-3 border-t border-slate-200">
+              <button
+                type="button"
+                onClick={() => onDelete(registration.id)}
+                className="w-full py-2.5 px-3 rounded-xl border border-red-300 bg-red-50 hover:bg-red-100 text-red-700 font-mono text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete Registration Record</span>
+              </button>
+            </div>
+          )}
 
         </div>
 

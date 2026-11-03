@@ -480,6 +480,30 @@ class RegistrationStore {
     return { success: true, data: reg };
   }
 
+  // Delete registration record (Admin)
+  async deleteRegistration(regId: string): Promise<boolean> {
+    this.registrations = this.registrations.filter(r => r.id !== regId && r.registration_code !== regId);
+    this.saveRegistrations();
+
+    if (isSupabaseConfigured) {
+      try {
+        const { error } = await supabase
+          .from('registrations')
+          .delete()
+          .or(`id.eq.${regId},registration_code.eq.${regId}`);
+
+        if (error) {
+          console.error('Supabase delete registration error:', error);
+          return false;
+        }
+      } catch (err) {
+        console.error('Failed to delete registration from Supabase:', err);
+        return false;
+      }
+    }
+    return true;
+  }
+
   // Export registrations as CSV
   exportRegistrationsToCSV(records: RegistrationRecord[]): string {
     const headers = [

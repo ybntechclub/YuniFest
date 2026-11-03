@@ -4,7 +4,7 @@ import { registrationStore } from '../../lib/registrationStore';
 import { 
   Search, Download, Filter, Eye, CheckCircle, Clock, 
   XCircle, AlertCircle, ArrowUpDown, ChevronRight,
-  ExternalLink, FileText
+  ExternalLink, FileText, RefreshCw, Trash2
 } from 'lucide-react';
 import { isGoogleDriveUrl, getDriveViewUrl } from '../../lib/driveUpload';
 
@@ -13,6 +13,8 @@ interface RegistrationTableProps {
   events: EventItem[];
   onSelectRegistration: (reg: RegistrationRecord) => void;
   onStatusUpdate: (regId: string, status: RegistrationStatus) => void;
+  onDeleteRegistration?: (regId: string) => void;
+  onRefresh?: () => void;
 }
 
 export const RegistrationTable: React.FC<RegistrationTableProps> = ({
