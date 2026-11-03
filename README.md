@@ -86,8 +86,8 @@ npm run preview
    - **Build Command:** `npm run build`
    - **Output Directory:** `dist`
 5. (Optional) Set Environment Variables in Vercel:
-   - `VITE_SUPABASE_URL` = `https://your-project.supabase.co`
-   - `VITE_SUPABASE_ANON_KEY` = `your-anon-key`
+   - `YUNIFEST_SUPABASE_URL` = `https://your-project.supabase.co`
+   - `YUNIFEST_SUPABASE_ANON_KEY` = `your-anon-key`
 6. Click **Deploy**.
 7. The included `vercel.json` already contains SPA client-side routing rewrites (`/(.*) -> /index.html`), ensuring page refreshes on `/events`, `/schedule`, `/regulations`, etc. will never produce 404 errors.
 

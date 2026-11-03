@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
 import { ParticipantType, EventItem, RegistrationRecord } from '../../types/database';
 import { registrationStore } from '../../lib/registrationStore';
 import { 
   CreditCard, Copy, Check, Upload, AlertCircle, ArrowLeft, 
-  ShieldCheck, Clock, CheckCircle2, QrCode, FileImage, Sparkles 
+  ShieldCheck, Clock, CheckCircle2, QrCode, FileImage, Sparkles,
+  FileText, Smartphone, ExternalLink
 } from 'lucide-react';
 
 interface PaymentStepProps {
@@ -41,7 +41,9 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
 }) => {
   // Pricing: Inside YBN University = 399, Outsiders = 499
   const amount = participantType === 'ybn_student' ? 399 : 499;
-  const officialUpiId = "ybntechclub@upi";
+  const officialUpiId = "conference123@fbl";
+  const beneficiaryName = "CONFERENCE AND SEMINAR YBN UNIVERSITY";
+  const partnerBank = "Federal Bank";
 
   const [transactionId, setTransactionId] = useState('');
   const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
@@ -50,8 +52,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Dynamic UPI payment link
-  const upiLink = `upi://pay?pa=${officialUpiId}&pn=YUNIFEST%202026&am=${amount}&cu=INR&tn=YUNIFEST-${encodeURIComponent(formData.fullName.replace(/\s+/g, '').slice(0, 10))}`;
+  // Dynamic UPI payment link matching the exact NPCI standard decoded from the official Federal Bank QR
+  const upiLink = `upi://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&am=${amount}&cu=INR&tn=YUNIFEST-${encodeURIComponent(formData.fullName.replace(/\s+/g, '').slice(0, 10))}`;
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText(officialUpiId);
@@ -153,7 +155,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             Registration Fee Payment
           </h2>
           <p className="font-display text-xs sm:text-sm text-slate-600 mt-1">
-            Pay via UPI QR and upload your transaction receipt for official verification.
+            Official merchant payment gateway via Federal Bank UPI.
           </p>
         </div>
 
@@ -187,48 +189,80 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             ₹{amount}
           </div>
           <span className="font-mono text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300 font-bold">
-            Standard Festival Delegate Pass
+            Verified Pass Entry Fee
           </span>
         </div>
       </div>
 
       {/* QR Code & UPI Instructions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 items-start">
         
-        {/* UPI QR Display Card */}
+        {/* Official Federal Bank UPI QR Display Card */}
         <div className="flex flex-col items-center p-6 rounded-3xl bg-slate-950 text-white border-[1.5px] border-slate-900 shadow-sm relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-[#CCFF00]/20 rounded-full blur-2xl pointer-events-none" />
           
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[#CCFF00] font-mono text-[10px] font-bold uppercase tracking-wider mb-4">
-            <QrCode className="w-3.5 h-3.5" />
-            <span>SCAN TO PAY WITH ANY UPI APP</span>
+            <span className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
+            <span>FEDERAL BANK MERCHANT QR</span>
           </div>
 
-          <div className="p-4 bg-white rounded-2xl shadow-inner border border-slate-200">
-            <QRCodeSVG
-              value={upiLink}
-              size={180}
-              level="H"
-              includeMargin={false}
+          {/* Authentic High-Resolution QR Code Extracted Directly from Federal Bank PDF */}
+          <div className="p-3 bg-white rounded-2xl shadow-inner border-[1.5px] border-slate-300 relative group">
+            <img 
+              src="/official-upi-qr.png" 
+              alt="Official Federal Bank UPI QR Code" 
+              className="w-48 h-48 sm:w-52 sm:h-52 object-contain rounded-lg"
             />
           </div>
 
-          <div className="mt-4 text-center">
-            <span className="font-headline font-extrabold text-2xl text-white">
-              ₹{amount}
+          {/* Payee Info Box */}
+          <div className="mt-3 text-center w-full px-2">
+            <span className="font-mono text-[11px] text-slate-300 font-bold block truncate" title={beneficiaryName}>
+              {beneficiaryName}
             </span>
-            <span className="block font-mono text-[11px] text-slate-400 mt-0.5">
-              Instant UPI Gateway
+            <span className="font-mono text-xs text-emerald-400 font-black tracking-wider block mt-0.5">
+              {officialUpiId}
             </span>
+            <div className="mt-2 inline-flex items-center gap-1.5 font-headline font-black text-2xl text-white">
+              <span>₹{amount}</span>
+              <span className="text-xs font-mono text-slate-400 font-normal">INR</span>
+            </div>
+          </div>
+
+          {/* Direct Mobile UPI App & Full Poster Actions */}
+          <div className="mt-4 flex flex-col w-full gap-2 pt-2 border-t border-white/10">
+            <a
+              href={upiLink}
+              className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#2B59FF] hover:bg-blue-600 text-white font-mono text-xs font-bold transition-all shadow-sm active:scale-95 sm:hidden"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              <span>TAP TO PAY IN UPI APP</span>
+            </a>
+
+            <a
+              href="/federal-bank-upi-qr.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-1.5 text-[11px] font-mono text-slate-400 hover:text-[#CCFF00] transition-colors py-1"
+              title="Open Official Federal Bank Payment Standee PDF"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>View Official Bank Standee (PDF) ↗</span>
+            </a>
           </div>
         </div>
 
         {/* UPI ID & Steps */}
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-              Official Festival UPI ID:
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700">
+                Official Festival UPI ID:
+              </label>
+              <span className="font-mono text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300 font-bold">
+                ✓ VERIFIED
+              </span>
+            </div>
             <div className="flex items-center gap-2">
               <input
                 type="text"
@@ -247,16 +281,35 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             </div>
           </div>
 
+          {/* Account Verified Details Pill */}
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-300 text-xs font-mono space-y-1.5">
+            <div className="flex justify-between items-start gap-2">
+              <span className="text-slate-500 shrink-0">Beneficiary:</span>
+              <span className="font-bold text-slate-950 text-right leading-tight">
+                {beneficiaryName}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Partner Bank:</span>
+              <span className="font-bold text-slate-950">{partnerBank}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Supported:</span>
+              <span className="font-bold text-slate-950">GPay, PhonePe, Paytm, BHIM, UPI</span>
+            </div>
+          </div>
+
           <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 text-xs font-display text-slate-700 space-y-2">
             <h4 className="font-bold text-[#2B59FF] uppercase tracking-wider flex items-center gap-1.5 font-mono text-[11px]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>How to Complete Payment:</span>
             </h4>
-            <ol className="list-decimal list-inside space-y-1 text-slate-600 leading-relaxed font-sans">
-              <li>Open <strong>GPay, PhonePe, Paytm, or BHIM</strong>.</li>
-              <li>Scan the QR code or paste UPI ID: <strong>{officialUpiId}</strong>.</li>
+            <ol className="list-decimal list-inside space-y-1.5 text-slate-600 leading-relaxed font-sans text-xs">
+              <li>Open <strong>Google Pay, PhonePe, Paytm, or BHIM</strong>.</li>
+              <li>Scan the Federal Bank QR code or pay to: <strong>{officialUpiId}</strong>.</li>
+              <li>Verify beneficiary shows as <strong>{beneficiaryName}</strong>.</li>
               <li>Pay the exact fee amount of <strong>₹{amount}</strong>.</li>
-              <li>Copy the <strong>12-digit UTR / Transaction ID</strong> and take a screenshot.</li>
+              <li>Copy the <strong>12-digit UTR / Transaction ID</strong> and take a screenshot of the receipt.</li>
             </ol>
           </div>
         </div>
@@ -353,7 +406,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             <span>Manual Verification Workflow:</span>
           </div>
           <p className="text-slate-700 leading-relaxed text-xs">
-            Once submitted, your registration will be set to <strong>Pending Verification</strong>. The Accounts &amp; Payment Desk will manually verify the UTR and timestamp against incoming bank statements. Upon confirmation, your final QR festival badge will be dispatched to <strong>{formData.email}</strong>.
+            Once submitted, your registration will be set to <strong>Pending Verification</strong>. The Accounts &amp; Payment Desk will manually verify the UTR and timestamp against incoming Federal Bank statements. Upon confirmation, your final QR festival badge will be dispatched to <strong>{formData.email}</strong>.
           </p>
         </div>
 
