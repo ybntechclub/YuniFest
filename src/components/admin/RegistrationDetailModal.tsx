@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RegistrationRecord, RegistrationStatus } from '../../types/database';
-import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles } from 'lucide-react';
+import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage } from 'lucide-react';
 
 interface RegistrationDetailModalProps {
   registration: RegistrationRecord | null;
@@ -17,6 +17,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
 
   const [currentStatus, setCurrentStatus] = useState<RegistrationStatus>(registration.registration_status);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [verifiedNotice, setVerifiedNotice] = useState<string | null>(null);
 
   const handleStatusChange = async (status: RegistrationStatus) => {
     setIsUpdating(true);
@@ -138,6 +139,86 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               </div>
             </div>
           )}
+
+          {/* Payment Verification Review (Manual Verification by Payment Head) */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-[#FEF08A]/30 border-[1.5px] border-slate-900 space-y-3 font-mono text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-headline font-bold uppercase text-slate-950 flex items-center gap-1.5 text-xs">
+                <CreditCard className="w-4 h-4 text-[#2B59FF]" />
+                <span>Payment Verification Review</span>
+              </span>
+              <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase border ${
+                currentStatus === 'confirmed' 
+                  ? 'bg-emerald-100 text-emerald-900 border-emerald-400' 
+                  : 'bg-amber-100 text-amber-900 border-amber-400'
+              }`}>
+                {currentStatus === 'confirmed' ? "Verified & Paid" : "Pending Verification"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 bg-white p-3 rounded-xl border border-slate-300">
+              <div>
+                <span className="text-slate-400 block text-[10px]">FEE AMOUNT:</span>
+                <span className="font-headline font-black text-slate-950 text-base">
+                  ₹{registration.amount_inr || (registration.participant_type === 'ybn_student' ? 399 : 499)}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[10px]">TRANSACTION / UTR ID:</span>
+                <span className="font-bold text-slate-950 select-all text-xs">
+                  {registration.transaction_id || "Not submitted"}
+                </span>
+              </div>
+              <div className="col-span-2">
+                <span className="text-slate-400 block text-[10px]">PAYMENT DATE &amp; TIME:</span>
+                <span className="font-bold text-slate-950 text-xs">
+                  {registration.payment_timestamp 
+                    ? new Date(registration.payment_timestamp).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
+                    : new Date(registration.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                </span>
+              </div>
+            </div>
+
+            {/* Receipt Screenshot Preview */}
+            {registration.payment_screenshot_url && (
+              <div className="space-y-1.5">
+                <span className="text-slate-600 block text-[10px] font-bold">RECEIPT SCREENSHOT:</span>
+                <div className="rounded-xl overflow-hidden border border-slate-300 max-h-48 bg-slate-100 flex items-center justify-center p-1">
+                  <img 
+                    src={registration.payment_screenshot_url} 
+                    alt="Payment Screenshot" 
+                    className="max-h-44 object-contain rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => window.open(registration.payment_screenshot_url, '_blank')}
+                    title="Click to view full image"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Manual Verification Action by Payment Head */}
+            {currentStatus === 'pending' && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  disabled={isUpdating}
+                  onClick={async () => {
+                    await handleStatusChange('confirmed');
+                    setVerifiedNotice(`Payment verified by Payment Head! Confirmation email with official entry badge dispatched to ${registration.email}.`);
+                  }}
+                  className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-bold text-xs uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Verify Payment &amp; Confirm Pass</span>
+                </button>
+              </div>
+            )}
+
+            {verifiedNotice && (
+              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-mono">
+                ✓ {verifiedNotice}
+              </div>
+            )}
+          </div>
 
           {/* Status Controls */}
           <div className="pt-3 border-t border-slate-200">

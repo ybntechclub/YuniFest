@@ -27,7 +27,7 @@ export const CoordinatorsSection: React.FC = () => {
     {
       category: "CAMPUS EXPEDITIONS & CREATIVE MEDIA",
       tag: "CAMPUS GROUNDS & MEDIA WING",
-      description: "Conducting the 25-team restricted Treasure Hunt clue checkpoints, Poster Making adjudication, and viral festival reel judging.",
+      description: "Conducting the 6-team restricted Treasure Hunt clue checkpoints, Poster Making adjudication, and viral festival reel judging.",
       coordinators: "Agrani Shrivastava & Shreya Shukla",
       border: "border-slate-900",
       accent: "text-emerald-800",

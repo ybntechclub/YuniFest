@@ -109,7 +109,7 @@ export const Navbar: React.FC = () => {
             to="/register"
             className="bg-slate-950 text-white px-4 py-1.5 rounded-full font-display text-xs font-bold uppercase tracking-wider border border-slate-950"
           >
-            ₹0 PASS
+            REGISTER
           </Link>
 
           <button
@@ -168,7 +168,7 @@ export const Navbar: React.FC = () => {
               to="/register"
               className="btn-voltage w-full text-center py-3 text-xs justify-center"
             >
-              <span>CLAIM ₹0 REGISTRATION PASS</span>
+              <span>REGISTER FOR FESTIVAL PASS</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { HeroSection } from '../components/home/HeroSection';
 import { FestOverview } from '../components/home/FestOverview';
 import { DayByDayPreview } from '../components/home/DayByDayPreview';
+import { MysteryDjSection } from '../components/home/MysteryDjSection';
 import { CoordinatorsSection } from '../components/home/CoordinatorsSection';
 import { RulesSection } from '../components/home/RulesSection';
 import { VenueMapSection } from '../components/home/VenueMapSection';
@@ -15,11 +16,11 @@ export const HomePage: React.FC = () => {
     "DECEMBER 10, 11 & 12, 2026",
     "15+ STAGE SHOWCASES",
     "ESPORTS: BGMI & FREE FIRE",
-    "TREASURE HUNT (CAP: 25)",
+    "TREASURE HUNT (CAP: 6 TEAMS)",
     "DANCE & SINGING BATTLES",
     "GRAND FASHION RUNWAY",
     "OPEN-AIR MEGA EDM DJ NIGHT",
-    "₹0 PARTICIPATION PASS",
+    "PASS: ₹399 INTERNAL / ₹499 VISITING",
   ];
 
   return (
@@ -62,6 +63,9 @@ export const HomePage: React.FC = () => {
 
       {/* 5. Three-Day Itinerary */}
       <DayByDayPreview />
+
+      {/* 5.5. High-Voltage Secret Celebrity DJ Night Teaser */}
+      <MysteryDjSection />
 
       {/* 6. Leadership & Mentors */}
       <CoordinatorsSection />

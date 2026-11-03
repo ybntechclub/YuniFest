@@ -66,6 +66,13 @@ export interface RegistrationRecord {
   };
   consent: boolean;
   registration_status: RegistrationStatus;
+  amount_inr?: number; // 399 for ybn_student, 499 for outside_student
+  payment_method?: 'upi';
+  transaction_id?: string; // UTR or Txn ID entered by user
+  payment_screenshot_url?: string; // Data URL or storage URL
+  payment_timestamp?: string; // ISO date-time of when user submitted payment
+  payment_verified_at?: string; // ISO date-time when verified by payment head
+  payment_verified_by?: string; // Name/email of verifier
   created_at: string;
   updated_at?: string;
 }

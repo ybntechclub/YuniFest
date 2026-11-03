@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ParticipantType, EventItem } from '../../types/database';
 import { registrationStore } from '../../lib/registrationStore';
 import { EventSpecificFields } from './EventSpecificFields';
+import { PaymentStep } from './PaymentStep';
 import { 
   Sparkles, ShieldAlert, CheckCircle2, AlertCircle, ArrowRight, 
   Loader2, Building2, GraduationCap, Calendar, User, Phone, Mail, FileText
@@ -53,6 +54,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
   // Mandatory checkboxes
   const [idCardConfirmed, setIdCardConfirmed] = useState(false);
   const [consent, setConsent] = useState(false);
+
+  // Payment step transition state
+  const [isPaymentStep, setIsPaymentStep] = useState(false);
 
   // Submission state & validation errors
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -149,7 +153,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
 
@@ -158,42 +162,45 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      const result = await registrationStore.submitRegistration({
-        event_id: selectedEventId,
-        participant_type: participantType,
-        full_name: fullName.trim(),
-        email: email.trim().toLowerCase(),
-        mobile: mobile.trim(),
-        institution_name: participantType === 'ybn_student' ? "YBN University, Ranchi" : institutionName.trim(),
-        institution_location: participantType === 'outside_student' ? institutionLocation.trim() : "Ranchi, Jharkhand",
-        department: participantType === 'ybn_student' ? department.trim() : undefined,
-        course: course.trim(),
-        academic_year: academicYear,
-        semester: participantType === 'ybn_student' ? semester : undefined,
-        student_id_number: studentIdNumber.trim(),
-        id_card_confirmed: idCardConfirmed,
-        participation_category: participationCategory,
-        team_name: teamName.trim() || undefined,
-        team_details: teamDetails.trim() || undefined,
-        event_specific_data: eventSpecificData,
-        consent: consent,
-      });
-
-      if (!result.success || !result.data) {
-        setSubmitError(result.error || "Failed to process registration. Please try again.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      navigate('/register/success', { state: { registration: result.data } });
-    } catch (err: any) {
-      setSubmitError(err.message || "An unexpected error occurred. Please try again.");
-      setIsSubmitting(false);
-    }
+    setIsPaymentStep(true);
+    window.scrollTo({ top: 150, behavior: 'smooth' });
   };
+
+  const feeAmount = participantType === 'ybn_student' ? 399 : 499;
+
+  if (isPaymentStep && selectedEvent) {
+    return (
+      <PaymentStep
+        participantType={participantType}
+        selectedEvent={selectedEvent}
+        formData={{
+          fullName,
+          email,
+          mobile,
+          institutionName: participantType === 'ybn_student' ? "YBN University, Ranchi" : institutionName.trim(),
+          institutionLocation: participantType === 'outside_student' ? institutionLocation.trim() : "Ranchi, Jharkhand",
+          department: participantType === 'ybn_student' ? department.trim() : undefined,
+          course: course.trim(),
+          academicYear,
+          semester: participantType === 'ybn_student' ? semester : undefined,
+          studentIdNumber: studentIdNumber.trim(),
+          idCardConfirmed,
+          participationCategory,
+          teamName: teamName.trim() || undefined,
+          teamDetails: teamDetails.trim() || undefined,
+          eventSpecificData,
+          consent,
+        }}
+        onBack={() => {
+          setIsPaymentStep(false);
+          window.scrollTo({ top: 250, behavior: 'smooth' });
+        }}
+        onSuccess={(record) => {
+          navigate('/register/success', { state: { registration: record } });
+        }}
+      />
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto rounded-[32px] border-[1.5px] border-slate-900 bg-white p-8 sm:p-12 shadow-solid-pop text-slate-950">
@@ -208,7 +215,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
             {participantType === 'ybn_student' ? "YBN University Student Form" : "Visiting Delegate Registration"}
           </h3>
           <p className="font-mono text-xs text-slate-600 mt-1">
-            FEE: <strong className="text-slate-950 bg-[#FEF08A] px-2 py-0.5 rounded border border-slate-900">₹0 (FREE ENTRY)</strong> • SINGLE PASS ENTRY
+            ENTRY FEE: <strong className="text-slate-950 bg-[#FEF08A] px-2 py-0.5 rounded border border-slate-900">₹{feeAmount}</strong> • VERIFIED PASS ACCESS
           </p>
         </div>
       </div>
@@ -481,23 +488,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
         <div className="pt-4">
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="btn-voltage w-full py-4 text-sm font-black flex items-center justify-center gap-3 disabled:opacity-60 shadow-solid-pop hover:shadow-solid-pop-lg"
+            className="btn-voltage w-full py-4 text-sm font-black flex items-center justify-center gap-3 shadow-solid-pop hover:shadow-solid-pop-lg transition-all"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin text-white" />
-                <span>GENERATING DIGITAL BADGE...</span>
-              </>
-            ) : (
-              <>
-                <span>COMPLETE REGISTRATION &amp; ISSUE PASS (₹0)</span>
-                <ArrowRight className="w-5 h-5" />
-              </>
-            )}
+            <span>PROCEED TO PAYMENT DESK (₹{feeAmount})</span>
+            <ArrowRight className="w-5 h-5" />
           </button>
           <p className="font-mono text-center text-[10px] text-slate-500 mt-2.5 uppercase tracking-wider font-bold">
-            ZERO ENTRY CHARGES • INSTANT SCANNABLE DIGITAL BADGE
+            UPI QR CODE &amp; UTR SUBMISSION • MANUAL VERIFICATION BY ACCOUNTS DESK
           </p>
         </div>
 

@@ -16,10 +16,12 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
     };
     if (event) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [event, onClose]);
@@ -28,19 +30,26 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn"
+      data-lenis-prevent="true"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-sm animate-fadeIn overscroll-contain"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-event-title"
+      onClick={onClose}
     >
-      <div className="relative w-full max-w-2xl bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg overflow-hidden animate-scaleUp text-slate-950">
+      <div 
+        data-lenis-prevent="true"
+        onClick={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl max-h-[90vh] bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg overflow-hidden animate-scaleUp text-slate-950 flex flex-col"
+      >
         
-        {/* Modal Top Header */}
-        <div className="p-6 sm:p-8 bg-[#F6F7F9] border-b-[1.5px] border-slate-900/10 relative">
+        {/* Modal Top Header (Fixed at top) */}
+        <div className="p-6 sm:p-8 bg-[#F6F7F9] border-b-[1.5px] border-slate-900/10 relative shrink-0">
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 rounded-full bg-white text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm focus:outline-none"
+            className="absolute top-6 right-6 p-2 rounded-full bg-white text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm focus:outline-none hover:bg-slate-100 transition-colors"
             aria-label="Close event details modal"
           >
             <X className="w-5 h-5" />
@@ -72,8 +81,11 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
           </p>
         </div>
 
-        {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+        {/* Content Body (Smooth, Isolated Inner Scroll) */}
+        <div 
+          data-lenis-prevent="true"
+          className="p-6 sm:p-8 space-y-6 flex-1 overflow-y-auto overscroll-contain"
+        >
           
           {/* Key Quick Facts */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300 text-xs font-mono">
@@ -151,8 +163,8 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
 
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-6 bg-[#F6F7F9] border-t-[1.5px] border-slate-900/10 flex items-center justify-between gap-4">
+        {/* Modal Footer (Fixed at bottom) */}
+        <div className="p-6 bg-[#F6F7F9] border-t-[1.5px] border-slate-900/10 flex items-center justify-between gap-4 shrink-0">
           <button
             type="button"
             onClick={onClose}

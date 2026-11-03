@@ -152,9 +152,9 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
             <tr className="bg-[#F6F7F9] border-b border-slate-200 text-slate-600 font-mono text-[11px] uppercase tracking-wider">
               <th className="py-3 px-4">Ref Code</th>
               <th className="py-3 px-4">Participant</th>
-              <th className="py-3 px-4">Institution</th>
               <th className="py-3 px-4">Event</th>
               <th className="py-3 px-4">Type</th>
+              <th className="py-3 px-4">Fee &amp; UTR</th>
               <th className="py-3 px-4">Status</th>
               <th className="py-3 px-4 text-right">Actions</th>
             </tr>
@@ -184,12 +184,7 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                     <td className="py-3.5 px-4">
                       <div className="font-bold text-slate-950">{reg.full_name}</div>
                       <div className="font-mono text-[10px] text-slate-500">{reg.student_id_number}</div>
-                    </td>
-
-                    {/* Institution */}
-                    <td className="py-3.5 px-4 max-w-[200px]">
-                      <div className="truncate text-slate-800 font-medium">{reg.institution_name}</div>
-                      <div className="text-[10px] text-slate-500 truncate">{reg.course}</div>
+                      <div className="text-[10px] text-slate-400 truncate max-w-[150px]">{reg.institution_name}</div>
                     </td>
 
                     {/* Event */}
@@ -211,6 +206,19 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                           VISITING
                         </span>
                       )}
+                    </td>
+
+                    {/* Fee & UTR */}
+                    <td className="py-3.5 px-4 whitespace-nowrap">
+                      <div className="font-mono font-bold text-slate-950">
+                        ₹{reg.amount_inr || (reg.participant_type === 'ybn_student' ? 399 : 499)}
+                      </div>
+                      <div className="font-mono text-[10px] text-slate-500 truncate max-w-[120px]" title={reg.transaction_id || 'Pending UTR'}>
+                        {reg.transaction_id ? `UTR: ${reg.transaction_id}` : 'Pending UTR'}
+                      </div>
+                      <div className="font-mono text-[9px] text-slate-400">
+                        {reg.payment_timestamp ? new Date(reg.payment_timestamp).toLocaleDateString('en-IN') : new Date(reg.created_at).toLocaleDateString('en-IN')}
+                      </div>
                     </td>
 
                     {/* Status */}

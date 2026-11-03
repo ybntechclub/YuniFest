@@ -45,7 +45,7 @@ export const RegulationsPage: React.FC = () => {
               to="/register"
               className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-8 shrink-0 self-start md:self-auto"
             >
-              <span>CLAIM PASS (₹0)</span>
+              <span>REGISTER FOR PASS</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -84,7 +84,7 @@ export const RegulationsPage: React.FC = () => {
                   "Mimicry Competition",
                   "Stand-up Comedy",
                   "Gaming Tournament — Free Fire or BGMI",
-                  "Treasure Hunting (Strictly Capped to 25 Teams)"
+                  "Treasure Hunting (Strictly Capped to 6 Teams of 5)"
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-3">
                     <span className="w-2 h-2 rounded-full bg-[#2B59FF] shrink-0" />
@@ -95,7 +95,7 @@ export const RegulationsPage: React.FC = () => {
             </div>
 
             <div className="mt-8 pt-4 border-t border-slate-200 text-xs font-mono text-slate-500 flex items-center justify-between">
-              <span>Fee: ₹0 (Free)</span>
+              <span>Pass Fee: ₹499 (External) / ₹399 (YBN)</span>
               <span className="font-bold text-slate-950">PHYSICAL COLLEGE ID REQUIRED</span>
             </div>
           </div>

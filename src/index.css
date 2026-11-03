@@ -221,4 +221,27 @@
     animation: spin-slow 24s linear infinite;
     transform-origin: center center;
   }
+
+  /* Running Animated Gradient Border for Spotlight Lead Card */
+  @keyframes running-border {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .running-border-glow {
+    background: linear-gradient(90deg, #CCFF00, #2B59FF, #FEF08A, #EC4899, #CCFF00);
+    background-size: 300% 300%;
+    animation: running-border 3.5s ease infinite;
+  }
+
+  .glossy-shine {
+    background: linear-gradient(135deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+  }
 }

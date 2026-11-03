@@ -57,7 +57,7 @@ export const RulesSection: React.FC = () => {
               to="/register"
               className="btn-voltage text-xs py-3.5 px-8 shrink-0 self-start md:self-auto"
             >
-              <span>CLAIM PASS (₹0)</span>
+              <span>REGISTER FOR PASS</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -87,7 +87,7 @@ export const RulesSection: React.FC = () => {
               </h4>
 
               <p className="font-display text-xs sm:text-sm text-slate-600 leading-relaxed mb-6">
-                Students from any recognized college or university across India can register with ₹0 fee. Open to 9 flagship events:
+                Students from any recognized college or university across India can register with ₹499 fee. Open to 9 flagship events:
               </p>
 
               <div className="grid grid-cols-2 gap-2 text-xs font-display text-slate-800">
@@ -101,7 +101,7 @@ export const RulesSection: React.FC = () => {
                   <span className="w-2 h-2 rounded-full bg-[#2B59FF]" /> BGMI &amp; Free Fire
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#2B59FF]" /> Treasure Hunt (Cap: 25)
+                  <span className="w-2 h-2 rounded-full bg-[#2B59FF]" /> Treasure Hunt (Cap: 6 Teams)
                 </span>
                 <span className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#2B59FF]" /> Quiz Battle

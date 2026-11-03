@@ -138,7 +138,7 @@ export const FestOverview: React.FC = () => {
                   [ 03 // ADVENTURE ]
                 </span>
                 <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white border border-slate-900 text-slate-950">
-                  CAP: 25 TEAMS
+                  CAP: 6 TEAMS
                 </span>
               </div>
 
@@ -155,7 +155,7 @@ export const FestOverview: React.FC = () => {
                   </span>
                 </div>
                 <div className="font-headline font-black text-2xl text-slate-950">
-                  25 Teams Max
+                  6 Teams (5 each)
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-600">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -241,7 +241,7 @@ export const FestOverview: React.FC = () => {
                   </div>
                   <div>
                     <span className="font-mono text-xs font-black text-slate-950 block">YUNI-2026-PASS</span>
-                    <span className="text-[10px] text-slate-500">Free Admission (₹0)</span>
+                    <span className="text-[10px] text-slate-500">Official Pass (₹399/₹499)</span>
                   </div>
                 </div>
               </div>
@@ -335,25 +335,25 @@ export const FestOverview: React.FC = () => {
 
             <div className="space-y-1">
               <div className="font-headline font-black text-4xl sm:text-5xl text-slate-950">
-                ₹0
+                ₹399
               </div>
               <div className="font-mono text-xs font-bold text-emerald-600 uppercase tracking-wider">
-                REGISTRATION FEE
+                ENTRY PASS
               </div>
               <div className="font-mono text-[10px] text-slate-500 uppercase">
-                100% FREE PARTICIPATION
+                ₹399 YBN / ₹499 VISITING
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="font-headline font-black text-4xl sm:text-5xl text-slate-950">
-                25
+                06
               </div>
               <div className="font-mono text-xs font-bold text-amber-600 uppercase tracking-wider">
-                TREASURE HUNT CAP
+                TREASURE HUNT TEAMS
               </div>
               <div className="font-mono text-[10px] text-slate-500 uppercase">
-                STRICT TEAM QUOTA
+                STRICT 5 MEMBERS EACH
               </div>
             </div>
           </div>

@@ -106,19 +106,44 @@ export const INITIAL_EVENTS: EventItem[] = [
     event_day: "day_1",
     timing_display: "All Day Event",
     venue: "Main Campus Grounds",
-    registration_open: false, // Informational & internal vendor allocation
+    registration_open: true,
     eligible_participant_types: "ybn_only",
     capacity: 20,
     capacity_unit: "teams",
     rules: [
+      "Stall / team size: 5 to 8 members will be per team or stall.",
       "Stall allotments are coordinated directly by the organizing committee.",
-      "Strict food safety and cleanliness hygiene standards must be upheld.",
-      "All registered YUNIFEST attendees enjoy open entry."
+      "Strict food safety and cleanliness hygiene standards must be upheld at all times.",
+      "All registered YUNIFEST attendees enjoy open entry to the food arena."
     ],
-    student_coordinator: "Meenu Mahto",
+    student_coordinator: "Meenu Mahato",
     faculty_coordinator: "Dr. Rachna Kumari",
     icon_name: "Utensils",
     accent_color: "gold",
+  },
+  {
+    id: "evt-live-sketch",
+    slug: "live-sketch",
+    name: "Live Sketch Competition",
+    description: "On-the-spot live campus sketching challenge testing observational drawing, light-and-shade, and architectural perspective.",
+    category: "creative",
+    event_day: "day_1",
+    timing_display: "Schedule to be announced",
+    venue: "Central Courtyard & Art Arena",
+    registration_open: true,
+    eligible_participant_types: "all",
+    capacity: 35,
+    capacity_unit: "participants",
+    rules: [
+      "Instructions: All materials must be self-brought (drawing sheets, pencils, charcoals, erasers, clipboards); the university will NOT provide any materials.",
+      "Live campus perspective or still-life subject will be designated on the spot.",
+      "Time limit: 90 minutes strictly.",
+      "Judging based on perspective accuracy, tonal depth, and artistic craftsmanship."
+    ],
+    student_coordinator: "Shreya Shukla",
+    faculty_coordinator: "Mrs. Pinky Kumari",
+    icon_name: "PenTool",
+    accent_color: "cyan",
   },
 
   // DAY 2 — DEC 11, 2026: Cultural Showcase & Creative Competitions
@@ -133,15 +158,16 @@ export const INITIAL_EVENTS: EventItem[] = [
     venue: "Entire Campus Grounds",
     registration_open: true,
     eligible_participant_types: "all", // Open to both YBN and Outside
-    capacity: 25, // Stated in prompt: configurable capacity of 25
+    capacity: 6, // Exactly 6 teams
     capacity_unit: "teams",
     rules: [
-      "Maximum capacity is capped at 25 entries strictly on first-come, first-served basis.",
-      "Clues must be solved sequentially without interfering with other teams.",
-      "Tampering with physical clue markers results in disqualification.",
+      "Strictly limited to only 6 teams on a first-come, first-registered basis.",
+      "Each team must consist of exactly 5 members (30 participants maximum).",
+      "Clues must be solved sequentially across campus checkpoints without interfering with other teams.",
+      "Tampering with physical clue markers results in immediate disqualification.",
       "Physical student ID card verification required before start packet release."
     ],
-    student_coordinator: "Agrani Sriwastava",
+    student_coordinator: "Agrani Shrivastava",
     faculty_coordinator: "Dr. Sapna Kasari",
     icon_name: "Compass",
     accent_color: "gold",
@@ -208,9 +234,10 @@ export const INITIAL_EVENTS: EventItem[] = [
     capacity: 100,
     capacity_unit: "participants",
     rules: [
+      "Official Topic / Theme: 'A Day in YUNIFEST' — capture raw energy, festival moments, celebrations, and campus life.",
       "Reel duration must be strictly between 30 and 60 seconds.",
       "Footage must be captured on the YBN University campus during YUNIFEST 2026.",
-      "Must tag official fest handles and use official festival hashtags.",
+      "Must tag official fest handles and use official festival hashtags #YUNIFEST2026.",
       "Content must be original; zero plagiarism or inappropriate language."
     ],
     student_coordinator: "Aryan Sharma",
@@ -219,51 +246,29 @@ export const INITIAL_EVENTS: EventItem[] = [
     accent_color: "magenta",
   },
   {
-    id: "evt-mimicry-competition",
-    slug: "mimicry-competition",
-    name: "Mimicry Competition",
-    description: "Master the art of theatrical impressions, voice modulation, and satire.",
+    id: "evt-mimicry-standup",
+    slug: "mimicry-standup",
+    name: "Mimicry & Stand-up Comedy",
+    description: "Master the art of theatrical impressions, voice modulation, satire, and stand-up observational humor across solo, duo, and group acts.",
     category: "cultural",
     event_day: "day_2",
     timing_display: "Schedule to be announced",
     venue: "Open Stage B",
     registration_open: true,
     eligible_participant_types: "all", // Open to Outside & YBN
-    capacity: 25,
+    capacity: 40,
     capacity_unit: "participants",
     rules: [
-      "Individual solo performance with maximum 4 minutes on stage.",
-      "No defamatory, religious, or political insults permitted.",
-      "Voice clarity, humor, and likeness will be prime criteria."
+      "Categories: Solo, Duo, and Group performances.",
+      "Performance time: 4 to 6 minutes strictly.",
+      "Content must be strictly original; plagiarized jokes are penalized.",
+      "No offensive, vulgar, religious, or communally sensitive remarks permitted.",
+      "Voice clarity, comedic timing, and likeness will be prime judging criteria."
     ],
     student_coordinator: "Astha Kachhap",
     faculty_coordinator: "Abhilasha Mam",
     icon_name: "Smile",
     accent_color: "gold",
-  },
-  {
-    id: "evt-standup-comedy",
-    slug: "stand-up-comedy",
-    name: "Stand-up Comedy",
-    description: "Grab the mic, share hilarious observations, and have the campus roaring with laughter.",
-    category: "cultural",
-    event_day: "day_2",
-    timing_display: "Schedule to be announced",
-    venue: "Open Stage B",
-    registration_open: true,
-    eligible_participant_types: "all", // Open to Outside & YBN
-    capacity: 25,
-    capacity_unit: "participants",
-    rules: [
-      "Performance time: 4 to 6 minutes strictly.",
-      "Content must be strictly original; plagiarized jokes are penalized.",
-      "No offensive, vulgar, or communally sensitive remarks permitted.",
-      "Jury decisions are final and binding."
-    ],
-    student_coordinator: "Astha Kachhap",
-    faculty_coordinator: "Abhilasha Mam",
-    icon_name: "Sparkles",
-    accent_color: "cyan",
   },
 
   // DAY 3 — DEC 12, 2026: Grand Finale & Closing Ceremony
@@ -356,7 +361,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Negative marking for wrong answers in buzzer rounds.",
       "Timing will be officially announced and notified on this dashboard."
     ],
-    student_coordinator: "Kamil husan",
+    student_coordinator: "Kamil Hussain",
     faculty_coordinator: "Dr. Subhashish Sinha",
     icon_name: "HelpCircle",
     accent_color: "gold",
@@ -375,8 +380,9 @@ export const INITIAL_EVENTS: EventItem[] = [
     capacity: 40,
     capacity_unit: "participants",
     rules: [
+      "Theme will be disclosed on the spot by the coordinators at competition commencement.",
       "Standard A2 / A3 chart paper will be provided.",
-      "Participants bring their own sketching, coloring, and painting medium.",
+      "Participants must bring their own sketching, coloring, and painting medium.",
       "Time duration: 2 hours.",
       "Judging criteria: Creativity, relevance to theme, and artistic presentation."
     ],
