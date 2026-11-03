@@ -32,6 +32,12 @@ export const AdminDashboardPage: React.FC = () => {
 
   const loadData = async () => {
     setIsLoading(true);
+    // Explicitly purge any legacy sample data or stale local cache
+    const raw = localStorage.getItem('yunifest_registrations_v1');
+    if (raw && (raw.includes('reg-sample-') || raw.includes('Aman Kumar Verma') || raw.includes('Priya Sundaram'))) {
+      localStorage.removeItem('yunifest_registrations_v1');
+    }
+
     const [regs, evts] = await Promise.all([
       registrationStore.getRegistrations(),
       registrationStore.getEvents(),

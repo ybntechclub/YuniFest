@@ -109,6 +109,21 @@ CREATE POLICY "Public can view active events"
   TO anon, authenticated
   USING (true);
 
+-- Events RLS: Organizers can update events
+DROP POLICY IF EXISTS "Admins can update events" ON public.events;
+CREATE POLICY "Admins can update events"
+  ON public.events FOR UPDATE
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);
+
+-- Events RLS: Organizers can insert events
+DROP POLICY IF EXISTS "Admins can insert events" ON public.events;
+CREATE POLICY "Admins can insert events"
+  ON public.events FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
 -- Registrations RLS: Public can submit registration
 DROP POLICY IF EXISTS "Public can submit registration" ON public.registrations;
 CREATE POLICY "Public can submit registration"
@@ -132,6 +147,13 @@ CREATE POLICY "Public and Admins can view registrations"
 DROP POLICY IF EXISTS "Admins can update registrations" ON public.registrations;
 CREATE POLICY "Admins can update registrations"
   ON public.registrations FOR UPDATE
+  TO anon, authenticated
+  USING (true);
+
+-- Registrations RLS: Organizers can delete registrations
+DROP POLICY IF EXISTS "Admins can delete registrations" ON public.registrations;
+CREATE POLICY "Admins can delete registrations"
+  ON public.registrations FOR DELETE
   TO anon, authenticated
   USING (true);
 

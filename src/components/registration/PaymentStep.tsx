@@ -31,7 +31,7 @@ interface PaymentStepProps {
     consent: boolean;
   };
   onBack: () => void;
-  onSuccess: (record: RegistrationRecord) => void;
+  onSuccess: (record: RegistrationRecord, localPreviewUrl?: string) => void;
 }
 
 export const PaymentStep: React.FC<PaymentStepProps> = ({
@@ -49,6 +49,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
 
   const [transactionId, setTransactionId] = useState('');
   const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isCompressing, setIsCompressing] = useState<boolean>(false);
   const [screenshotFileName, setScreenshotFileName] = useState<string>('');
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,28 +112,52 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
+    // Robust image verification: handles mobile galleries, WhatsApp downloads, and standard pickers
+    const isImage = (file.type && file.type.startsWith('image/')) || 
+      /\.(jpe?g|png|webp|gif|bmp|heic|heif)$/i.test(file.name);
+
+    if (!isImage) {
       setError("Please upload an image file (PNG, JPG, or JPEG) for the payment screenshot.");
       return;
     }
 
-    if (file.size > 15 * 1024 * 1024) {
-      setError("Screenshot image size exceeds 15MB limit. Please upload a smaller image.");
+    if (file.size > 25 * 1024 * 1024) {
+      setError("Screenshot image size exceeds 25MB limit. Please upload a smaller image.");
       return;
     }
 
     setError(null);
     setScreenshotFileName(file.name);
 
+    // Instant local preview (synchronous 0ms visual display)
+    let localObjUrl = '';
+    try {
+      localObjUrl = URL.createObjectURL(file);
+      setPreviewUrl(localObjUrl);
+    } catch {
+      // fallback
+    }
+
+    setIsCompressing(true);
+
     try {
       const compressedDataUrl = await compressImage(file);
       setScreenshotUrl(compressedDataUrl);
+      if (!localObjUrl) {
+        setPreviewUrl(compressedDataUrl);
+      }
     } catch {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setScreenshotUrl(reader.result as string);
+        const res = reader.result as string;
+        setScreenshotUrl(res);
+        if (!localObjUrl) {
+          setPreviewUrl(res);
+        }
       };
       reader.readAsDataURL(file);
+    } finally {
+      setIsCompressing(false);
     }
   };
 
@@ -144,7 +170,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
       return;
     }
 
-    if (!screenshotUrl) {
+    if (!screenshotUrl && !previewUrl) {
       setError("Please upload a screenshot of your successful UPI payment for verification.");
       return;
     }
@@ -186,7 +212,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         amount_inr: amount,
         payment_method: 'upi',
         transaction_id: transactionId.trim(),
-        payment_screenshot_url: finalScreenshotUrl,
+        payment_screenshot_url: finalScreenshotUrl || undefined,
         payment_timestamp: nowIso,
       });
 
@@ -203,7 +229,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         console.warn('Confirmation email dispatch background note:', mailErr);
       }
 
-      onSuccess(result.data);
+      const localReceiptPreview = previewUrl || screenshotUrl || undefined;
+      onSuccess(result.data, localReceiptPreview);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred while submitting payment details.");
       setIsSubmitting(false);
@@ -422,42 +449,72 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
           </label>
           
           <div className="p-6 rounded-2xl border-2 border-dashed border-slate-400 hover:border-slate-900 transition-colors bg-[#F6F7F9] text-center">
-            {screenshotUrl ? (
+            {(previewUrl || screenshotUrl) ? (
               <div className="space-y-3">
-                <div className="max-w-xs mx-auto rounded-xl overflow-hidden border-[1.5px] border-slate-900 shadow-md">
-                  <img src={screenshotUrl} alt="Payment Receipt Preview" className="w-full max-h-52 object-contain bg-white" />
+                <div className="relative max-w-xs mx-auto rounded-xl overflow-hidden border-[1.5px] border-slate-900 shadow-md bg-white">
+                  <img 
+                    src={previewUrl || screenshotUrl || ''} 
+                    alt="Payment Receipt Preview" 
+                    className="w-full max-h-56 object-contain bg-slate-50" 
+                  />
+                  <div className="absolute top-2 right-2">
+                    <span className="font-mono text-[9px] font-black uppercase tracking-wider bg-slate-950/80 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
+                      ✓ Preview
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-center gap-3">
-                  <span className="font-mono text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-300">
-                    ✓ {screenshotFileName || "Receipt Uploaded"}
+
+                <div className="flex flex-wrap items-center justify-center gap-2.5">
+                  <span className="font-mono text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-300 inline-flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span className="truncate max-w-[180px]">{screenshotFileName || "Receipt Selected"}</span>
                   </span>
-                  <label className="cursor-pointer text-xs font-mono font-bold text-[#2B59FF] hover:underline">
+
+                  {isCompressing && (
+                    <span className="font-mono text-[11px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 animate-pulse">
+                      Optimizing for upload...
+                    </span>
+                  )}
+
+                  <label className="cursor-pointer text-xs font-mono font-bold text-[#2B59FF] hover:underline px-2 py-1">
                     Change Screenshot
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/*,.heic,.heif"
                       onChange={handleFileChange}
                       className="hidden"
                     />
                   </label>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreviewUrl(null);
+                      setScreenshotUrl(null);
+                      setScreenshotFileName('');
+                    }}
+                    className="text-xs font-mono font-bold text-red-600 hover:text-red-800 px-2 py-1"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             ) : (
-              <label className="cursor-pointer flex flex-col items-center justify-center space-y-2">
-                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-300 flex items-center justify-center text-slate-600 shadow-sm">
-                  <Upload className="w-6 h-6 text-[#2B59FF]" />
+              <label className="cursor-pointer flex flex-col items-center justify-center space-y-2 py-3">
+                <div className="w-14 h-14 rounded-2xl bg-white border border-slate-300 flex items-center justify-center text-slate-600 shadow-sm hover:scale-105 transition-transform">
+                  <Upload className="w-7 h-7 text-[#2B59FF]" />
                 </div>
                 <div>
-                  <span className="text-xs font-display font-bold text-slate-900 block">
+                  <span className="text-sm font-display font-bold text-slate-900 block">
                     Click to upload payment screenshot
                   </span>
-                  <span className="font-mono text-[11px] text-slate-500">
-                    Supports PNG, JPG, JPEG up to 8MB
+                  <span className="font-mono text-[11px] text-slate-500 block mt-0.5">
+                    Supports PNG, JPG, JPEG, WEBP from your phone or gallery
                   </span>
                 </div>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/*,.heic,.heif"
                   required
                   onChange={handleFileChange}
                   className="hidden"

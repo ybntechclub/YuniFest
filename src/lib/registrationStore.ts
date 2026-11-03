@@ -5,104 +5,10 @@ import { generateRegistrationCode } from './utils';
 
 const EVENTS_STORAGE_KEY = 'yunifest_events_v1';
 const REGISTRATIONS_STORAGE_KEY = 'yunifest_registrations_v1';
+const EVENT_OVERRIDES_KEY = 'yunifest_event_overrides_v1';
 
-// Sample seed registrations for demonstration & testing in dashboard
-const SAMPLE_REGISTRATIONS: RegistrationRecord[] = [
-  {
-    id: "reg-sample-1",
-    registration_code: "YUNI-2026-A8F2",
-    event_id: "evt-gaming-tournament",
-    event_name: "Gaming Tournament (Free Fire & BGMI)",
-    participant_type: "ybn_student",
-    full_name: "Aman Kumar Verma",
-    email: "aman.verma@ybn.edu.in",
-    mobile: "9876543210",
-    institution_name: "YBN University, Ranchi",
-    department: "Computer Science & Engineering",
-    course: "B.Tech CSE",
-    academic_year: "3rd Year",
-    semester: "5th Semester",
-    student_id_number: "YBN/2023/BT-042",
-    id_card_confirmed: true,
-    participation_category: "Solo",
-    event_specific_data: {
-      gameChoice: "BGMI",
-      gameId: "5123984712",
-      gameIgn: "Soul_Striker99"
-    },
-    consent: true,
-    registration_status: "confirmed",
-    created_at: new Date(Date.now() - 3600000 * 48).toISOString()
-  },
-  {
-    id: "reg-sample-2",
-    registration_code: "YUNI-2026-K9P4",
-    event_id: "evt-dance-competition",
-    event_name: "Dance Competition",
-    participant_type: "outside_student",
-    full_name: "Priya Sundaram",
-    email: "priya.sundaram@bitmesra.ac.in",
-    mobile: "9835123456",
-    institution_name: "Birla Institute of Technology, Mesra",
-    institution_location: "Ranchi, Jharkhand",
-    course: "BCA",
-    academic_year: "2nd Year",
-    semester: "3rd Semester",
-    student_id_number: "BITM/2024/BCA-104",
-    id_card_confirmed: true,
-    participation_category: "Group",
-    team_name: "Rhythm Waves",
-    team_details: "1. Priya Sundaram (Lead)\n2. Shalini Kumari (BITM/2024/BCA-109)\n3. Riya Sen (BITM/2024/BCA-115)\n4. Aditi Roy (BITM/2024/BCA-118)",
-    consent: true,
-    registration_status: "pending",
-    created_at: new Date(Date.now() - 3600000 * 24).toISOString()
-  },
-  {
-    id: "reg-sample-3",
-    registration_code: "YUNI-2026-TR25",
-    event_id: "evt-treasure-hunting",
-    event_name: "Treasure Hunting",
-    participant_type: "outside_student",
-    full_name: "Rohit Raj",
-    email: "rohit.raj@ranchiuniv.ac.in",
-    mobile: "9431102938",
-    institution_name: "Ranchi University",
-    institution_location: "Ranchi, Jharkhand",
-    course: "B.Sc Physics",
-    academic_year: "3rd Year",
-    student_id_number: "RU/2023/SCI-091",
-    id_card_confirmed: true,
-    participation_category: "Team",
-    team_name: "The Cryptic Four",
-    team_details: "Rohit Raj (Captain), Ankit Kumar, Vikas Yadav, Saurav Paul",
-    consent: true,
-    registration_status: "confirmed",
-    created_at: new Date(Date.now() - 3600000 * 12).toISOString()
-  },
-  {
-    id: "reg-sample-4",
-    registration_code: "YUNI-2026-M7D1",
-    event_id: "evt-model-presentation",
-    event_name: "Model Presentation Competition",
-    participant_type: "ybn_student",
-    full_name: "Sneha Tigga",
-    email: "sneha.tigga@ybn.edu.in",
-    mobile: "9122334455",
-    institution_name: "YBN University, Ranchi",
-    department: "Faculty of Agriculture",
-    course: "B.Sc (Hons) Agriculture",
-    academic_year: "4th Year",
-    semester: "7th Semester",
-    student_id_number: "YBN/2022/AG-019",
-    id_card_confirmed: true,
-    participation_category: "Team",
-    team_name: "AgriTech Innovators",
-    team_details: "Model: Solar Automated Drip Irrigation System with Soil Moisture Telemetry",
-    consent: true,
-    registration_status: "confirmed",
-    created_at: new Date(Date.now() - 3600000 * 6).toISOString()
-  }
-];
+// Seed sample registrations (only used if Supabase is completely unconfigured)
+const SAMPLE_REGISTRATIONS: RegistrationRecord[] = [];
 
 class RegistrationStore {
   private events: EventItem[] = [];
@@ -126,17 +32,34 @@ class RegistrationStore {
       localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(this.events));
     }
 
-    // Load registrations from LocalStorage or initialize with sample records
+    // Registrations Initialization:
+    // If Supabase is configured, live database is the single source of truth.
+    // Purge any legacy sample mock data from localStorage if present.
     const storedRegistrations = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
-    if (storedRegistrations) {
-      try {
-        this.registrations = JSON.parse(storedRegistrations);
-      } catch {
-        this.registrations = SAMPLE_REGISTRATIONS;
+    if (isSupabaseConfigured) {
+      if (storedRegistrations && (storedRegistrations.includes('reg-sample-') || storedRegistrations.includes('Aman Kumar Verma') || storedRegistrations.includes('Priya Sundaram'))) {
+        localStorage.removeItem(REGISTRATIONS_STORAGE_KEY);
+        this.registrations = [];
+      } else if (storedRegistrations) {
+        try {
+          this.registrations = JSON.parse(storedRegistrations);
+        } catch {
+          this.registrations = [];
+        }
+      } else {
+        this.registrations = [];
       }
     } else {
-      this.registrations = SAMPLE_REGISTRATIONS;
-      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(this.registrations));
+      if (storedRegistrations) {
+        try {
+          this.registrations = JSON.parse(storedRegistrations);
+        } catch {
+          this.registrations = SAMPLE_REGISTRATIONS;
+        }
+      } else {
+        this.registrations = SAMPLE_REGISTRATIONS;
+        localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(this.registrations));
+      }
     }
   }
 
@@ -148,8 +71,37 @@ class RegistrationStore {
     localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(this.registrations));
   }
 
+  // Clear local storage cache
+  clearLocalCache() {
+    this.registrations = [];
+    localStorage.removeItem(REGISTRATIONS_STORAGE_KEY);
+  }
+
+  // Local event parameter overrides (persists admin changes reliably)
+  private loadEventOverrides(): Record<string, Partial<EventItem>> {
+    try {
+      const raw = localStorage.getItem(EVENT_OVERRIDES_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  private saveEventOverride(event: EventItem) {
+    try {
+      const overrides = this.loadEventOverrides();
+      if (event.id) overrides[event.id] = event;
+      if (event.slug) overrides[event.slug] = event;
+      localStorage.setItem(EVENT_OVERRIDES_KEY, JSON.stringify(overrides));
+    } catch (err) {
+      console.warn('Failed to save event override:', err);
+    }
+  }
+
   // Fetch events list
   async getEvents(): Promise<EventItem[]> {
+    const overrides = this.loadEventOverrides();
+
     if (isSupabaseConfigured) {
       try {
         const { data, error } = await supabase
@@ -157,61 +109,130 @@ class RegistrationStore {
           .select('*')
           .order('name');
         if (!error && data && data.length > 0) {
-          this.events = data as EventItem[];
+          const dbEvents = data as EventItem[];
+          // Merge Supabase events with any local overrides so admin edits persist
+          this.events = dbEvents.map(evt => {
+            const override = overrides[evt.id] || (evt.slug ? overrides[evt.slug] : undefined);
+            return override ? { ...evt, ...override } : evt;
+          });
           this.saveEvents();
-          return this.events;
+          return [...this.events];
         }
       } catch (err) {
         console.warn('Supabase getEvents fallback to local store:', err);
       }
     }
+
+    // Fallback: apply overrides to local events
+    this.events = this.events.map(evt => {
+      const override = overrides[evt.id] || (evt.slug ? overrides[evt.slug] : undefined);
+      return override ? { ...evt, ...override } : evt;
+    });
     return [...this.events];
   }
 
   // Get specific event by slug or id
   getEventBySlugOrId(identifier: string): EventItem | undefined {
-    return this.events.find(e => e.slug === identifier || e.id === identifier);
+    if (!identifier) return undefined;
+    const clean = identifier.trim();
+    const withoutPrefix = clean.replace(/^evt-/, '');
+    return this.events.find(e => 
+      e.slug === clean || 
+      e.id === clean || 
+      e.slug === withoutPrefix ||
+      `evt-${e.slug}` === clean
+    );
   }
 
   // Update event details (Admin feature)
-  async updateEvent(updatedEvent: EventItem): Promise<boolean> {
-    const index = this.events.findIndex(e => e.id === updatedEvent.id);
-    if (index === -1) return false;
+  async updateEvent(updatedEvent: EventItem): Promise<{ success: boolean; cloudSynced: boolean; error?: string }> {
+    const targetSlug = updatedEvent.slug || (updatedEvent.id ? updatedEvent.id.replace(/^evt-/, '') : '');
+    const index = this.events.findIndex(e => 
+      e.id === updatedEvent.id || 
+      e.slug === updatedEvent.slug ||
+      (targetSlug && e.slug === targetSlug)
+    );
+    if (index === -1) {
+      return { success: false, cloudSynced: false, error: 'Event not found in directory' };
+    }
 
-    this.events[index] = { ...updatedEvent, updated_at: new Date().toISOString() };
+    const current = this.events[index];
+    const merged: EventItem = {
+      ...current,
+      ...updatedEvent,
+      id: current.id || updatedEvent.id,
+      slug: current.slug || updatedEvent.slug || targetSlug,
+      updated_at: new Date().toISOString()
+    };
+
+    this.events[index] = merged;
     this.saveEvents();
+    this.saveEventOverride(merged);
+
+    let cloudSynced = false;
+    let cloudError: string | undefined = undefined;
 
     if (isSupabaseConfigured) {
       try {
-        await supabase
-          .from('events')
-          .update({
-            name: updatedEvent.name,
-            description: updatedEvent.description,
-            category: updatedEvent.category,
-            event_day: updatedEvent.event_day,
-            timing_display: updatedEvent.timing_display,
-            venue: updatedEvent.venue,
-            registration_open: updatedEvent.registration_open,
-            eligible_participant_types: updatedEvent.eligible_participant_types,
-            capacity: updatedEvent.capacity,
-            capacity_unit: updatedEvent.capacity_unit,
-            rules: updatedEvent.rules,
-            student_coordinator: updatedEvent.student_coordinator,
-            faculty_coordinator: updatedEvent.faculty_coordinator,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', updatedEvent.id);
-      } catch (err) {
+        const payload = {
+          name: merged.name,
+          description: merged.description,
+          category: merged.category,
+          event_day: merged.event_day,
+          timing_display: merged.timing_display,
+          venue: merged.venue,
+          registration_open: merged.registration_open,
+          eligible_participant_types: merged.eligible_participant_types,
+          capacity: merged.capacity,
+          capacity_unit: merged.capacity_unit,
+          rules: merged.rules,
+          student_coordinator: merged.student_coordinator,
+          faculty_coordinator: merged.faculty_coordinator,
+          updated_at: merged.updated_at
+        };
+
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(merged.id);
+        let query = supabase.from('events').update(payload);
+        if (isUuid) {
+          query = query.eq('id', merged.id);
+        } else if (merged.slug) {
+          query = query.eq('slug', merged.slug);
+        } else {
+          query = query.eq('id', merged.id);
+        }
+
+        const { data, error } = await query.select();
+        if (error) {
+          console.warn('Supabase updateEvent error:', error);
+          cloudError = error.message;
+        } else if (data && data.length > 0) {
+          cloudSynced = true;
+          this.events[index] = data[0] as EventItem;
+          this.saveEvents();
+          this.saveEventOverride(this.events[index]);
+        } else {
+          console.warn('Supabase updateEvent affected 0 rows (RLS update policy may need fix_events_rls.sql)');
+          cloudError = 'Database update policy blocked cloud sync. Run supabase/fix_events_rls.sql in Supabase Dashboard.';
+        }
+      } catch (err: any) {
         console.warn('Supabase updateEvent error:', err);
+        cloudError = err.message || 'Error updating event in Supabase';
       }
     }
-    return true;
+
+    return { success: true, cloudSynced, error: cloudError };
   }
 
   // Get current registration count for an event
   getRegistrationCount(eventId: string): number {
-    return this.registrations.filter(r => r.event_id === eventId && r.registration_status !== 'rejected').length;
+    const event = this.getEventBySlugOrId(eventId);
+    const validIds = new Set<string>([eventId]);
+    if (event) {
+      if (event.id) validIds.add(event.id);
+      if (event.slug) validIds.add(event.slug);
+      if (event.slug) validIds.add(`evt-${event.slug}`);
+    }
+    return this.registrations.filter(r => validIds.has(r.event_id) && r.registration_status !== 'rejected').length;
   }
 
   // Check capacity limit
@@ -418,7 +439,8 @@ class RegistrationStore {
             .order('created_at', { ascending: false });
         }
 
-        if (!result.error && result.data && result.data.length > 0) {
+        // When Supabase responds with data (even if 0 records []), it is the authoritative source:
+        if (!result.error && Array.isArray(result.data)) {
           const mapped: RegistrationRecord[] = result.data.map((d: any) => ({
             ...d,
             event_name: d.events?.name || this.getEventBySlugOrId(d.event_id)?.name || 'Event'
@@ -426,6 +448,8 @@ class RegistrationStore {
           this.registrations = mapped;
           this.saveRegistrations();
           return mapped;
+        } else if (result.error) {
+          console.warn('Supabase query error:', result.error);
         }
       } catch (err) {
         console.warn('Supabase getRegistrations fallback to local:', err);

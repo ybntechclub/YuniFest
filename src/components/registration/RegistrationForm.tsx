@@ -195,8 +195,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
           setIsPaymentStep(false);
           window.scrollTo({ top: 250, behavior: 'smooth' });
         }}
-        onSuccess={(record) => {
-          navigate('/register/success', { state: { registration: record } });
+        onSuccess={(record, localPreviewUrl) => {
+          navigate('/register/success', { 
+            state: { 
+              registration: record,
+              localScreenshotUrl: localPreviewUrl 
+            } 
+          });
         }}
       />
     );

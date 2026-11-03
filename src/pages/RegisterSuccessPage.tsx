@@ -4,7 +4,7 @@ import confetti from 'canvas-confetti';
 import { RegistrationRecord } from '../types/database';
 import { PassCard } from '../components/registration/PassCard';
 import { CheckCircle2, ArrowRight, Home, Sparkles, ShieldCheck, Clock, AlertCircle, Mail, FileImage, MessageCircle, ExternalLink } from 'lucide-react';
-import { isGoogleDriveUrl, getDriveDirectImageUrl, getDriveViewUrl } from '../lib/driveUpload';
+import { isGoogleDriveUrl, getDriveDirectImageUrl, getDrivePreviewUrl, getDriveViewUrl } from '../lib/driveUpload';
 import { DEFAULT_WHATSAPP_CHANNEL_URL } from '../lib/emailTemplate';
 import { sendRegistrationConfirmationEmail } from '../lib/emailService';
 import { registrationStore } from '../lib/registrationStore';
@@ -16,6 +16,8 @@ export const RegisterSuccessPage: React.FC = () => {
   const [resendStatus, setResendStatus] = React.useState<string | null>(null);
 
   let registration: RegistrationRecord | undefined = location.state?.registration;
+  const localScreenshotUrl = location.state?.localScreenshotUrl;
+  const [imgFailed, setImgFailed] = React.useState(false);
 
   const handleResendEmail = async () => {
     if (!registration) return;
@@ -140,15 +142,60 @@ export const RegisterSuccessPage: React.FC = () => {
               </div>
 
               {/* Screenshot Preview */}
-              {registration.payment_screenshot_url && (
-                <div className="p-4 rounded-2xl bg-white border border-slate-300 space-y-2">
-                  <span className="font-mono text-[10px] text-slate-500 uppercase font-bold block flex items-center gap-1.5">
-                    <FileImage className="w-3.5 h-3.5 text-[#2B59FF]" />
-                    <span>SUBMITTED PAYMENT RECEIPT SCREENSHOT:</span>
-                  </span>
-                  <div className="max-w-xs mx-auto rounded-xl overflow-hidden border border-slate-400 shadow-sm">
-                    <img src={registration.payment_screenshot_url} alt="Receipt preview" className="w-full max-h-48 object-contain bg-slate-50" />
+              {(localScreenshotUrl || registration.payment_screenshot_url) && (
+                <div className="p-4 rounded-2xl bg-white border border-slate-300 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <span className="text-[10px] text-slate-500 uppercase font-bold flex items-center gap-1.5">
+                      <FileImage className="w-3.5 h-3.5 text-[#2B59FF]" />
+                      <span>SUBMITTED PAYMENT RECEIPT SCREENSHOT:</span>
+                    </span>
+
+                    {isGoogleDriveUrl(registration.payment_screenshot_url) && (
+                      <a
+                        href={getDriveViewUrl(registration.payment_screenshot_url) || registration.payment_screenshot_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2B59FF] hover:underline"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Open in Drive ↗</span>
+                      </a>
+                    )}
                   </div>
+
+                  <div className="max-w-sm mx-auto rounded-xl overflow-hidden border border-slate-300 shadow-sm bg-slate-50">
+                    {localScreenshotUrl ? (
+                      <img 
+                        src={localScreenshotUrl} 
+                        alt="Submitted receipt preview" 
+                        className="w-full max-h-56 object-contain bg-white" 
+                      />
+                    ) : !imgFailed && isGoogleDriveUrl(registration.payment_screenshot_url) ? (
+                      <img 
+                        src={getDriveDirectImageUrl(registration.payment_screenshot_url)} 
+                        alt="Submitted receipt preview" 
+                        referrerPolicy="no-referrer"
+                        className="w-full max-h-56 object-contain bg-white" 
+                        onError={() => setImgFailed(true)}
+                      />
+                    ) : isGoogleDriveUrl(registration.payment_screenshot_url) ? (
+                      <iframe
+                        src={getDrivePreviewUrl(registration.payment_screenshot_url)}
+                        title="Google Drive Receipt Preview"
+                        className="w-full h-56 border-0"
+                        allow="autoplay"
+                      />
+                    ) : (
+                      <img 
+                        src={registration.payment_screenshot_url} 
+                        alt="Submitted receipt preview" 
+                        className="w-full max-h-56 object-contain bg-white" 
+                      />
+                    )}
+                  </div>
+                  <p className="text-[10.5px] text-slate-500 text-center">
+                    Saved to Official YUNIFEST 2026 Google Drive receipts repository.
+                  </p>
                 </div>
               )}
 

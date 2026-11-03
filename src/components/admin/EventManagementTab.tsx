@@ -12,8 +12,16 @@ interface EventManagementTabProps {
 }
 
 export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, onRefreshEvents }) => {
+  const [localEvents, setLocalEvents] = useState<EventItem[]>(events);
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  // Sync with prop updates
+  React.useEffect(() => {
+    setLocalEvents(events);
+  }, [events]);
 
   // Form states for modal
   const [name, setName] = useState('');
@@ -44,39 +52,58 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
   };
 
   const handleToggleOpen = async (evt: EventItem) => {
-    const updated = { ...evt, registration_open: !evt.registration_open };
-    await registrationStore.updateEvent(updated);
+    const nextOpen = !evt.registration_open;
+    // Optimistic local state update
+    setLocalEvents(prev => prev.map(item => 
+      (item.id === evt.id || item.slug === evt.slug) ? { ...item, registration_open: nextOpen } : item
+    ));
+
+    const updated = { ...evt, registration_open: nextOpen };
+    const res = await registrationStore.updateEvent(updated);
     await onRefreshEvents();
+
+    setStatusMessage(nextOpen ? `Registration OPENED for "${evt.name}"` : `Registration CLOSED for "${evt.name}"`);
+    setTimeout(() => setStatusMessage(null), 3000);
   };
 
   const handleSaveModal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingEvent) return;
 
+    setIsSaving(true);
     const parsedCapacity = capacity.trim() === '' ? null : parseInt(capacity, 10);
 
     const updated: EventItem = {
       ...editingEvent,
-      name,
-      description,
+      name: name.trim(),
+      description: description.trim(),
       event_day: eventDay,
-      timing_display: timingDisplay,
-      venue,
+      timing_display: timingDisplay.trim() || 'Schedule to be announced',
+      venue: venue.trim() || 'Main Campus, YBN University',
       eligible_participant_types: eligibleTypes,
-      capacity: parsedCapacity,
+      capacity: (parsedCapacity !== null && !isNaN(parsedCapacity)) ? parsedCapacity : null,
       capacity_unit: capacityUnit,
-      student_coordinator: studentCoord,
-      faculty_coordinator: facultyCoord,
+      student_coordinator: studentCoord.trim(),
+      faculty_coordinator: facultyCoord.trim(),
       registration_open: isOpen,
     };
 
-    await registrationStore.updateEvent(updated);
+    // Optimistic local state update
+    setLocalEvents(prev => prev.map(item => 
+      (item.id === updated.id || item.slug === updated.slug) ? updated : item
+    ));
+
+    const res = await registrationStore.updateEvent(updated);
     await onRefreshEvents();
+    
     setSaveSuccess(true);
+    setIsSaving(false);
+    setStatusMessage(`Saved parameters for "${updated.name}"`);
     setTimeout(() => {
       setSaveSuccess(false);
       setEditingEvent(null);
-    }, 1000);
+      setStatusMessage(null);
+    }, 800);
   };
 
   return (
@@ -92,9 +119,22 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
         </div>
       </div>
 
+      {/* Status Alert Banner */}
+      {statusMessage && (
+        <div className="p-3.5 rounded-2xl bg-emerald-50 border-[1.5px] border-emerald-500 text-emerald-950 text-xs font-mono font-bold flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-2">
+            <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>{statusMessage}</span>
+          </div>
+          <button type="button" onClick={() => setStatusMessage(null)} className="text-emerald-700 hover:text-emerald-950">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Events Table / Card List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((evt) => {
+        {localEvents.map((evt) => {
           const regCount = registrationStore.getRegistrationCount(evt.id);
           const isFull = evt.capacity !== null && regCount >= evt.capacity;
 
@@ -357,9 +397,10 @@ export const EventManagementTab: React.FC<EventManagementTabProps> = ({ events, 
 
                 <button
                   type="submit"
+                  disabled={isSaving}
                   className="btn-voltage text-xs py-2 px-6"
                 >
-                  {saveSuccess ? 'Changes Saved!' : 'Save Parameters'}
+                  {isSaving ? 'Saving Parameters...' : saveSuccess ? 'Changes Saved!' : 'Save Parameters'}
                 </button>
               </div>
             </form>

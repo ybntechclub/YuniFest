@@ -22,6 +22,8 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
   events,
   onSelectRegistration,
   onStatusUpdate,
+  onDeleteRegistration,
+  onRefresh,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [eventFilter, setEventFilter] = useState('all');
@@ -67,6 +69,11 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
     document.body.removeChild(link);
   };
 
+  const handlePurgeCache = () => {
+    registrationStore.clearLocalCache();
+    if (onRefresh) onRefresh();
+  };
+
   const statusBadges: Record<RegistrationStatus, { bg: string; text: string; icon: React.ElementType }> = {
     confirmed: { bg: 'bg-emerald-50 border-emerald-300', text: 'text-emerald-800', icon: CheckCircle },
     pending: { bg: 'bg-amber-50 border-amber-300', text: 'text-amber-800', icon: Clock },
@@ -77,7 +84,7 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
   return (
     <div className="bg-white border-[1.5px] border-slate-900 rounded-[32px] p-6 sm:p-8 shadow-solid-pop text-slate-950">
       
-      {/* Top Controls: Search + Multi-Filters + Export Button */}
+      {/* Top Controls: Search + Multi-Filters + Export & Refresh Buttons */}
       <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between mb-6 pb-6 border-b border-slate-200">
         
         {/* Search */}
@@ -130,11 +137,34 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
             <option value="rejected">Rejected</option>
           </select>
 
+          {/* Purge Local Cache Button */}
+          <button
+            type="button"
+            onClick={handlePurgeCache}
+            className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-xs font-bold border border-slate-300 transition-colors"
+            title="Clear browser local cache and re-sync directly from Supabase"
+          >
+            <span>Purge Cache</span>
+          </button>
+
+          {/* Refresh Button */}
+          {onRefresh && (
+            <button
+              type="button"
+              onClick={onRefresh}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 font-display font-bold text-xs border border-slate-300 transition-colors shadow-sm"
+              title="Sync records from Supabase"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-slate-600" />
+              <span>Refresh</span>
+            </button>
+          )}
+
           {/* Export CSV Button */}
           <button
             type="button"
             onClick={handleExportCSV}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FEF08A] hover:bg-yellow-300 text-slate-950 font-display font-bold text-xs border border-slate-900 transition-colors shadow-sm ml-auto"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FEF08A] hover:bg-yellow-300 text-slate-950 font-display font-bold text-xs border border-slate-900 transition-colors shadow-sm"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -167,7 +197,7 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
             {filteredRegistrations.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-12 text-center text-slate-500 font-mono text-xs">
-                  No registration records matching the selected query.
+                  No registration records found in the database.
                 </td>
               </tr>
             ) : (
@@ -223,6 +253,25 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                       <div className="font-mono text-[9px] text-slate-400">
                         {reg.payment_timestamp ? new Date(reg.payment_timestamp).toLocaleDateString('en-IN') : new Date(reg.created_at).toLocaleDateString('en-IN')}
                       </div>
+                      {reg.payment_screenshot_url && (
+                        <div className="mt-1">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const targetUrl = isGoogleDriveUrl(reg.payment_screenshot_url)
+                                ? (getDriveViewUrl(reg.payment_screenshot_url) || reg.payment_screenshot_url)
+                                : reg.payment_screenshot_url;
+                              window.open(targetUrl, '_blank');
+                            }}
+                            className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-[#2B59FF] hover:text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2 py-0.5 rounded-md transition-colors"
+                            title="View Payment Receipt in new tab"
+                          >
+                            <ExternalLink className="w-2.5 h-2.5" />
+                            <span>Receipt ↗</span>
+                          </button>
+                        </div>
+                      )}
                     </td>
 
                     {/* Status */}
@@ -233,9 +282,9 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                       </span>
                     </td>
 
-                    {/* Quick Status Toggle */}
+                    {/* Quick Actions */}
                     <td className="py-3.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                      <div className="inline-flex items-center gap-1">
+                      <div className="inline-flex items-center gap-1.5">
                         <select
                           value={reg.registration_status}
                           onChange={(e) => onStatusUpdate(reg.id, e.target.value as RegistrationStatus)}
@@ -250,11 +299,22 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                         <button
                           type="button"
                           onClick={() => onSelectRegistration(reg)}
-                          className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
                           title="Inspect Record"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
+
+                        {onDeleteRegistration && (
+                          <button
+                            type="button"
+                            onClick={() => onDeleteRegistration(reg.id)}
+                            className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
+                            title="Delete Record"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
