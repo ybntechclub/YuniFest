@@ -142,7 +142,7 @@ export const Footer: React.FC = () => {
             </div>
             <div>
               <Link to="/register" className="text-white/80 hover:text-[#CCFF00] transition-colors block">
-                GET PASS (₹0 ENTRY)
+                GET PASS (₹399 / ₹499)
               </Link>
             </div>
             <div>
@@ -173,7 +173,7 @@ export const Footer: React.FC = () => {
                 ADMISSION POLICY:
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Registration is 100% free (₹0). Physical college/university ID card is strictly mandatory for campus entry.
+                Delegate passes: ₹399 (YBN students) / ₹499 (Visiting scholars). Physical college/university ID card is strictly mandatory for campus entry.
               </p>
             </div>
           </div>

@@ -4,8 +4,9 @@ import { EventItem } from '../../types/database';
 import { 
   Gamepad2, Cpu, Palette, Scissors, Utensils, Compass, Music, Mic2, 
   Video, Smile, Sparkles, Crown, Award, Radio, HelpCircle, FileImage,
-  MapPin, ArrowUpRight
+  MapPin, ArrowUpRight, Phone, PenTool
 } from 'lucide-react';
+import { OFFICIAL_COORDINATORS } from '../../data/coordinators';
 
 interface EventCardProps {
   event: EventItem;
@@ -30,11 +31,18 @@ const iconMap: Record<string, React.ElementType> = {
   Radio,
   HelpCircle,
   FileImage,
+  PenTool,
 };
 
 export const EventCard: React.FC<EventCardProps> = ({ event, onOpenDetails, registeredCount = 0 }) => {
   const IconComponent = iconMap[event.icon_name] || Award;
   const isFull = event.capacity !== null && registeredCount >= event.capacity;
+
+  const matchedCoord = OFFICIAL_COORDINATORS.find(
+    (c) =>
+      c.studentCoordinator.toLowerCase().includes(event.student_coordinator.toLowerCase()) ||
+      event.student_coordinator.toLowerCase().includes(c.studentCoordinator.toLowerCase())
+  );
 
   const dayLabels: Record<string, string> = {
     day_1: "DAY 01",
@@ -102,9 +110,23 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onOpenDetails, regi
           )}
         </div>
 
-        {/* Coordinators Quick Footnote */}
-        <div className="text-[11px] font-mono text-slate-500 mb-6 flex flex-col gap-0.5">
-          <div><strong className="text-slate-800">Student Coordinator:</strong> {event.student_coordinator}</div>
+        {/* Coordinators Quick Footnote with Phone Number */}
+        <div className="text-[11px] font-mono text-slate-500 mb-6 p-2.5 rounded-2xl bg-[#F6F7F9] border border-slate-300 flex items-center justify-between gap-2">
+          <div className="truncate">
+            <span className="text-slate-400 block text-[9px] uppercase font-bold tracking-wider">[ Lead Coordinator ]</span>
+            <strong className="text-slate-900 font-bold block truncate">{event.student_coordinator}</strong>
+          </div>
+          {matchedCoord?.studentPhone && (
+            <a
+              href={`tel:${matchedCoord.studentPhone.replace(/\s+/g, '')}`}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-slate-300 text-[10px] font-bold text-[#2B59FF] hover:bg-[#2B59FF] hover:text-white hover:border-[#2B59FF] transition-all shadow-sm shrink-0"
+              title={`Call ${event.student_coordinator}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Phone className="w-2.5 h-2.5" />
+              <span>{matchedCoord.studentPhone}</span>
+            </a>
+          )}
         </div>
       </div>
 

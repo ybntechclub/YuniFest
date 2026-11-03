@@ -48,9 +48,12 @@ export const AdminLoginPage: React.FC = () => {
 
         navigate('/admin');
       } else {
+        const envEmail = (import.meta.env.VITE_ADMIN_EMAIL || 'organizer@ybn.edu.in').toLowerCase().trim();
+        const envPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'yunifest2026';
+
         if (
-          (email.trim().toLowerCase() === 'organizer@ybn.edu.in' && password === 'yunifest2026') ||
-          (email.trim().toLowerCase() === 'admin@ybn.edu.in' && password === 'yunifest2026')
+          (email.trim().toLowerCase() === envEmail && password === envPassword) ||
+          (email.trim().toLowerCase() === 'admin@ybn.edu.in' && password === envPassword)
         ) {
           sessionStorage.setItem(
             'yunifest_admin_auth',
@@ -58,7 +61,7 @@ export const AdminLoginPage: React.FC = () => {
           );
           navigate('/admin');
         } else {
-          setError("Invalid organizer credentials. (For evaluation, click 'Fill Demo Credentials' below)");
+          setError("Invalid organizer email or password. Please check your credentials.");
         }
       }
     } catch (err: any) {
@@ -66,11 +69,6 @@ export const AdminLoginPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setEmail('organizer@ybn.edu.in');
-    setPassword('yunifest2026');
   };
 
   return (
@@ -142,27 +140,7 @@ export const AdminLoginPage: React.FC = () => {
           </div>
         </form>
 
-        {/* Demo Fast Login Switcher */}
-        <div className="mt-6 pt-6 border-t border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-mono text-[10px] text-slate-500 uppercase font-bold">
-              EVALUATION CREDENTIALS
-            </span>
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="text-[11px] font-mono font-bold text-[#2B59FF] hover:underline"
-            >
-              Fill Demo Credentials
-            </button>
-          </div>
-          <div className="p-3 rounded-xl bg-[#F6F7F9] border border-slate-300 font-mono text-[11px] text-slate-600 space-y-0.5">
-            <div><strong className="text-slate-950">Email:</strong> organizer@ybn.edu.in</div>
-            <div><strong className="text-slate-950">Password:</strong> yunifest2026</div>
-          </div>
-        </div>
-
-        <div className="mt-6 text-center">
+        <div className="mt-8 text-center pt-6 border-t border-slate-200">
           <Link to="/" className="text-xs font-mono font-bold text-slate-500 hover:text-slate-950">
             ← Back to Public Website
           </Link>

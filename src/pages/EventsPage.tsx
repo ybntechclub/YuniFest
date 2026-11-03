@@ -84,7 +84,7 @@ export const EventsPage: React.FC = () => {
             </span>
           </h1>
           <p className="font-display text-slate-600 text-sm sm:text-base leading-relaxed">
-            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your <strong className="text-slate-900 font-editorial italic text-lg">₹0 entry pass</strong>.
+            Explore 15+ official events across technology, culture, creative arts, and esports. Filter by day or eligibility to claim your <strong className="text-slate-900 font-editorial italic text-lg">official festival pass</strong>.
           </p>
 
           <div className="mt-5 flex justify-center">

@@ -3,7 +3,7 @@
 **Dates:** December 10, 11 and 12, 2026  
 **Theme:** Technology, Culture, Creativity and Celebration  
 **Tagline:** One Campus. Three Days. Endless Possibilities.  
-**Registration Fee:** ₹0 (Free Entry across all eligible events)  
+**Registration Fee:** ₹399 (Internal YBN Students) / ₹499 (Visiting College Delegates)  
 **Mandatory Entry Condition:** Valid Physical College / University ID card is required for all participants.
 
 ---

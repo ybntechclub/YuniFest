@@ -267,12 +267,16 @@ class RegistrationStore {
       };
     }
 
+    const amount_inr = input.amount_inr || (input.participant_type === 'ybn_student' ? 399 : 499);
     const newRecord: RegistrationRecord = {
       ...input,
+      amount_inr,
+      payment_method: 'upi',
       id: "reg-" + Date.now().toString(36) + "-" + Math.random().toString(36).substring(2, 7),
       registration_code: generateRegistrationCode(),
       event_name: event.name,
-      registration_status: "confirmed",
+      registration_status: "pending", // Pending manual verification by payment head
+      payment_timestamp: input.payment_timestamp || new Date().toISOString(),
       created_at: new Date().toISOString()
     };
 
@@ -347,6 +351,10 @@ class RegistrationStore {
     if (!reg) return false;
 
     reg.registration_status = status;
+    if (status === 'confirmed') {
+      reg.payment_verified_at = reg.payment_verified_at || new Date().toISOString();
+      reg.payment_verified_by = reg.payment_verified_by || 'Payment Verification Desk';
+    }
     reg.updated_at = new Date().toISOString();
     this.saveRegistrations();
 
@@ -354,7 +362,12 @@ class RegistrationStore {
       try {
         await supabase
           .from('registrations')
-          .update({ registration_status: status, updated_at: reg.updated_at })
+          .update({ 
+            registration_status: status, 
+            payment_verified_at: reg.payment_verified_at,
+            payment_verified_by: reg.payment_verified_by,
+            updated_at: reg.updated_at 
+          })
           .or(`id.eq.${regId},registration_code.eq.${regId}`);
       } catch (err) {
         console.warn('Supabase update status failed:', err);
@@ -362,6 +375,20 @@ class RegistrationStore {
     }
 
     return true;
+  }
+
+  // Manual payment verification with email confirmation simulation
+  async verifyPayment(regId: string, verifiedBy: string = "Payment Head"): Promise<{ success: boolean; data?: RegistrationRecord; error?: string }> {
+    const reg = this.registrations.find(r => r.id === regId || r.registration_code === regId);
+    if (!reg) return { success: false, error: "Registration record not found." };
+
+    reg.registration_status = 'confirmed';
+    reg.payment_verified_at = new Date().toISOString();
+    reg.payment_verified_by = verifiedBy;
+    reg.updated_at = new Date().toISOString();
+    this.saveRegistrations();
+
+    return { success: true, data: reg };
   }
 
   // Export registrations as CSV

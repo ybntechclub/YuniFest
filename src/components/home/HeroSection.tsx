@@ -59,7 +59,7 @@ export const HeroSection: React.FC = () => {
 
           <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF08A] border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 shadow-sm">
             <Sparkles className="w-3 h-3 text-slate-900" />
-            <span>OFFICIAL PASS: ₹0 (FREE ENTRY)</span>
+            <span>DELEGATE PASS: ₹399 / ₹499</span>
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 text-slate-700">
@@ -170,7 +170,7 @@ export const HeroSection: React.FC = () => {
                 to="/register"
                 className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-6 sm:px-7"
               >
-                <RollText text="CLAIM PASS (₹0)" highlightColor="text-white" />
+                <RollText text="GET FESTIVAL PASS" highlightColor="text-white" />
                 <span className="w-2 h-2 rounded-full bg-[#FEF08A]" />
               </Link>
 
@@ -232,7 +232,7 @@ export const HeroSection: React.FC = () => {
             <span className="text-white/40">•</span>
             <span>3 DAYS</span>
             <span className="text-white/40">•</span>
-            <span className="text-emerald-400 font-bold">₹0 PASS</span>
+            <span className="text-emerald-400 font-bold">₹399 / ₹499 PASS</span>
           </div>
 
           {/* Video Bottom Overlays */}

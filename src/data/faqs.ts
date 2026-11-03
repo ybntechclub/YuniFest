@@ -8,7 +8,7 @@ export const FEST_FAQS: FAQItem[] = [
   {
     category: "registration",
     question: "What is the registration fee for YUNIFEST 2026?",
-    answer: "Registration is completely ₹0 (Free) for all eligible events in accordance with the official festival brochure. You must submit your registration via this official portal to receive your verified digital pass.",
+    answer: "The entry pass fee is ₹399 for internal YBN University students and ₹499 for visiting college scholars. Complete your registration form, transfer via UPI QR, and submit your UTR ID for desk verification to receive your confirmed digital pass.",
   },
   {
     category: "eligibility",
@@ -33,7 +33,7 @@ export const FEST_FAQS: FAQItem[] = [
   {
     category: "registration",
     question: "What is the registration limit for Treasure Hunting?",
-    answer: "Treasure Hunting has a strictly capped capacity of 25 team entries on a first-come, first-served basis. Once the quota is reached, registrations for this event will automatically close or transition to a waitlist.",
+    answer: "Treasure Hunting has a strictly capped capacity of 6 teams (5 members per team, 30 max participants) on a first-come, first-served basis. Once the quota is reached, registrations for this event will automatically close.",
   },
   {
     category: "general",

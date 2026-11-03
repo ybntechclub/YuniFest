@@ -6,12 +6,25 @@ export interface CoordinatorPair {
   facultyCoordinator: string;
   divisionNumber: number;
   roleNote?: string;
+  isHead?: boolean;
+  crewMembers?: string[];
 }
 
 export const OFFICIAL_COORDINATORS: CoordinatorPair[] = [
   {
-    id: "dance",
+    id: "tech-registration-head",
     divisionNumber: 1,
+    event: "Technical & Registration Head",
+    studentCoordinator: "Satyam Kumar",
+    studentPhone: "9905336808",
+    facultyCoordinator: "University Technical Directorate",
+    roleNote: "Platform Architecture, Registration Infrastructure & Live Systems",
+    isHead: true,
+    crewMembers: ["Sachin K.", "Sachin V.", "Pawan K."],
+  },
+  {
+    id: "dance",
+    divisionNumber: 2,
     event: "Dance Competition",
     studentCoordinator: "Antara Chakraborty",
     studentPhone: "62997 61602",
