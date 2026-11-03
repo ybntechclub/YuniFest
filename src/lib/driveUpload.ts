@@ -5,7 +5,6 @@ export const GOOGLE_DRIVE_FOLDER_ID = '1-Z9Z7qD904fzBYjFRO3_Dip_ME96Fl1L';
 export const GOOGLE_DRIVE_FOLDER_URL = `https://drive.google.com/drive/folders/${GOOGLE_DRIVE_FOLDER_ID}?usp=drive_link`;
 
 const DRIVE_SCRIPT_URL = 
-  import.meta.env.VITE_GOOGLE_DRIVE_SCRIPT_URL || 
   import.meta.env.YUNIFEST_GOOGLE_DRIVE_SCRIPT_URL || 
   'https://script.google.com/macros/s/AKfycbx5Gs2lLreeJskwf3-1cnQcFuEQC2jc2-mWLny_ror6zhONpS1IjXNogtl2d6m8PDMfOQ/exec';
 
@@ -30,7 +29,7 @@ export async function uploadReceiptToGoogleDrive({
 
   if (!DRIVE_SCRIPT_URL) {
     console.warn(
-      'Google Drive Script URL not yet configured in .env (VITE_GOOGLE_DRIVE_SCRIPT_URL). ' +
+      'Google Drive Script URL not yet configured in .env (YUNIFEST_GOOGLE_DRIVE_SCRIPT_URL). ' +
       'Saving compressed receipt as fallback.'
     );
     return base64;

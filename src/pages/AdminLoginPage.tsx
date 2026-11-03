@@ -22,48 +22,48 @@ export const AdminLoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
+      const envEmail = (import.meta.env.YUNIFEST_ADMIN_EMAIL || '').trim().toLowerCase();
+      const envPassword = import.meta.env.YUNIFEST_ADMIN_PASSWORD || '';
+
+      // Authenticate via env credentials strictly if configured in .env
+      const isMasterAdmin = 
+        Boolean(envEmail && envPassword) &&
+        email.trim().toLowerCase() === envEmail &&
+        password === envPassword;
+
+      if (isMasterAdmin) {
+        sessionStorage.setItem(
+          'yunifest_admin_auth',
+          JSON.stringify({ email: email.trim(), role: 'organizer', mode: 'master' })
+        );
+        navigate('/admin');
+        return;
+      }
+
+      // If not master credentials, attempt Supabase Auth if configured
       if (isSupabaseConfigured) {
         const { data, error: authError } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password: password.trim(),
         });
 
-        if (authError) {
-          setError(authError.message || "Invalid credentials.");
-          setIsLoading(false);
-          return;
-        }
+        if (!authError && data?.user) {
+          const { data: adminData } = await supabase
+            .from('admin_users')
+            .select('role')
+            .eq('user_id', data.user.id)
+            .single();
 
-        const { data: adminData, error: roleError } = await supabase
-          .from('admin_users')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .single();
-
-        if (roleError || !adminData) {
-          sessionStorage.setItem('yunifest_admin_auth', JSON.stringify({ email: data.user.email, role: 'organizer' }));
-        } else {
-          sessionStorage.setItem('yunifest_admin_auth', JSON.stringify({ email: data.user.email, role: adminData.role }));
-        }
-
-        navigate('/admin');
-      } else {
-        const envEmail = (import.meta.env.VITE_ADMIN_EMAIL || 'organizer@ybn.edu.in').toLowerCase().trim();
-        const envPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'yunifest2026';
-
-        if (
-          (email.trim().toLowerCase() === envEmail && password === envPassword) ||
-          (email.trim().toLowerCase() === 'admin@ybn.edu.in' && password === envPassword)
-        ) {
           sessionStorage.setItem(
-            'yunifest_admin_auth',
-            JSON.stringify({ email: email.trim(), role: 'organizer', mode: 'local' })
+            'yunifest_admin_auth', 
+            JSON.stringify({ email: data.user.email, role: adminData?.role || 'organizer' })
           );
           navigate('/admin');
-        } else {
-          setError("Invalid organizer email or password. Please check your credentials.");
+          return;
         }
       }
+
+      setError("Invalid organizer email or password. Please check your credentials.");
     } catch (err: any) {
       setError(err.message || "Failed to authenticate.");
     } finally {

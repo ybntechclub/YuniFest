@@ -7,12 +7,10 @@ import { RegistrationRecord } from '../types/database';
 import { generateRegistrationEmailHtml, DEFAULT_WHATSAPP_CHANNEL_URL, DEFAULT_REGISTRATION_HEAD } from './emailTemplate';
 
 const DRIVE_SCRIPT_URL = 
-  import.meta.env.VITE_GOOGLE_DRIVE_SCRIPT_URL || 
   import.meta.env.YUNIFEST_GOOGLE_DRIVE_SCRIPT_URL || 
   'https://script.google.com/macros/s/AKfycbx5Gs2lLreeJskwf3-1cnQcFuEQC2jc2-mWLny_ror6zhONpS1IjXNogtl2d6m8PDMfOQ/exec';
 
 const RESEND_API_KEY = 
-  import.meta.env.VITE_RESEND_API_KEY || 
   import.meta.env.YUNIFEST_RESEND_API_KEY || 
   '';
 

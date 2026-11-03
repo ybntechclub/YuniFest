@@ -22,7 +22,6 @@ export interface EmailTemplateParams {
 }
 
 export const DEFAULT_WHATSAPP_CHANNEL_URL = 
-  import.meta.env.VITE_WHATSAPP_CHANNEL_URL || 
   import.meta.env.YUNIFEST_WHATSAPP_CHANNEL_URL || 
   'https://whatsapp.com/channel/0029Va9yunifest2026';
 
