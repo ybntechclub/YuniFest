@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RegistrationRecord, RegistrationStatus } from '../../types/database';
 import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage, ExternalLink, Folder } from 'lucide-react';
-import { isGoogleDriveUrl, getDriveThumbnailUrl, GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
+import { isGoogleDriveUrl, getDriveDirectImageUrl, getDrivePreviewUrl, getDriveViewUrl, GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
 
 interface RegistrationDetailModalProps {
   registration: RegistrationRecord | null;
@@ -19,6 +19,13 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
   const [currentStatus, setCurrentStatus] = useState<RegistrationStatus>(registration.registration_status);
   const [isUpdating, setIsUpdating] = useState(false);
   const [verifiedNotice, setVerifiedNotice] = useState<string | null>(null);
+  const [previewTab, setPreviewTab] = useState<'image' | 'iframe'>('image');
+  const [imgFailed, setImgFailed] = useState(false);
+
+  const isDrive = isGoogleDriveUrl(registration.payment_screenshot_url);
+  const directImgUrl = isDrive ? getDriveDirectImageUrl(registration.payment_screenshot_url) : registration.payment_screenshot_url;
+  const driveEmbedUrl = isDrive ? getDrivePreviewUrl(registration.payment_screenshot_url) : '';
+  const driveViewUrl = isDrive ? (getDriveViewUrl(registration.payment_screenshot_url) || registration.payment_screenshot_url) : registration.payment_screenshot_url;
 
   const handleStatusChange = async (status: RegistrationStatus) => {
     setIsUpdating(true);
@@ -34,7 +41,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-white text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm"
+          className="absolute top-6 right-6 p-2 rounded-full bg-white text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm transition-transform hover:scale-105"
         >
           <X className="w-5 h-5" />
         </button>
@@ -182,53 +189,102 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
 
             {/* Receipt Screenshot Preview & Google Drive View */}
             {registration.payment_screenshot_url && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-600 block text-[10px] font-bold uppercase tracking-wider">
-                    PAYMENT RECEIPT SCREENSHOT:
+              <div className="space-y-3 p-3.5 rounded-2xl bg-white border border-slate-300">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                    <FileImage className="w-4 h-4 text-[#2B59FF]" />
+                    <span>Receipt Screenshot</span>
                   </span>
-                  {isGoogleDriveUrl(registration.payment_screenshot_url) ? (
-                    <a
-                      href={registration.payment_screenshot_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2B59FF] hover:underline"
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                      <span>Open in Google Drive</span>
-                    </a>
+
+                  {isDrive ? (
+                    <div className="flex items-center gap-2">
+                      <div className="inline-flex rounded-lg border border-slate-300 p-0.5 bg-slate-100 text-[11px] font-bold">
+                        <button
+                          type="button"
+                          onClick={() => setPreviewTab('image')}
+                          className={`px-2.5 py-1 rounded-md transition-colors ${previewTab === 'image' && !imgFailed ? 'bg-white shadow text-slate-950' : 'text-slate-600 hover:text-slate-950'}`}
+                        >
+                          Photo View
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPreviewTab('iframe')}
+                          className={`px-2.5 py-1 rounded-md transition-colors ${previewTab === 'iframe' || imgFailed ? 'bg-white shadow text-[#2B59FF]' : 'text-slate-600 hover:text-slate-950'}`}
+                        >
+                          Drive Player
+                        </button>
+                      </div>
+
+                      <a
+                        href={driveViewUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-[#2B59FF] hover:bg-blue-100 border border-blue-200 transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Open Drive ↗</span>
+                      </a>
+                    </div>
                   ) : (
                     <a
                       href={registration.payment_screenshot_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 hover:text-slate-950"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 hover:text-slate-950 border border-slate-300"
                     >
-                      <ExternalLink className="w-3 h-3" />
-                      <span>Open Image</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Open Image ↗</span>
                     </a>
                   )}
                 </div>
 
-                <div 
-                  className="rounded-xl overflow-hidden border border-slate-300 max-h-52 bg-slate-100 flex items-center justify-center p-1.5 relative group cursor-pointer"
-                  onClick={() => window.open(registration.payment_screenshot_url, '_blank')}
-                  title="Click to view full image in a new tab"
-                >
-                  <img 
-                    src={getDriveThumbnailUrl(registration.payment_screenshot_url)} 
-                    alt={`Payment receipt for ${registration.email}`} 
-                    className="max-h-48 object-contain rounded-lg group-hover:opacity-90 transition-opacity"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl text-white font-mono text-xs font-bold gap-1.5 pointer-events-none">
-                    <ExternalLink className="w-4 h-4" />
-                    <span>View Full Receipt</span>
+                {/* Display Area */}
+                {isDrive ? (
+                  (previewTab === 'iframe' || imgFailed) ? (
+                    <div className="rounded-xl overflow-hidden border border-slate-300 bg-slate-900 shadow-inner">
+                      <iframe
+                        src={driveEmbedUrl}
+                        title="Google Drive Receipt Preview"
+                        className="w-full h-72 border-0"
+                        allow="autoplay"
+                      />
+                    </div>
+                  ) : (
+                    <div 
+                      className="rounded-xl overflow-hidden border border-slate-300 max-h-64 bg-slate-100 flex items-center justify-center p-2 relative group cursor-pointer"
+                      onClick={() => window.open(driveViewUrl, '_blank')}
+                      title="Click to view full image in Google Drive"
+                    >
+                      <img 
+                        src={directImgUrl} 
+                        alt={`Payment receipt for ${registration.email}`} 
+                        referrerPolicy="no-referrer"
+                        crossOrigin="anonymous"
+                        onError={() => setImgFailed(true)}
+                        className="max-h-60 object-contain rounded-lg group-hover:scale-[1.01] transition-transform"
+                      />
+                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl text-white font-mono text-xs font-bold gap-1.5 pointer-events-none">
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Click to Open in Drive</span>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  <div 
+                    className="rounded-xl overflow-hidden border border-slate-300 max-h-64 bg-slate-50 flex items-center justify-center p-2 relative group cursor-pointer"
+                    onClick={() => window.open(registration.payment_screenshot_url, '_blank')}
+                  >
+                    <img 
+                      src={registration.payment_screenshot_url} 
+                      alt={`Payment receipt for ${registration.email}`} 
+                      className="max-h-60 object-contain rounded-lg"
+                    />
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-center justify-between pt-1">
-                  <span className="font-mono text-[10px] text-slate-500">
-                    File: <strong className="text-slate-700">{registration.email}_UTR.jpg</strong>
+                <div className="flex items-center justify-between pt-1 border-t border-slate-200">
+                  <span className="font-mono text-[10px] text-slate-500 truncate max-w-[220px]">
+                    UTR: <strong className="text-slate-800">{registration.transaction_id || 'N/A'}</strong>
                   </span>
                   <a
                     href={GOOGLE_DRIVE_FOLDER_URL}
@@ -236,8 +292,8 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-[#2B59FF] hover:underline"
                   >
-                    <Folder className="w-3 h-3" />
-                    <span>Open Drive Folder</span>
+                    <Folder className="w-3.5 h-3.5" />
+                    <span>Open Drive Folder ↗</span>
                   </a>
                 </div>
               </div>

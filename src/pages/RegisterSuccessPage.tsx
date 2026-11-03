@@ -3,8 +3,9 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { RegistrationRecord } from '../types/database';
 import { PassCard } from '../components/registration/PassCard';
-import { CheckCircle2, ArrowRight, Home, Sparkles, ShieldCheck, Clock, AlertCircle, Mail, FileImage, MessageCircle } from 'lucide-react';
-import { DEFAULT_WHATSAPP_CHANNEL_URL, DEFAULT_REGISTRATION_HEAD } from '../lib/emailTemplate';
+import { CheckCircle2, ArrowRight, Home, Sparkles, ShieldCheck, Clock, AlertCircle, Mail, FileImage, MessageCircle, ExternalLink } from 'lucide-react';
+import { isGoogleDriveUrl, getDriveDirectImageUrl, getDriveViewUrl } from '../lib/driveUpload';
+import { DEFAULT_WHATSAPP_CHANNEL_URL } from '../lib/emailTemplate';
 import { sendRegistrationConfirmationEmail } from '../lib/emailService';
 import { registrationStore } from '../lib/registrationStore';
 
@@ -173,25 +174,20 @@ export const RegisterSuccessPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Registration & Technical Desk Head Contact */}
-              <div className="p-4 rounded-2xl bg-white border border-slate-300 text-xs font-mono space-y-2">
+              {/* Official Organizing Committee Info */}
+              <div className="p-4 rounded-2xl bg-white border border-slate-300 text-xs font-mono space-y-1">
                 <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
-                  Registration &amp; Technical Desk Head:
+                  OFFICIAL ISSUING BODY:
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-slate-950 text-sm block">{DEFAULT_REGISTRATION_HEAD.name}</span>
-                    <span className="text-[11px] text-slate-500">{DEFAULT_REGISTRATION_HEAD.role}</span>
-                  </div>
-                  <div className="text-right">
-                    <a href={`tel:${DEFAULT_REGISTRATION_HEAD.phone.replace(/\s+/g, '')}`} className="text-[#2B59FF] font-bold block hover:underline">
-                      {DEFAULT_REGISTRATION_HEAD.phone}
-                    </a>
-                    <a href={`mailto:${DEFAULT_REGISTRATION_HEAD.email}`} className="text-slate-600 text-[11px] hover:underline">
-                      {DEFAULT_REGISTRATION_HEAD.email}
-                    </a>
-                  </div>
+                <div className="font-bold text-slate-950 text-sm">
+                  YUNIFEST 2026 Organizing Committee
                 </div>
+                <div className="text-[11px] text-slate-500">
+                  YBN University Campus • Namkum, Ranchi, Jharkhand
+                </div>
+                <p className="text-[10.5px] text-slate-600 pt-1 border-t border-slate-200 mt-2">
+                  Keep your Registration Token handy for check-in and delegate pass collection on event day.
+                </p>
               </div>
 
               {/* Email Sent Notice & Resend Action */}

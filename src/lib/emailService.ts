@@ -1,10 +1,10 @@
 // =========================================================================
 // YUNIFEST 2026 — Automated Registration Email Dispatcher
-// Dispatches the neon-styled confirmation email to the participant
+// Dispatches the official confirmation email to the participant
 // =========================================================================
 
 import { RegistrationRecord } from '../types/database';
-import { generateRegistrationEmailHtml, DEFAULT_WHATSAPP_CHANNEL_URL, DEFAULT_REGISTRATION_HEAD } from './emailTemplate';
+import { generateRegistrationEmailHtml, DEFAULT_WHATSAPP_CHANNEL_URL } from './emailTemplate';
 
 const DRIVE_SCRIPT_URL = 
   import.meta.env.YUNIFEST_GOOGLE_DRIVE_SCRIPT_URL || 
@@ -42,12 +42,9 @@ export async function sendRegistrationConfirmationEmail(
     transactionId: record.transaction_id || '',
     amountInr: record.amount_inr || (record.participant_type === 'ybn_student' ? 399 : 499),
     whatsAppChannelUrl: DEFAULT_WHATSAPP_CHANNEL_URL,
-    registrationHeadName: DEFAULT_REGISTRATION_HEAD.name,
-    registrationHeadPhone: DEFAULT_REGISTRATION_HEAD.phone,
-    registrationHeadEmail: DEFAULT_REGISTRATION_HEAD.email
   });
 
-  // 1. Try Google Apps Script Web App (native GmailApp without extra API keys)
+  // 1. Try Google Apps Script Web App (native GmailApp)
   if (DRIVE_SCRIPT_URL) {
     try {
       const response = await fetch(DRIVE_SCRIPT_URL, {
@@ -88,7 +85,7 @@ export async function sendRegistrationConfirmationEmail(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'YUNIFEST 2026 <admissions@ybn.edu.in>',
+          from: 'YUNIFEST 2026 Committee <admissions@ybn.edu.in>',
           to: [record.email],
           subject,
           html: htmlContent,
@@ -104,7 +101,7 @@ export async function sendRegistrationConfirmationEmail(
     }
   }
 
-  // If neither provider is configured yet, log the generated email
+  // If fallback, log the generated email
   console.log(`[Email Service] Confirmation Email generated for ${record.email}: Token ${record.registration_code}`);
   return { 
     success: true, 

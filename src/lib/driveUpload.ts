@@ -86,14 +86,45 @@ export function getDriveFileId(url?: string | null): string | null {
 }
 
 /**
- * Returns a high-resolution preview URL for an image.
- * If it's a Google Drive URL, uses the direct thumbnail CDN.
+ * Returns a high-resolution direct image CDN URL for an image.
+ * Uses lh3.googleusercontent.com direct CDN which avoids 302 redirects.
  */
-export function getDriveThumbnailUrl(url?: string | null): string {
+export function getDriveDirectImageUrl(url?: string | null): string {
   if (!url) return '';
   const fileId = getDriveFileId(url);
   if (fileId) {
-    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
   return url;
+}
+
+/**
+ * Returns the official Google Drive embed preview URL (works in <iframe>)
+ */
+export function getDrivePreviewUrl(url?: string | null): string {
+  if (!url) return '';
+  const fileId = getDriveFileId(url);
+  if (fileId) {
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  }
+  return url;
+}
+
+/**
+ * Returns the standard Google Drive View / Sharing URL
+ */
+export function getDriveViewUrl(url?: string | null): string {
+  if (!url) return '';
+  const fileId = getDriveFileId(url);
+  if (fileId) {
+    return `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
+  }
+  return url;
+}
+
+/**
+ * Backwards compatible alias for getDriveDirectImageUrl
+ */
+export function getDriveThumbnailUrl(url?: string | null): string {
+  return getDriveDirectImageUrl(url);
 }

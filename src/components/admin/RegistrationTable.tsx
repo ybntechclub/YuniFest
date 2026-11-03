@@ -3,8 +3,10 @@ import { RegistrationRecord, EventItem, RegistrationStatus, ParticipantType } fr
 import { registrationStore } from '../../lib/registrationStore';
 import { 
   Search, Download, Filter, Eye, CheckCircle, Clock, 
-  XCircle, AlertCircle, ArrowUpDown, ChevronRight 
+  XCircle, AlertCircle, ArrowUpDown, ChevronRight,
+  ExternalLink, FileText
 } from 'lucide-react';
+import { isGoogleDriveUrl, getDriveViewUrl } from '../../lib/driveUpload';
 
 interface RegistrationTableProps {
   registrations: RegistrationRecord[];
