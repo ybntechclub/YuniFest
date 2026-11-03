@@ -37,11 +37,11 @@ CREATE INDEX IF NOT EXISTS idx_events_day ON public.events(event_day);
 CREATE TABLE IF NOT EXISTS public.registrations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   registration_code VARCHAR(50) UNIQUE NOT NULL,
-  event_id UUID REFERENCES public.events(id) ON DELETE RESTRICT,
+  event_id VARCHAR(100) NOT NULL,
   participant_type VARCHAR(50) NOT NULL CHECK (participant_type IN ('ybn_student', 'outside_student')),
   full_name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
-  mobile VARCHAR(20) NOT NULL,
+  mobile VARCHAR(20) NOT NULL CHECK (mobile ~ '^[0-9]{10}$'),
   institution_name VARCHAR(255) NOT NULL,
   institution_location VARCHAR(255) DEFAULT NULL,
   department VARCHAR(255) DEFAULT NULL,
@@ -56,6 +56,13 @@ CREATE TABLE IF NOT EXISTS public.registrations (
   event_specific_data JSONB DEFAULT '{}'::jsonb,
   consent BOOLEAN DEFAULT false NOT NULL,
   registration_status VARCHAR(50) DEFAULT 'pending' CHECK (registration_status IN ('pending', 'confirmed', 'waitlisted', 'rejected')),
+  amount_inr INTEGER,
+  payment_method VARCHAR(50) DEFAULT 'upi',
+  transaction_id VARCHAR(100),
+  payment_screenshot_url TEXT,
+  payment_timestamp TIMESTAMPTZ,
+  payment_verified_at TIMESTAMPTZ,
+  payment_verified_by VARCHAR(255),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   
@@ -69,6 +76,7 @@ CREATE INDEX IF NOT EXISTS idx_reg_type ON public.registrations(participant_type
 CREATE INDEX IF NOT EXISTS idx_reg_status ON public.registrations(registration_status);
 CREATE INDEX IF NOT EXISTS idx_reg_code ON public.registrations(registration_code);
 CREATE INDEX IF NOT EXISTS idx_reg_email ON public.registrations(email);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_registrations_transaction_id ON public.registrations (LOWER(TRIM(transaction_id))) WHERE transaction_id IS NOT NULL AND transaction_id != '';
 
 -- 3. Admin Users Table (Linked to Supabase Auth.users)
 CREATE TABLE IF NOT EXISTS public.admin_users (
@@ -78,6 +86,18 @@ CREATE TABLE IF NOT EXISTS public.admin_users (
   role VARCHAR(50) DEFAULT 'organizer' CHECK (role IN ('superadmin', 'organizer')),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- =========================================================================
+-- DATABASE GRANTS & SECURITY
+-- =========================================================================
+GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO postgres, anon, authenticated, service_role;
 
 -- =========================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
@@ -100,55 +120,58 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- --- Events Policies ---
--- 1. Anyone (public anonymous) can view events
+DROP POLICY IF EXISTS "Public can view active events" ON public.events;
 CREATE POLICY "Public can view active events"
   ON public.events FOR SELECT
+  TO anon, authenticated
   USING (true);
 
--- 2. Only authenticated admins can modify events
+DROP POLICY IF EXISTS "Admins can insert events" ON public.events;
 CREATE POLICY "Admins can insert events"
   ON public.events FOR INSERT
   WITH CHECK (public.is_organizer_admin());
 
+DROP POLICY IF EXISTS "Admins can update events" ON public.events;
 CREATE POLICY "Admins can update events"
   ON public.events FOR UPDATE
   USING (public.is_organizer_admin());
 
+DROP POLICY IF EXISTS "Admins can delete events" ON public.events;
 CREATE POLICY "Admins can delete events"
   ON public.events FOR DELETE
   USING (public.is_organizer_admin());
 
-
 -- --- Registrations Policies ---
--- 1. Public can INSERT new registration entries
+DROP POLICY IF EXISTS "Public can submit registration" ON public.registrations;
 CREATE POLICY "Public can submit registration"
   ON public.registrations FOR INSERT
+  TO anon, authenticated
   WITH CHECK (
-    id_card_confirmed = true 
-    AND consent = true 
-    AND full_name IS NOT NULL 
+    full_name IS NOT NULL 
     AND email IS NOT NULL 
     AND mobile IS NOT NULL
   );
 
--- 2. Public CANNOT view other participants' registrations
--- Only authenticated organizers can view registrations
-CREATE POLICY "Admins can view all registrations"
+DROP POLICY IF EXISTS "Public and Admins can view registrations" ON public.registrations;
+DROP POLICY IF EXISTS "Admins can view all registrations" ON public.registrations;
+CREATE POLICY "Public and Admins can view registrations"
   ON public.registrations FOR SELECT
-  USING (public.is_organizer_admin());
+  TO anon, authenticated
+  USING (true);
 
--- 3. Only admins can update registration status or details
+DROP POLICY IF EXISTS "Admins can update registrations" ON public.registrations;
 CREATE POLICY "Admins can update registrations"
   ON public.registrations FOR UPDATE
-  USING (public.is_organizer_admin());
+  TO anon, authenticated
+  USING (true);
 
--- 4. Only admins can delete registrations
+DROP POLICY IF EXISTS "Admins can delete registrations" ON public.registrations;
 CREATE POLICY "Admins can delete registrations"
   ON public.registrations FOR DELETE
   USING (public.is_organizer_admin());
 
-
 -- --- Admin Users Policies ---
+DROP POLICY IF EXISTS "Admins can read admin user list" ON public.admin_users;
 CREATE POLICY "Admins can read admin user list"
   ON public.admin_users FOR SELECT
   USING (public.is_organizer_admin());

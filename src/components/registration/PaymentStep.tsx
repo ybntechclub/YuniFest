@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ParticipantType, EventItem, RegistrationRecord } from '../../types/database';
 import { registrationStore } from '../../lib/registrationStore';
+import { uploadReceiptToGoogleDrive } from '../../lib/driveUpload';
+import { sendRegistrationConfirmationEmail } from '../../lib/emailService';
 import { 
   CreditCard, Copy, Check, Upload, AlertCircle, ArrowLeft, 
   ShieldCheck, Clock, CheckCircle2, QrCode, FileImage, Sparkles,
@@ -61,7 +63,50 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
     setTimeout(() => setCopiedUpi(false), 2000);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 1200;
+            const MAX_HEIGHT = 1200;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height = Math.round((height * MAX_WIDTH) / width);
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width = Math.round((width * MAX_HEIGHT) / height);
+                height = MAX_HEIGHT;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0, width, height);
+            const compressed = canvas.toDataURL('image/jpeg', 0.8);
+            resolve(compressed);
+          } catch {
+            resolve(e.target?.result as string);
+          }
+        };
+        img.onerror = () => resolve(e.target?.result as string);
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => resolve('');
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -70,19 +115,24 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
       return;
     }
 
-    if (file.size > 8 * 1024 * 1024) {
-      setError("Screenshot image size exceeds 8MB limit. Please upload a smaller image.");
+    if (file.size > 15 * 1024 * 1024) {
+      setError("Screenshot image size exceeds 15MB limit. Please upload a smaller image.");
       return;
     }
 
     setError(null);
     setScreenshotFileName(file.name);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setScreenshotUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressedDataUrl = await compressImage(file);
+      setScreenshotUrl(compressedDataUrl);
+    } catch {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setScreenshotUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +153,17 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
 
     try {
       const nowIso = new Date().toISOString();
+
+      // Upload screenshot to Google Drive named with participant's email ID
+      let finalScreenshotUrl = screenshotUrl;
+      if (screenshotUrl) {
+        finalScreenshotUrl = await uploadReceiptToGoogleDrive({
+          base64: screenshotUrl,
+          email: formData.email,
+          transactionId: transactionId.trim(),
+        });
+      }
+
       const result = await registrationStore.submitRegistration({
         event_id: selectedEvent.id,
         participant_type: participantType,
@@ -125,7 +186,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         amount_inr: amount,
         payment_method: 'upi',
         transaction_id: transactionId.trim(),
-        payment_screenshot_url: screenshotUrl,
+        payment_screenshot_url: finalScreenshotUrl,
         payment_timestamp: nowIso,
       });
 
@@ -133,6 +194,13 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         setError(result.error || "Failed to submit registration. Please try again.");
         setIsSubmitting(false);
         return;
+      }
+
+      // Automatically dispatch confirmation email with Token & WhatsApp Channel link
+      try {
+        await sendRegistrationConfirmationEmail(result.data);
+      } catch (mailErr) {
+        console.warn('Confirmation email dispatch background note:', mailErr);
       }
 
       onSuccess(result.data);
@@ -338,12 +406,12 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             type="text"
             required
             value={transactionId}
-            onChange={(e) => setTransactionId(e.target.value)}
+            onChange={(e) => setTransactionId(e.target.value.toUpperCase())}
             placeholder="e.g. 430128910482 or UPI Ref / Txn ID"
             className="w-full px-4 py-3 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-sm font-mono font-bold text-slate-950 focus:outline-none transition-colors"
           />
           <p className="font-mono text-[11px] text-slate-500 mt-1">
-            Enter the 12-digit reference or UTR ID shown in your payment app receipt.
+            Must be a unique 12-digit UTR or bank reference ID. Reused or duplicate UTRs are strictly rejected.
           </p>
         </div>
 

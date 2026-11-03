@@ -3,14 +3,32 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { RegistrationRecord } from '../types/database';
 import { PassCard } from '../components/registration/PassCard';
-import { CheckCircle2, ArrowRight, Home, Sparkles, ShieldCheck, Clock, AlertCircle, Mail, FileImage } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Home, Sparkles, ShieldCheck, Clock, AlertCircle, Mail, FileImage, MessageCircle } from 'lucide-react';
+import { DEFAULT_WHATSAPP_CHANNEL_URL, DEFAULT_REGISTRATION_HEAD } from '../lib/emailTemplate';
+import { sendRegistrationConfirmationEmail } from '../lib/emailService';
 import { registrationStore } from '../lib/registrationStore';
 
 export const RegisterSuccessPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isResending, setIsResending] = React.useState(false);
+  const [resendStatus, setResendStatus] = React.useState<string | null>(null);
 
   let registration: RegistrationRecord | undefined = location.state?.registration;
+
+  const handleResendEmail = async () => {
+    if (!registration) return;
+    setIsResending(true);
+    setResendStatus(null);
+    try {
+      const res = await sendRegistrationConfirmationEmail(registration);
+      setResendStatus(res.message || 'Confirmation email dispatched!');
+    } catch {
+      setResendStatus('Failed to send email. Check connection.');
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   if (!registration) {
     const all = JSON.parse(localStorage.getItem('yunifest_registrations_v1') || '[]');
@@ -133,16 +151,67 @@ export const RegisterSuccessPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Next Steps Info Box */}
-              <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 text-xs space-y-1.5 text-slate-800">
-                <div className="flex items-center gap-2 font-headline font-bold text-[#2B59FF] uppercase text-[11px]">
-                  <Mail className="w-4 h-4" />
-                  <span>Next Step: Official Pass Delivery to Email</span>
+              {/* WhatsApp Channel Card (Neon Green Box from Template) */}
+              <div className="p-5 rounded-2xl bg-[#062319] border-2 border-[#10B981] text-center shadow-lg text-white space-y-3">
+                <div className="inline-flex items-center gap-1.5 font-headline font-bold text-sm text-[#34D399]">
+                  <MessageCircle className="w-4 h-4 text-[#10B981]" />
+                  <span>Join Official YUNIFEST 2026 WhatsApp Channel</span>
                 </div>
-                <p className="font-display text-slate-700 leading-relaxed text-xs">
-                  The payment desk will manually cross-verify your transaction against live bank feeds. Upon verification by the Payment Head, your official verified festival QR badge will be activated and sent directly to <strong>{registration.email}</strong>.
+                <p className="text-xs text-emerald-200/90 font-display max-w-md mx-auto leading-relaxed">
+                  Get live event alerts, reporting slots, presentation guidelines, and instant announcements directly on WhatsApp!
                 </p>
+                <div>
+                  <a
+                    href={DEFAULT_WHATSAPP_CHANNEL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#10B981] hover:bg-emerald-400 text-slate-950 font-headline font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:scale-105"
+                  >
+                    <span>📲 Join WhatsApp Channel Now</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
+
+              {/* Registration & Technical Desk Head Contact */}
+              <div className="p-4 rounded-2xl bg-white border border-slate-300 text-xs font-mono space-y-2">
+                <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
+                  Registration &amp; Technical Desk Head:
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <span className="font-bold text-slate-950 text-sm block">{DEFAULT_REGISTRATION_HEAD.name}</span>
+                    <span className="text-[11px] text-slate-500">{DEFAULT_REGISTRATION_HEAD.role}</span>
+                  </div>
+                  <div className="text-right">
+                    <a href={`tel:${DEFAULT_REGISTRATION_HEAD.phone.replace(/\s+/g, '')}`} className="text-[#2B59FF] font-bold block hover:underline">
+                      {DEFAULT_REGISTRATION_HEAD.phone}
+                    </a>
+                    <a href={`mailto:${DEFAULT_REGISTRATION_HEAD.email}`} className="text-slate-600 text-[11px] hover:underline">
+                      {DEFAULT_REGISTRATION_HEAD.email}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Email Sent Notice & Resend Action */}
+              <div className="flex flex-wrap items-center justify-between p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-xs font-mono gap-2">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <Mail className="w-4 h-4 text-[#2B59FF]" />
+                  <span>Confirmation email sent to <strong>{registration.email}</strong> with Token <strong>{registration.registration_code}</strong></span>
+                </div>
+                <button
+                  type="button"
+                  disabled={isResending}
+                  onClick={handleResendEmail}
+                  className="px-3 py-1 rounded-lg bg-white border border-slate-400 hover:border-slate-900 text-slate-900 font-bold text-[11px] transition-colors"
+                >
+                  {isResending ? 'Sending...' : 'Resend Email'}
+                </button>
+              </div>
+              {resendStatus && (
+                <p className="font-mono text-xs text-center text-emerald-700">{resendStatus}</p>
+              )}
 
               <div className="text-center pt-2">
                 <Link

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { RegistrationRecord, RegistrationStatus } from '../../types/database';
-import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage } from 'lucide-react';
+import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage, ExternalLink, Folder } from 'lucide-react';
+import { isGoogleDriveUrl, getDriveThumbnailUrl, GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
 
 interface RegistrationDetailModalProps {
   registration: RegistrationRecord | null;
@@ -179,18 +180,65 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               </div>
             </div>
 
-            {/* Receipt Screenshot Preview */}
+            {/* Receipt Screenshot Preview & Google Drive View */}
             {registration.payment_screenshot_url && (
-              <div className="space-y-1.5">
-                <span className="text-slate-600 block text-[10px] font-bold">RECEIPT SCREENSHOT:</span>
-                <div className="rounded-xl overflow-hidden border border-slate-300 max-h-48 bg-slate-100 flex items-center justify-center p-1">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-600 block text-[10px] font-bold uppercase tracking-wider">
+                    PAYMENT RECEIPT SCREENSHOT:
+                  </span>
+                  {isGoogleDriveUrl(registration.payment_screenshot_url) ? (
+                    <a
+                      href={registration.payment_screenshot_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2B59FF] hover:underline"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Open in Google Drive</span>
+                    </a>
+                  ) : (
+                    <a
+                      href={registration.payment_screenshot_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 hover:text-slate-950"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Open Image</span>
+                    </a>
+                  )}
+                </div>
+
+                <div 
+                  className="rounded-xl overflow-hidden border border-slate-300 max-h-52 bg-slate-100 flex items-center justify-center p-1.5 relative group cursor-pointer"
+                  onClick={() => window.open(registration.payment_screenshot_url, '_blank')}
+                  title="Click to view full image in a new tab"
+                >
                   <img 
-                    src={registration.payment_screenshot_url} 
-                    alt="Payment Screenshot" 
-                    className="max-h-44 object-contain rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => window.open(registration.payment_screenshot_url, '_blank')}
-                    title="Click to view full image"
+                    src={getDriveThumbnailUrl(registration.payment_screenshot_url)} 
+                    alt={`Payment receipt for ${registration.email}`} 
+                    className="max-h-48 object-contain rounded-lg group-hover:opacity-90 transition-opacity"
                   />
+                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl text-white font-mono text-xs font-bold gap-1.5 pointer-events-none">
+                    <ExternalLink className="w-4 h-4" />
+                    <span>View Full Receipt</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1">
+                  <span className="font-mono text-[10px] text-slate-500">
+                    File: <strong className="text-slate-700">{registration.email}_UTR.jpg</strong>
+                  </span>
+                  <a
+                    href={GOOGLE_DRIVE_FOLDER_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-[#2B59FF] hover:underline"
+                  >
+                    <Folder className="w-3 h-3" />
+                    <span>Open Drive Folder</span>
+                  </a>
                 </div>
               </div>
             )}

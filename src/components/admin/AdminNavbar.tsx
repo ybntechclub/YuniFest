@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Shield, LogOut, QrCode, Globe, CheckCircle2, AlertTriangle, Settings } from 'lucide-react';
 import { isSupabaseConfigured } from '../../lib/supabase';
+import { GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
+import { Folder } from 'lucide-react';
 
 interface AdminNavbarProps {
   onOpenLiveQR: () => void;
@@ -75,6 +77,18 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
                 Event Settings
               </button>
             </div>
+
+            {/* Google Drive Receipts Folder Shortcut */}
+            <a
+              href={GOOGLE_DRIVE_FOLDER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-display font-bold bg-white hover:bg-slate-50 text-slate-900 border border-slate-900 transition-all shadow-sm ml-2"
+              title="Open Official Google Drive Payment Receipts Folder"
+            >
+              <Folder className="w-3.5 h-3.5 text-[#2B59FF]" />
+              <span>Receipts Drive</span>
+            </a>
 
             {/* Live QR Generator Action */}
             <button

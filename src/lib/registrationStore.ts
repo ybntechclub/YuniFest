@@ -253,11 +253,59 @@ class RegistrationStore {
       };
     }
 
-    // Duplicate check
+    // 1. Mobile number validation (strictly 10 digits)
+    const cleanMobile = input.mobile.replace(/\D/g, '');
+    if (cleanMobile.length !== 10) {
+      return { 
+        success: false, 
+        error: `Mobile number must be exactly 10 digits (received ${cleanMobile.length} digits).` 
+      };
+    }
+
+    // 2. Transaction / UTR ID uniqueness check (across all registrations)
+    if (input.transaction_id && input.transaction_id.trim()) {
+      const cleanTxn = input.transaction_id.trim().toUpperCase();
+      
+      // Check local cache
+      const isDuplicateTxn = this.registrations.some(
+        r => r.transaction_id && r.transaction_id.trim().toUpperCase() === cleanTxn
+      );
+      if (isDuplicateTxn) {
+        return {
+          success: false,
+          error: `Transaction / UTR ID "${input.transaction_id}" has already been used for another registration. Every registration must have a unique payment transaction ID.`
+        };
+      }
+
+      // Check remote Supabase database
+      if (isSupabaseConfigured) {
+        try {
+          const { data: existingTxn } = await supabase
+            .from('registrations')
+            .select('id, registration_code')
+            .ilike('transaction_id', cleanTxn)
+            .limit(1);
+
+          if (existingTxn && existingTxn.length > 0) {
+            return {
+              success: false,
+              error: `Transaction / UTR ID "${input.transaction_id}" has already been submitted for registration ${existingTxn[0].registration_code}. Duplicate payment references are not allowed.`
+            };
+          }
+        } catch (err) {
+          console.warn('Supabase remote txn check note:', err);
+        }
+      }
+    }
+
+    // 3. Student ID & Email duplicate check
+    const cleanStudentId = input.student_id_number.trim().toLowerCase();
+    const cleanEmail = input.email.trim().toLowerCase();
+
     const isDuplicate = this.registrations.some(
       r => r.event_id === input.event_id &&
-           (r.student_id_number.trim().toLowerCase() === input.student_id_number.trim().toLowerCase() ||
-            r.email.trim().toLowerCase() === input.email.trim().toLowerCase())
+           (r.student_id_number.trim().toLowerCase() === cleanStudentId ||
+            r.email.trim().toLowerCase() === cleanEmail)
     );
 
     if (isDuplicate) {
@@ -287,13 +335,24 @@ class RegistrationStore {
     // If Supabase is connected, attempt remote insert
     if (isSupabaseConfigured) {
       try {
-        const { error } = await supabase.from('registrations').insert({
+        // Resolve event ID: if database uses UUIDs, map by slug or name
+        let dbEventId = newRecord.event_id;
+        const matchingEvent = this.events.find(e => 
+          e.id === newRecord.event_id || 
+          e.slug === newRecord.event_id || 
+          (event && (e.slug === event.slug || e.name === event.name))
+        );
+        if (matchingEvent && matchingEvent.id) {
+          dbEventId = matchingEvent.id;
+        }
+
+        const { data, error } = await supabase.from('registrations').insert({
           registration_code: newRecord.registration_code,
-          event_id: newRecord.event_id,
+          event_id: dbEventId,
           participant_type: newRecord.participant_type,
           full_name: newRecord.full_name,
           email: newRecord.email,
-          mobile: newRecord.mobile,
+          mobile: newRecord.mobile.replace(/\D/g, '').slice(0, 10),
           institution_name: newRecord.institution_name,
           institution_location: newRecord.institution_location || null,
           department: newRecord.department || null,
@@ -307,13 +366,35 @@ class RegistrationStore {
           team_details: newRecord.team_details || null,
           event_specific_data: newRecord.event_specific_data || {},
           consent: newRecord.consent,
-          registration_status: newRecord.registration_status
-        });
+          registration_status: newRecord.registration_status,
+          amount_inr: newRecord.amount_inr,
+          payment_method: newRecord.payment_method || 'upi',
+          transaction_id: newRecord.transaction_id || null,
+          payment_screenshot_url: newRecord.payment_screenshot_url || null,
+          payment_timestamp: newRecord.payment_timestamp || null
+        }).select();
+
         if (error) {
-          console.warn('Supabase insert note:', error.message);
+          console.error('Supabase insert error:', error.message, error);
+          if (error.code === '23505') {
+            return {
+              success: false,
+              error: `A registration with ID "${newRecord.student_id_number}" or email "${newRecord.email}" already exists for this event.`
+            };
+          }
+          return {
+            success: false,
+            error: `Failed to save to Supabase: ${error.message}`
+          };
+        } else {
+          console.log('Successfully saved registration to Supabase:', data);
         }
-      } catch (err) {
-        console.warn('Supabase remote push failed, saved locally:', err);
+      } catch (err: any) {
+        console.error('Supabase remote push failed:', err);
+        return {
+          success: false,
+          error: `Network error saving to Supabase: ${err.message || 'Check your internet connection'}`
+        };
       }
     }
 
@@ -324,13 +405,21 @@ class RegistrationStore {
   async getRegistrations(): Promise<RegistrationRecord[]> {
     if (isSupabaseConfigured) {
       try {
-        const { data, error } = await supabase
+        let result = await supabase
           .from('registrations')
           .select('*, events(name)')
           .order('created_at', { ascending: false });
 
-        if (!error && data && data.length > 0) {
-          const mapped: RegistrationRecord[] = data.map((d: any) => ({
+        // Fallback to simple select if foreign join fails
+        if (result.error) {
+          result = await supabase
+            .from('registrations')
+            .select('*')
+            .order('created_at', { ascending: false });
+        }
+
+        if (!result.error && result.data && result.data.length > 0) {
+          const mapped: RegistrationRecord[] = result.data.map((d: any) => ({
             ...d,
             event_name: d.events?.name || this.getEventBySlugOrId(d.event_id)?.name || 'Event'
           }));

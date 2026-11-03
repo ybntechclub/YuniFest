@@ -176,7 +176,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
         formData={{
           fullName,
           email,
-          mobile,
+          mobile: mobile.replace(/\D/g, '').slice(0, 10),
           institutionName: participantType === 'ybn_student' ? "YBN University, Ranchi" : institutionName.trim(),
           institutionLocation: participantType === 'outside_student' ? institutionLocation.trim() : "Ranchi, Jharkhand",
           department: participantType === 'ybn_student' ? department.trim() : undefined,
@@ -337,14 +337,21 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ participantT
             </div>
 
             <div>
-              <label className="block font-mono text-xs uppercase text-slate-600 mb-1 font-bold">
-                Mobile Number <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block font-mono text-xs uppercase text-slate-600 font-bold">
+                  Mobile Number <span className="text-red-500">*</span>
+                </label>
+                <span className={`font-mono text-[10px] ${mobile.replace(/\D/g, '').length === 10 ? 'text-emerald-700 font-bold' : 'text-slate-500'}`}>
+                  {mobile.replace(/\D/g, '').length}/10 digits
+                </span>
+              </div>
               <input
                 type="tel"
+                inputMode="numeric"
+                maxLength={10}
                 value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                placeholder="10-digit mobile number"
+                onChange={(e) => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                placeholder="10-digit mobile number (e.g. 9876543210)"
                 className="w-full px-4 py-3 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] font-mono text-xs sm:text-sm text-slate-950 font-bold focus:outline-none"
               />
               {errors.mobile && <p className="font-mono text-xs text-red-600 mt-1">{errors.mobile}</p>}
