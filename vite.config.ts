@@ -4,7 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  envPrefix: 'YUNIFEST_',
+  envPrefix: ['YUNIFEST_', 'VITE_'],
   plugins: [react()],
   server: {
     host: '127.0.0.1',

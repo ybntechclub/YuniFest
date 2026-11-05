@@ -56,6 +56,14 @@ export interface RegistrationRecord {
   participation_category?: string; // Solo, Duo, Group
   team_name?: string;
   team_details?: string;
+  day_1_event_id?: string;
+  day_2_event_id?: string;
+  day_3_event_id?: string;
+  selected_events_by_day?: Record<string, any>;
+  gaming_squad_members?: Array<{ name: string; ign: string; uid: string; role?: string }>;
+  ramp_walk_theme?: string;
+  iks_presentation_format?: string;
+  face_art_category?: string;
   event_specific_data?: {
     gameChoice?: 'Free Fire' | 'BGMI';
     gameId?: string;

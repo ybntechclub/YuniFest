@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { RegistrationRecord, RegistrationStatus } from '../../types/database';
-import { X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, Award, ShieldCheck, Sparkles, CreditCard, FileImage, ExternalLink, Folder, Trash2 } from 'lucide-react';
+import { 
+  X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, 
+  Award, ShieldCheck, Sparkles, CreditCard, FileImage, ExternalLink, Folder, 
+  Trash2, Calendar, Gamepad2, Palette, Shirt
+} from 'lucide-react';
 import { isGoogleDriveUrl, getDriveDirectImageUrl, getDrivePreviewUrl, getDriveViewUrl, GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
 
 interface RegistrationDetailModalProps {
@@ -36,22 +40,57 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
     setIsUpdating(false);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
-      <div className="relative w-full max-w-xl bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg p-6 sm:p-8 text-slate-950">
-        
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-white text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm transition-transform hover:scale-105"
-        >
-          <X className="w-5 h-5" />
-        </button>
+  // 3-Day Itinerary Data Resolution
+  const eventData = registration.event_specific_data || {};
+  const selectedByDay = eventData.selectedEventsByDay || {};
+  
+  const day1Name = selectedByDay.day_1?.name || (
+    registration.event_name?.toLowerCase().includes('gaming') ? 'Gaming Tournament (Free Fire & BGMI)' :
+    registration.event_name?.toLowerCase().includes('face') ? 'Face Painting & Tattoo Making' :
+    registration.event_name?.toLowerCase().includes('model') ? 'Model Representation & Poster Making' :
+    registration.event_name?.toLowerCase().includes('sketch') ? 'Live Sketch Competition' :
+    'General Delegate Attendance (No Competition)'
+  );
 
-        {/* Modal Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="font-mono text-sm font-black text-[#2B59FF] px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200">
+  const day2Name = selectedByDay.day_2?.name || (
+    registration.event_name?.toLowerCase().includes('dance') ? 'Dance Competition' :
+    registration.event_name?.toLowerCase().includes('singing') ? 'Singing Competition' :
+    registration.event_name?.toLowerCase().includes('treasure') ? 'Treasure Hunting' :
+    registration.event_name?.toLowerCase().includes('reel') ? 'Reel Competition' :
+    registration.event_name?.toLowerCase().includes('mimicry') ? 'Mimicry & Stand-up Comedy' :
+    'General Delegate Attendance (No Competition)'
+  );
+
+  const day3Name = selectedByDay.day_3?.name || (
+    registration.event_name?.toLowerCase().includes('ramp') ? 'Ramp Walk / Fashion Show' :
+    'Grand Runway & EDM DJ Concert (Audience Entry)'
+  );
+
+  const squadMembers = eventData.squadMembers;
+  const isDuo = eventData.gamingFormat === 'duo' || (Array.isArray(squadMembers) && squadMembers.length === 2);
+  const rampWalkTheme = eventData.rampWalkTheme;
+  const iksFormat = eventData.iksFormat;
+  const faceArtCategory = eventData.faceArtCategory;
+  const modelPartnerName = eventData.modelPartnerName;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 md:p-8 animate-fadeIn">
+      {/* Outer Card with flex layout: Sticky Header, Smooth Mouse-Scrollable Body, Clean Footer */}
+      <div className="relative w-full max-w-2xl bg-white border-[2px] border-slate-900 rounded-[32px] shadow-solid-pop-lg text-slate-950 my-auto max-h-[92vh] flex flex-col overflow-hidden">
+        
+        {/* Pinned Header */}
+        <div className="p-6 sm:p-7 pb-4 shrink-0 border-b-[1.5px] border-slate-900/10 bg-white relative z-10">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm transition-transform hover:scale-105"
+            aria-label="Close modal"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center gap-2 mb-2 pr-12 flex-wrap">
+            <span className="font-mono text-xs sm:text-sm font-black text-[#2B59FF] px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200">
               {registration.registration_code}
             </span>
             <span className={`text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
@@ -61,53 +100,139 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
             }`}>
               {registration.participant_type === 'ybn_student' ? "YBN Internal Student" : "Visiting Delegate"}
             </span>
+            <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+              currentStatus === 'confirmed'
+                ? 'bg-emerald-100 text-emerald-950 border-emerald-400'
+                : 'bg-amber-100 text-amber-950 border-amber-400'
+            }`}>
+              {currentStatus === 'confirmed' ? "● VERIFIED & CONFIRMED" : "○ PENDING PAYMENT REVIEW"}
+            </span>
           </div>
 
-          <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950">
+          <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 truncate">
             {registration.full_name}
           </h2>
           <p className="font-mono text-xs text-slate-500 mt-1">
-            Student ID / Roll No: <strong>{registration.student_id_number}</strong>
+            Student ID / Roll No: <strong className="text-slate-900">{registration.student_id_number}</strong>
           </p>
         </div>
 
-        {/* Details Grid */}
-        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+        {/* Scrollable Modal Content: Fully responsive to standard mouse wheel scrolling */}
+        <div className="overflow-y-auto p-6 sm:p-7 pt-4 space-y-4 flex-1 overscroll-contain">
           
-          {/* Event Allocation */}
-          <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300">
-            <span className="font-mono text-[10px] uppercase font-bold text-slate-500 block">
-              REGISTERED EVENT
-            </span>
-            <span className="font-headline font-black text-lg text-slate-950 block mt-0.5">
-              {registration.event_name}
-            </span>
-            {registration.participation_category && (
-              <span className="text-xs font-mono text-[#2B59FF] font-bold block mt-1">
-                Category: {registration.participation_category}
+          {/* 3-DAY FESTIVAL ITINERARY BREAKDOWN */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#F6F7F9] to-white border-[1.5px] border-slate-900 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs font-black uppercase text-[#2B59FF] flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-[#2B59FF]" />
+                <span>3-DAY FESTIVAL ITINERARY BREAKDOWN</span>
               </span>
+              <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#FEF08A] text-slate-950 border border-slate-900">
+                PAY ONCE • 3 DAYS ACCESS
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 font-mono text-xs">
+              {/* Day 1 */}
+              <div className="p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-black uppercase">DAY 01 // DEC 10</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 text-blue-900 font-bold">TECH</span>
+                </div>
+                <span className="font-headline font-bold text-xs text-slate-950 block leading-snug">
+                  {day1Name}
+                </span>
+                <span className="text-[10px] text-slate-500 block truncate">
+                  Technical &amp; Innovation Day
+                </span>
+              </div>
+
+              {/* Day 2 */}
+              <div className="p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-black uppercase">DAY 02 // DEC 11</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 font-bold">CULTURAL</span>
+                </div>
+                <span className="font-headline font-bold text-xs text-slate-950 block leading-snug">
+                  {day2Name}
+                </span>
+                <span className="text-[10px] text-slate-500 block truncate">
+                  Showcase &amp; Competitions
+                </span>
+              </div>
+
+              {/* Day 3 */}
+              <div className="p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-black uppercase">DAY 03 // DEC 12</span>
+                  <span className="text-[9px] px-1.5 py-0.2 rounded bg-pink-100 text-pink-900 font-bold">FINALE</span>
+                </div>
+                <span className="font-headline font-bold text-xs text-slate-950 block leading-snug">
+                  {day3Name}
+                </span>
+                <span className="text-[10px] text-slate-500 block truncate">
+                  Runway &amp; DJ Concert
+                </span>
+              </div>
+            </div>
+
+            {/* Event Specific Sub-Details */}
+            {(rampWalkTheme || iksFormat || faceArtCategory || modelPartnerName) && (
+              <div className="pt-2 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                {rampWalkTheme && (
+                  <div className="p-2.5 rounded-lg bg-purple-50 border border-purple-200">
+                    <span className="text-[10px] text-purple-800 font-bold block uppercase flex items-center gap-1">
+                      <Shirt className="w-3 h-3" />
+                      <span>Ramp Walk Runway Theme:</span>
+                    </span>
+                    <strong className="text-purple-950 text-xs mt-0.5 block">{rampWalkTheme}</strong>
+                  </div>
+                )}
+
+                {iksFormat && (
+                  <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200">
+                    <span className="text-[10px] text-emerald-800 font-bold block uppercase flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      <span>IKS Presentation Medium:</span>
+                    </span>
+                    <strong className="text-emerald-950 text-xs mt-0.5 block">{iksFormat}</strong>
+                  </div>
+                )}
+
+                {(faceArtCategory || modelPartnerName) && (
+                  <div className="p-2.5 rounded-lg bg-pink-50 border border-pink-200">
+                    <span className="text-[10px] text-pink-800 font-bold block uppercase flex items-center gap-1">
+                      <Palette className="w-3 h-3" />
+                      <span>Face Art &amp; Canvas Companion:</span>
+                    </span>
+                    <strong className="text-pink-950 text-xs mt-0.5 block">
+                      {faceArtCategory || 'Face Painting'}{modelPartnerName ? ` • Companion: ${modelPartnerName}` : ''}
+                    </strong>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
-          {/* Academic Info */}
+          {/* Academic & Affiliation Profile */}
           <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300 space-y-2 text-xs font-mono">
             <div>
-              <span className="text-slate-500 block">Institution / College:</span>
-              <span className="font-bold text-slate-950">{registration.institution_name}</span>
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">Institution / College:</span>
+              <span className="font-bold text-slate-950 text-sm">{registration.institution_name}</span>
             </div>
             {registration.department && (
               <div>
-                <span className="text-slate-500 block">Department / Faculty:</span>
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">Department / Faculty:</span>
                 <span className="font-bold text-slate-950">{registration.department}</span>
               </div>
             )}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200">
               <div>
-                <span className="text-slate-500 block">Course:</span>
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">Course / Degree:</span>
                 <span className="font-bold text-slate-950">{registration.course}</span>
               </div>
               <div>
-                <span className="text-slate-500 block">Year:</span>
+                <span className="text-slate-500 block text-[10px] uppercase font-bold">Academic Year:</span>
                 <span className="font-bold text-slate-950">{registration.academic_year}</span>
               </div>
             </div>
@@ -116,37 +241,61 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
           {/* Contact Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
             <div className="p-3.5 rounded-xl bg-white border border-slate-300">
-              <span className="text-slate-500 block text-[10px]">EMAIL:</span>
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">EMAIL:</span>
               <span className="font-bold text-slate-950 truncate block mt-0.5">{registration.email}</span>
             </div>
             <div className="p-3.5 rounded-xl bg-white border border-slate-300">
-              <span className="text-slate-500 block text-[10px]">PHONE:</span>
+              <span className="text-slate-500 block text-[10px] uppercase font-bold">PHONE / WHATSAPP:</span>
               <span className="font-bold text-slate-950 truncate block mt-0.5">{registration.mobile}</span>
             </div>
           </div>
 
-          {/* Team / Dynamic Fields */}
-          {registration.team_name && (
-            <div className="p-4 rounded-2xl bg-[#FEF08A]/40 border border-slate-900 text-xs font-mono">
-              <span className="text-slate-700 uppercase font-bold block text-[10px]">TEAM NAME:</span>
-              <span className="font-bold text-slate-950 text-sm">{registration.team_name}</span>
-              {registration.team_details && (
-                <div className="mt-2 text-slate-800 whitespace-pre-wrap text-[11px] bg-white/70 p-2.5 rounded-xl border border-slate-300">
-                  {registration.team_details}
+          {/* Esports Duo / Squad Roster (If Registered for Gaming) */}
+          {squadMembers && Array.isArray(squadMembers) && squadMembers.length > 0 && (
+            <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-blue-950 uppercase font-black flex items-center gap-1.5 text-xs">
+                  <Gamepad2 className="w-4 h-4 text-[#2B59FF]" />
+                  <span>ESPORTS {isDuo ? 'DUO ROSTER (2 PLAYERS)' : `SQUAD ROSTER (${squadMembers.length} PLAYERS)`}</span>
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-900 border border-blue-300 font-bold">
+                  {eventData.gameChoice || 'Esports'}
+                </span>
+              </div>
+
+              {registration.team_name && (
+                <div>
+                  <span className="text-slate-500 text-[10px] block uppercase">Team / Clan Name:</span>
+                  <strong className="text-slate-950 text-sm">{registration.team_name}</strong>
                 </div>
               )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {squadMembers.map((m: any, i: number) => (
+                  <div key={i} className="p-2.5 rounded-xl bg-white border border-blue-200">
+                    <div className="flex items-center justify-between">
+                      <strong className="text-slate-950 font-bold">{i + 1}. {m.name || 'Player'}</strong>
+                      {i === 0 && <span className="text-[9px] bg-emerald-100 text-emerald-900 px-1.5 py-0.2 rounded font-bold">CAPTAIN</span>}
+                    </div>
+                    <div className="text-slate-600 text-[10px] mt-0.5">
+                      IGN: <span className="text-[#2B59FF] font-bold">{m.ign || 'N/A'}</span> • UID: <span className="text-slate-900 font-bold">{m.uid || 'N/A'}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
-          {/* Gaming Data */}
-          {registration.event_specific_data?.gameIgn && (
-            <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 text-xs font-mono space-y-1">
-              <span className="text-blue-900 uppercase font-bold block text-[10px]">ESPORTS CREDENTIALS</span>
-              <div className="grid grid-cols-2 gap-2">
-                <div>Game: <strong>{registration.event_specific_data.gameChoice}</strong></div>
-                <div>IGN: <strong>{registration.event_specific_data.gameIgn}</strong></div>
-                <div>Player ID: <strong>{registration.event_specific_data.gameId}</strong></div>
-              </div>
+          {/* Team / Project details if non-gaming */}
+          {registration.team_name && (!squadMembers || squadMembers.length === 0) && (
+            <div className="p-4 rounded-2xl bg-[#FEF08A]/40 border border-slate-900 text-xs font-mono">
+              <span className="text-slate-700 uppercase font-bold block text-[10px]">TEAM / PROJECT TITLE:</span>
+              <span className="font-bold text-slate-950 text-sm">{registration.team_name}</span>
+              {registration.team_details && (
+                <div className="mt-2 text-slate-800 whitespace-pre-wrap text-[11px] bg-white/80 p-2.5 rounded-xl border border-slate-300">
+                  {registration.team_details}
+                </div>
+              )}
             </div>
           )}
 
@@ -301,7 +450,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               </div>
             )}
 
-            {/* Manual Verification Action by Payment Head */}
+            {/* Verification Button */}
             {currentStatus === 'pending' && (
               <div className="pt-2">
                 <button
@@ -309,7 +458,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                   disabled={isUpdating}
                   onClick={async () => {
                     await handleStatusChange('confirmed');
-                    setVerifiedNotice(`Payment verified by Payment Head! Confirmation email with official entry badge dispatched to ${registration.email}.`);
+                    setVerifiedNotice(`Payment verified! Official entry badge confirmed for ${registration.email}.`);
                   }}
                   className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-headline font-bold text-xs uppercase tracking-wider transition-colors shadow-sm flex items-center justify-center gap-2"
                 >

@@ -180,13 +180,20 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
     try {
       const nowIso = new Date().toISOString();
 
-      // Upload screenshot to Google Drive named with participant's email ID
+      // Upload screenshot to Google Drive and let Apps Script send confirmation email directly (once only)
       let finalScreenshotUrl = screenshotUrl;
       if (screenshotUrl) {
         finalScreenshotUrl = await uploadReceiptToGoogleDrive({
           base64: screenshotUrl,
-          email: formData.email,
+          email: formData.email.trim(),
           transactionId: transactionId.trim(),
+          fullName: formData.fullName.trim(),
+          eventName: selectedEvent.name,
+          studentIdNumber: formData.studentIdNumber.trim(),
+          institutionName: formData.institutionName.trim(),
+          amountInr: amount,
+          participationCategory: formData.participationCategory,
+          sendEmail: true,
         });
       }
 
@@ -222,12 +229,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
         return;
       }
 
-      // Automatically dispatch confirmation email with Token & WhatsApp Channel link
-      try {
-        await sendRegistrationConfirmationEmail(result.data);
-      } catch (mailErr) {
-        console.warn('Confirmation email dispatch background note:', mailErr);
-      }
+      // Note: Confirmation email is dispatched directly and once by Google Apps Script on receipt upload
+      // Client-side duplicate email trigger removed to prevent double emails and spam flagging.
 
       const localReceiptPreview = previewUrl || screenshotUrl || undefined;
       onSuccess(result.data, localReceiptPreview);

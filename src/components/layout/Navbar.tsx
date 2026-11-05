@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Shield, ArrowUpRight, FileText } from 'lucide-react';
+import { Menu, X, Shield, ArrowUpRight, FileText, QrCode } from 'lucide-react';
 import { RollText } from '../ui/RollText';
 
 export const Navbar: React.FC = () => {
@@ -26,6 +26,7 @@ export const Navbar: React.FC = () => {
     { label: 'SCHEDULE', path: '/schedule' },
     { label: 'REGULATIONS', path: '/regulations' },
     { label: 'LEADERSHIP', path: '/leadership' },
+    { label: 'MY PASS', path: '/my-pass' },
   ];
 
   const isActive = (path: string) => {

@@ -12,17 +12,33 @@ export interface UploadReceiptParams {
   base64: string;
   email: string;
   transactionId?: string;
+  fullName?: string;
+  eventName?: string;
+  studentIdNumber?: string;
+  institutionName?: string;
+  amountInr?: number;
+  participationCategory?: string;
+  sendEmail?: boolean;
 }
 
 /**
  * Uploads a payment receipt to the official festival Google Drive folder.
  * Returns the Google Drive file view URL (saved in Supabase).
  */
-export async function uploadReceiptToGoogleDrive({
-  base64,
-  email,
-  transactionId
-}: UploadReceiptParams): Promise<string> {
+export async function uploadReceiptToGoogleDrive(params: UploadReceiptParams): Promise<string> {
+  const {
+    base64,
+    email,
+    transactionId,
+    fullName,
+    eventName,
+    studentIdNumber,
+    institutionName,
+    amountInr,
+    participationCategory,
+    sendEmail = true
+  } = params;
+
   const cleanEmail = email.trim().replace(/[^a-zA-Z0-9@._-]/g, '_');
   const cleanUtr = (transactionId || 'UTR').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
   const filename = `${cleanEmail}_${cleanUtr}.jpg`;
@@ -36,20 +52,34 @@ export async function uploadReceiptToGoogleDrive({
   }
 
   try {
+    // 12-second abort controller to prevent hanging if Google Apps Script is slow
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
     // Send with text/plain to avoid CORS preflight in Google Apps Script
     const response = await fetch(DRIVE_SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
       },
+      signal: controller.signal,
       body: JSON.stringify({
         base64,
         filename,
-        email: cleanEmail,
+        email: email.trim(),
         transactionId: cleanUtr,
+        fullName: fullName?.trim(),
+        eventName: eventName?.trim(),
+        studentIdNumber: studentIdNumber?.trim(),
+        institutionName: institutionName?.trim(),
+        amountInr,
+        participationCategory,
+        sendEmail,
         folderId: GOOGLE_DRIVE_FOLDER_ID,
       }),
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`Google Apps Script upload failed with HTTP status ${response.status}`);
@@ -63,7 +93,7 @@ export async function uploadReceiptToGoogleDrive({
 
     throw new Error(data.error || 'Unknown error uploading to Google Drive');
   } catch (err) {
-    console.error('Failed to upload directly to Google Drive, falling back to local storage:', err);
+    console.warn('Failed to upload directly to Google Drive, falling back to local receipt:', err);
     return base64;
   }
 }

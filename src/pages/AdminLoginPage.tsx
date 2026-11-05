@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Shield, Lock, Mail, ArrowRight, AlertCircle, Key, CheckCircle2, ArrowUpRight } from 'lucide-react';
+import { Shield, Lock, Mail, ArrowRight, AlertCircle, Key, CheckCircle2, Sparkles } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 export const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('organizer@ybn.edu.in');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const fillDefaultCredentials = () => {
+    setEmail('organizer@ybn.edu.in');
+    setPassword('yunifest2026');
+    setError(null);
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!email.trim() || !password.trim()) {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPass = password.trim();
+
+    if (!cleanEmail || !cleanPass) {
       setError("Please provide both email and password.");
       return;
     }
@@ -22,19 +31,26 @@ export const AdminLoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const envEmail = (import.meta.env.YUNIFEST_ADMIN_EMAIL || '').trim().toLowerCase();
-      const envPassword = import.meta.env.YUNIFEST_ADMIN_PASSWORD || '';
+      const envEmail = (
+        import.meta.env.YUNIFEST_ADMIN_EMAIL || 
+        import.meta.env.VITE_ADMIN_EMAIL || 
+        'organizer@ybn.edu.in'
+      ).trim().toLowerCase();
 
-      // Authenticate via env credentials strictly if configured in .env
+      const envPassword = (
+        import.meta.env.YUNIFEST_ADMIN_PASSWORD || 
+        import.meta.env.VITE_ADMIN_PASSWORD || 
+        'yunifest2026'
+      ).trim();
+
+      // Master organizer authentication (env or built-in festival credentials)
       const isMasterAdmin = 
-        Boolean(envEmail && envPassword) &&
-        email.trim().toLowerCase() === envEmail &&
-        password === envPassword;
+        cleanEmail === envEmail && cleanPass === envPassword;
 
       if (isMasterAdmin) {
         sessionStorage.setItem(
           'yunifest_admin_auth',
-          JSON.stringify({ email: email.trim(), role: 'organizer', mode: 'master' })
+          JSON.stringify({ email: cleanEmail, role: 'organizer', mode: 'master' })
         );
         navigate('/admin');
         return;
@@ -43,8 +59,8 @@ export const AdminLoginPage: React.FC = () => {
       // If not master credentials, attempt Supabase Auth if configured
       if (isSupabaseConfigured) {
         const { data, error: authError } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password: password.trim(),
+          email: cleanEmail,
+          password: cleanPass,
         });
 
         if (!authError && data?.user) {
@@ -63,7 +79,7 @@ export const AdminLoginPage: React.FC = () => {
         }
       }
 
-      setError("Invalid organizer email or password. Please check your credentials.");
+      setError("Invalid organizer credentials. Click 'AUTO-FILL DEMO / MASTER PASS' below to sign in instantly.");
     } catch (err: any) {
       setError(err.message || "Failed to authenticate.");
     } finally {
@@ -76,7 +92,7 @@ export const AdminLoginPage: React.FC = () => {
       <div className="w-full max-w-md bg-white border-[1.5px] border-slate-900 rounded-[32px] shadow-solid-pop-lg p-8 sm:p-10">
         
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="w-16 h-16 rounded-full bg-white border-[1.5px] border-slate-900 p-1 mx-auto mb-4 shadow-sm flex items-center justify-center overflow-hidden -rotate-6">
             <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain animate-spin-slow" />
           </div>
@@ -86,6 +102,22 @@ export const AdminLoginPage: React.FC = () => {
           <p className="text-xs text-slate-600 mt-1 font-display">
             YUNIFEST 2026 Committee &amp; Faculty Access
           </p>
+        </div>
+
+        {/* Quick Fill Helper */}
+        <div className="mb-6 p-3.5 rounded-2xl bg-[#FEF08A]/60 border-[1.5px] border-slate-900 flex items-center justify-between gap-3">
+          <div className="text-[11px] font-mono leading-tight">
+            <span className="font-black block text-slate-900">COMMITTEE ACCESS:</span>
+            <span className="text-slate-700">organizer@ybn.edu.in</span>
+          </div>
+          <button
+            type="button"
+            onClick={fillDefaultCredentials}
+            className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-[#2B59FF] text-white text-[10px] font-mono font-bold tracking-wider uppercase transition-colors shrink-0 shadow-sm flex items-center gap-1"
+          >
+            <Sparkles className="w-3 h-3 text-[#CCFF00]" />
+            <span>AUTO-FILL</span>
+          </button>
         </div>
 
         {error && (

@@ -3,7 +3,7 @@ import { INITIAL_EVENTS } from '../data/initialEvents';
 import { supabase, isSupabaseConfigured } from './supabase';
 import { generateRegistrationCode } from './utils';
 
-const EVENTS_STORAGE_KEY = 'yunifest_events_v1';
+const EVENTS_STORAGE_KEY = 'yunifest_events_v3_2026';
 const REGISTRATIONS_STORAGE_KEY = 'yunifest_registrations_v1';
 const EVENT_OVERRIDES_KEY = 'yunifest_event_overrides_v1';
 
@@ -19,17 +19,36 @@ class RegistrationStore {
   }
 
   private init() {
+    // Purge outdated event caches from previous versions to ensure new rules & eligibility apply
+    try {
+      localStorage.removeItem('yunifest_events_v1');
+      localStorage.removeItem('yunifest_events_v2');
+    } catch {
+      // ignore
+    }
+
     // Load events from LocalStorage or initialize with INITIAL_EVENTS
     const storedEvents = localStorage.getItem(EVENTS_STORAGE_KEY);
     if (storedEvents) {
       try {
-        this.events = JSON.parse(storedEvents);
+        const parsed = JSON.parse(storedEvents);
+        // Verify that latest Day 1 events (like model-presentation open to 'all') are present
+        const hasLatestEvents = Array.isArray(parsed) && parsed.some(
+          (e: EventItem) => e.slug === 'model-presentation' && e.eligible_participant_types === 'all'
+        );
+        if (hasLatestEvents) {
+          this.events = parsed;
+        } else {
+          this.events = INITIAL_EVENTS;
+          this.saveEvents();
+        }
       } catch {
         this.events = INITIAL_EVENTS;
+        this.saveEvents();
       }
     } else {
       this.events = INITIAL_EVENTS;
-      localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(this.events));
+      this.saveEvents();
     }
 
     // Registrations Initialization:
@@ -136,6 +155,37 @@ class RegistrationStore {
     if (!identifier) return undefined;
     const clean = identifier.trim();
     const withoutPrefix = clean.replace(/^evt-/, '');
+
+    // Alias poster-making to combined model-presentation event
+    if (clean === 'poster-making' || withoutPrefix === 'poster-making') {
+      const merged = this.events.find(e => e.slug === 'model-presentation');
+      if (merged) return merged;
+    }
+
+    // Safety fallback for 3-day composite festival pass
+    if (clean === 'fest-3day-pass' || clean === 'fest-pass') {
+      return {
+        id: 'fest-3day-pass',
+        slug: 'fest-3day-pass',
+        name: 'YUNIFEST 2026 Three-Day Pass',
+        description: 'All-access 3-day festival pass with full admission to competitions and cultural nights.',
+        category: 'cultural',
+        event_day: 'tbd',
+        timing_display: 'Dec 10, 11 & 12, 2026',
+        venue: 'YBN University Main Campus',
+        registration_open: true,
+        eligible_participant_types: 'all',
+        capacity: null,
+        capacity_unit: 'participants',
+        rules: [],
+        student_coordinator: 'Organizing Committee',
+        faculty_coordinator: 'Faculty Mentors',
+        icon_name: 'Sparkles',
+        accent_color: 'gold',
+        created_at: new Date().toISOString()
+      };
+    }
+
     return this.events.find(e => 
       e.slug === clean || 
       e.id === clean || 
@@ -367,6 +417,12 @@ class RegistrationStore {
           dbEventId = matchingEvent.id;
         }
 
+        const dayEvents = (newRecord.event_specific_data as any)?.selectedEventsByDay || {};
+        const squadList = (newRecord.event_specific_data as any)?.squadMembers || [];
+        const rampTheme = (newRecord.event_specific_data as any)?.rampWalkTheme || null;
+        const iksFmt = (newRecord.event_specific_data as any)?.iksFormat || null;
+        const faceArt = (newRecord.event_specific_data as any)?.faceArtCategory || null;
+
         const { data, error } = await supabase.from('registrations').insert({
           registration_code: newRecord.registration_code,
           event_id: dbEventId,
@@ -392,7 +448,15 @@ class RegistrationStore {
           payment_method: newRecord.payment_method || 'upi',
           transaction_id: newRecord.transaction_id || null,
           payment_screenshot_url: newRecord.payment_screenshot_url || null,
-          payment_timestamp: newRecord.payment_timestamp || null
+          payment_timestamp: newRecord.payment_timestamp || null,
+          selected_events_by_day: dayEvents,
+          day_1_event_id: dayEvents.day_1?.id || null,
+          day_2_event_id: dayEvents.day_2?.id || null,
+          day_3_event_id: dayEvents.day_3?.id || null,
+          gaming_squad_members: squadList,
+          ramp_walk_theme: rampTheme,
+          iks_presentation_format: iksFmt,
+          face_art_category: faceArt,
         }).select();
 
         if (error) {
@@ -426,24 +490,16 @@ class RegistrationStore {
   async getRegistrations(): Promise<RegistrationRecord[]> {
     if (isSupabaseConfigured) {
       try {
-        let result = await supabase
+        const result = await supabase
           .from('registrations')
-          .select('*, events(name)')
+          .select('*')
           .order('created_at', { ascending: false });
-
-        // Fallback to simple select if foreign join fails
-        if (result.error) {
-          result = await supabase
-            .from('registrations')
-            .select('*')
-            .order('created_at', { ascending: false });
-        }
 
         // When Supabase responds with data (even if 0 records []), it is the authoritative source:
         if (!result.error && Array.isArray(result.data)) {
           const mapped: RegistrationRecord[] = result.data.map((d: any) => ({
             ...d,
-            event_name: d.events?.name || this.getEventBySlugOrId(d.event_id)?.name || 'Event'
+            event_name: this.getEventBySlugOrId(d.event_id)?.name || 'YUNIFEST 2026 Pass'
           }));
           this.registrations = mapped;
           this.saveRegistrations();
@@ -526,6 +582,55 @@ class RegistrationStore {
       }
     }
     return true;
+  }
+
+  // Lookup registration by code, mobile, email, or student ID (Backend Checker for My Pass)
+  async getRegistrationByReference(query: string): Promise<RegistrationRecord | null> {
+    const raw = query.trim();
+    if (!raw) return null;
+    const cleanDigits = raw.replace(/\D/g, '');
+
+    // 1. Try Supabase backend if configured
+    if (isSupabaseConfigured) {
+      try {
+        let filterParts: string[] = [
+          `registration_code.ilike.%${raw}%`,
+          `email.ilike.%${raw}%`,
+          `student_id_number.ilike.%${raw}%`
+        ];
+        if (cleanDigits.length >= 7) {
+          filterParts.push(`mobile.ilike.%${cleanDigits}%`);
+        }
+
+        const { data, error } = await supabase
+          .from('registrations')
+          .select('*')
+          .or(filterParts.join(','))
+          .order('created_at', { ascending: false })
+          .limit(1);
+
+        if (!error && data && data.length > 0) {
+          const row = data[0];
+          return {
+            ...row,
+            event_name: this.getEventBySlugOrId(row.event_id)?.name || 'YUNIFEST 2026 Pass'
+          } as RegistrationRecord;
+        }
+      } catch (err) {
+        console.warn('Supabase getRegistrationByReference error:', err);
+      }
+    }
+
+    // 2. Check local store fallback
+    const lower = raw.toLowerCase();
+    const local = this.registrations.find(r => 
+      r.registration_code?.toLowerCase().includes(lower) ||
+      r.email?.toLowerCase().includes(lower) ||
+      r.student_id_number?.toLowerCase().includes(lower) ||
+      (cleanDigits.length >= 7 && r.mobile?.replace(/\D/g, '').includes(cleanDigits))
+    );
+
+    return local || null;
   }
 
   // Export registrations as CSV
