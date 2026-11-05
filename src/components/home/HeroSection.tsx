@@ -170,7 +170,7 @@ export const HeroSection: React.FC = () => {
                 to="/register"
                 className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-6 sm:px-7"
               >
-                <RollText text="GET FESTIVAL PASS" highlightColor="text-white" />
+                <RollText text="GET PASS NOW" highlightColor="text-white" />
                 <span className="w-2 h-2 rounded-full bg-[#FEF08A]" />
               </Link>
 

@@ -1,34 +1,34 @@
 /**
  * =========================================================================
- * YUNIFEST 2026 — Google Drive Uploader & Automated Confirmation Email Service
- * Target Folder ID: 1-Z9Z7qD904fzBYjFRO3_Dip_ME96Fl1L
+ * YUNIFEST 2026 — Google Drive Uploader & Anti-Spam Direct Email Service
+ * Target Google Drive Folder ID: 1-Z9Z7qD904fzBYjFRO3_Dip_ME96Fl1L
  * =========================================================================
  *
- * CRITICAL DEPLOYMENT SETTINGS:
- * 1. Open https://script.google.com/
- * 2. Open your project
- * 3. Replace all code with this file and click "Save" (Ctrl+S / floppy icon)
- * 4. Click "Deploy" (top right) -> "Manage deployments"
- * 5. Click the PENCIL icon (Edit) on the active deployment
- * 6. Set "Execute as": "Me (<your-email>)"
+ * HOW TO DEPLOY / UPDATE IN GOOGLE APPS SCRIPT:
+ * 1. Open https://script.google.com/ and open your YUNIFEST project.
+ * 2. Select all existing code, delete it, and paste this entire file.
+ * 3. Click "Save" (Ctrl + S / disk icon).
+ * 4. Click "Deploy" (top right) -> "Manage deployments".
+ * 5. Click the PENCIL icon (Edit) on the active deployment.
+ * 6. Set "Execute as": "Me (<your-google-account>)"
  * 7. Set "Who has access": "Anyone"
  * 8. Set "Version": "New version"
- * 9. Click "Deploy"
+ * 9. Click "Deploy" and grant permissions if prompted.
  * =========================================================================
  */
 
 var TARGET_FOLDER_ID = "1-Z9Z7qD904fzBYjFRO3_Dip_ME96Fl1L";
 var WHATSAPP_CHANNEL_URL = "https://whatsapp.com/channel/0029Va9yunifest2026";
+var OFFICIAL_HELPLINE = "+91 90312 74903";
 
 /**
- * Run this function directly inside the Apps Script Editor to test folder permissions!
- * Select "testUploadFromEditor" in the dropdown and click "Run".
+ * Test function to verify folder access from the Apps Script editor
  */
 function testUploadFromEditor() {
   try {
     var folder = DriveApp.getFolderById(TARGET_FOLDER_ID);
     Logger.log("Found folder: " + folder.getName());
-    var blob = Utilities.newBlob("YUNIFEST 2026 Drive Connection OK at " + new Date(), "text/plain", "connection_test.txt");
+    var blob = Utilities.newBlob("YUNIFEST 2026 Drive Test at " + new Date(), "text/plain", "test_connection.txt");
     var file = folder.createFile(blob);
     Logger.log("SUCCESS! Test file created: " + file.getUrl());
   } catch (err) {
@@ -36,6 +36,9 @@ function testUploadFromEditor() {
   }
 }
 
+/**
+ * Main Web App POST handler
+ */
 function doPost(e) {
   try {
     if (!e || !e.postData || !e.postData.contents) {
@@ -45,31 +48,27 @@ function doPost(e) {
     var data = JSON.parse(e.postData.contents);
     var output = { success: true };
 
-    // Action 1: Direct Send Email request
+    // -----------------------------------------------------------------------
+    // Action: Direct Manual Send Email Request (from Admin / Resend)
+    // -----------------------------------------------------------------------
     if (data.action === "send_email") {
-      if (data.email && data.htmlBody) {
-        var subject = data.subject || ("Registration Token [" + (data.registrationCode || "") + "] — YUNIFEST 2026");
-        try {
-          GmailApp.sendEmail(data.email, subject, "", {
-            htmlBody: data.htmlBody,
-            name: "YUNIFEST 2026 Organizing Committee"
-          });
-          output.emailSent = true;
-        } catch (mailErr) {
-          Logger.log("Gmail dispatch note: " + mailErr.toString());
-          output.emailError = mailErr.toString();
-        }
+      if (data.email) {
+        var emailResult = sendAntiSpamEmail(data);
+        output.emailSent = emailResult.sent;
+        output.emailMessage = emailResult.message;
       }
       return ContentService.createTextOutput(JSON.stringify(output)).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Action 2: Upload Payment Receipt to Google Drive Folder
+    // -----------------------------------------------------------------------
+    // Action: Upload Payment Receipt to Google Drive Folder
+    // -----------------------------------------------------------------------
     var folderId = data.folderId || TARGET_FOLDER_ID;
     var folder;
     try {
       folder = DriveApp.getFolderById(folderId);
     } catch (fErr) {
-      throw new Error("Cannot open Google Drive Folder ID: " + folderId + ". Ensure the Google account running this script owns or has Editor permission on the folder: " + fErr.toString());
+      throw new Error("Cannot open Google Drive Folder ID: " + folderId + ". Ensure Google account has Editor permission: " + fErr.toString());
     }
 
     var base64Data = data.base64 || "";
@@ -100,7 +99,7 @@ function doPost(e) {
       try {
         file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
       } catch (shareErr) {
-        Logger.log("Note on sharing setting (safe): " + shareErr.toString());
+        Logger.log("Sharing permission note (safe): " + shareErr.toString());
       }
 
       file.setDescription("Uploaded for YUNIFEST 2026. Participant: " + email + " | UTR: " + utr);
@@ -115,21 +114,13 @@ function doPost(e) {
     output.directImageUrl = directImageUrl;
     output.filename = filename;
 
-    // Action 3: Automatically Send Confirmation Email with Token & WhatsApp Channel Link
-    if (data.email) {
-      try {
-        var emailHtml = data.htmlBody || generateEmailTemplate(data);
-        var emailSubject = data.subject || ("Registration Confirmed [" + (data.registrationCode || "") + "] — YUNIFEST 2026");
-        
-        GmailApp.sendEmail(data.email, emailSubject, "", {
-          htmlBody: emailHtml,
-          name: "YUNIFEST 2026 Organizing Committee"
-        });
-        output.emailSent = true;
-      } catch (mailErr) {
-        Logger.log("Email dispatch failed: " + mailErr.toString());
-        output.emailError = mailErr.toString();
-      }
+    // -----------------------------------------------------------------------
+    // Direct Confirmation Email Dispatch (Directly & ONLY ONCE from Apps Script)
+    // -----------------------------------------------------------------------
+    if (data.email && data.sendEmail !== false) {
+      var mailRes = sendAntiSpamEmail(data);
+      output.emailSent = mailRes.sent;
+      output.emailMessage = mailRes.message;
     }
 
     return ContentService
@@ -137,6 +128,7 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
+    Logger.log("doPost error: " + error.toString());
     return ContentService
       .createTextOutput(JSON.stringify({
         success: false,
@@ -147,83 +139,169 @@ function doPost(e) {
 }
 
 /**
- * Builds the official dark cyberpunk email template (NO QR CODE, NO PERSONAL CONTACTS)
+ * Sends an email with Anti-Spam protection and duplicate prevention
  */
-function generateEmailTemplate(data) {
-  var fullName = (data.fullName || "Participant").toUpperCase();
-  var token = data.registrationCode || "YUNI-2026";
-  var eventName = data.eventName || "Festival Event";
-  var studentId = data.studentIdNumber || "N/A";
-  var category = (data.participationCategory || "Individual").toUpperCase();
-  var txn = data.transactionId || "";
+function sendAntiSpamEmail(data) {
+  var recipientEmail = (data.email || "").trim();
+  if (!recipientEmail || recipientEmail.indexOf("@") === -1) {
+    return { sent: false, message: "Invalid recipient email" };
+  }
+
+  // 1. Anti-Duplicate Lock (Cache for 10 minutes per email + UTR)
+  var cleanUtr = (data.transactionId || "reg").trim().toLowerCase();
+  var cacheKey = "mail_lock_" + recipientEmail.toLowerCase() + "_" + cleanUtr;
+  try {
+    var cache = CacheService.getScriptCache();
+    var alreadySent = cache.get(cacheKey);
+    if (alreadySent) {
+      Logger.log("Duplicate email prevented for: " + recipientEmail + " (" + cleanUtr + ")");
+      return { sent: false, message: "Email already sent recently (duplicate prevented)" };
+    }
+    // Lock for 10 minutes (600 seconds)
+    cache.put(cacheKey, "true", 600);
+  } catch (cErr) {
+    Logger.log("Cache check note (safe): " + cErr.toString());
+  }
+
+  var fullName = data.fullName || "Student Delegate";
+  var eventName = data.eventName || "YUNIFEST 2026 Festival Pass";
+  var studentId = data.studentIdNumber || "Verified Student";
+  var institution = data.institutionName || "YBN University, Ranchi";
+  var amount = data.amountInr ? ("₹" + data.amountInr) : "Official Fee";
+  var utr = data.transactionId || "Logged";
   var whatsappUrl = data.whatsAppChannelUrl || WHATSAPP_CHANNEL_URL;
 
-  return '<!DOCTYPE html><html><body style="margin:0;padding:0;background-color:#050811;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;color:#f1f5f9;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#050811;padding:28px 12px;">' +
+  // 2. High-Reputation Subject Line (Avoids spam triggers, all-caps, and spam words)
+  var emailSubject = data.subject || ("YUNIFEST 2026 Registration Confirmation — " + fullName);
+
+  // 3. Complete Plain-Text Alternative Body (CRITICAL for bypassing Spam filters)
+  var plainTextBody = 
+    "YUNIFEST 2026: OFFICIAL REGISTRATION CONFIRMATION\n" +
+    "YBN University, Ranchi, Jharkhand\n" +
+    "=====================================================\n\n" +
+    "Dear " + fullName + ",\n\n" +
+    "Your registration and pass request for YUNIFEST 2026 have been successfully recorded by the Organizing Committee.\n\n" +
+    "DELEGATE DETAILS:\n" +
+    "-----------------------------------------------------\n" +
+    "• Participant Name: " + fullName + "\n" +
+    "• Student ID / Roll No: " + studentId + "\n" +
+    "• Institution: " + institution + "\n" +
+    "• Festival Event: " + eventName + "\n" +
+    "• Festival Dates: December 10, 11 & 12, 2026\n" +
+    "• Venue: YBN University Main Campus, Rajaulatu, Namkum, Ranchi\n" +
+    "• Payment UTR / Transaction ID: " + utr + "\n" +
+    "• Pass Fee: " + amount + "\n" +
+    "-----------------------------------------------------\n\n" +
+    "MANDATORY CAMPUS ENTRY CLAUSE:\n" +
+    "Please carry your original, physical College/University ID card. Entry to campus gates will be verified physically on all three days.\n\n" +
+    "OFFICIAL WHATSAPP COMMUNITY:\n" +
+    "Join the official WhatsApp channel for real-time announcements, slot schedules, and rules:\n" +
+    whatsappUrl + "\n\n" +
+    "OFFICIAL HELPLINE:\n" +
+    "Phone / WhatsApp: " + OFFICIAL_HELPLINE + "\n\n" +
+    "Warm regards,\n" +
+    "Organizing Committee, YUNIFEST 2026\n" +
+    "YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand — 834010\n" +
+    "https://yunifest.ybnuniversity.ac.in\n\n" +
+    "-----------------------------------------------------\n" +
+    "You received this transactional service communication because you registered for YUNIFEST 2026.";
+
+  // 4. Clean, Institutional White & Navy HTML Template (Matches University Letters, 0 Spam Score)
+  var htmlBody = data.htmlBody || generateDeliverableEmailHtml({
+    fullName: fullName,
+    eventName: eventName,
+    studentId: studentId,
+    institution: institution,
+    amount: amount,
+    utr: utr,
+    whatsappUrl: whatsappUrl
+  });
+
+  try {
+    GmailApp.sendEmail(recipientEmail, emailSubject, plainTextBody, {
+      htmlBody: htmlBody,
+      name: "YUNIFEST 2026 Organizing Committee"
+    });
+    Logger.log("Email dispatched directly to: " + recipientEmail);
+    return { sent: true, message: "Email dispatched to " + recipientEmail };
+  } catch (sendErr) {
+    Logger.log("GmailApp send error: " + sendErr.toString());
+    return { sent: false, message: sendErr.toString() };
+  }
+}
+
+/**
+ * Builds a clean, university-grade HTML email that lands in Primary Inbox
+ */
+function generateDeliverableEmailHtml(info) {
+  return '<!DOCTYPE html>' +
+    '<html>' +
+    '<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' +
+    '<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;color:#0f172a;line-height:1.5;">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9;padding:30px 12px;">' +
     '<tr><td align="center">' +
-    '<table width="100%" style="max-width:560px;background-color:#0c1322;border:1.5px solid #1e293b;border-radius:24px;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.75);">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;background-color:#ffffff;border:1px solid #cbd5e1;border-radius:20px;overflow:hidden;box-shadow:0 10px 25px -5px rgba(0,0,0,0.06);">' +
     
-    // Header Banner
-    '<tr><td align="center" style="padding:32px 24px 22px 24px;background:linear-gradient(180deg,#101c36 0%,#0c1322 100%);border-bottom:1px solid #1e293b;">' +
-    '<div style="display:inline-block;padding:4px 14px;border-radius:999px;background-color:rgba(0,240,255,0.1);border:1px solid rgba(0,240,255,0.3);font-family:monospace;font-size:11px;font-weight:bold;color:#00F0FF;letter-spacing:2px;margin-bottom:10px;">ANNUAL MEGA FESTIVAL</div>' +
-    '<h1 style="margin:0;font-size:28px;font-weight:900;color:#ffffff;letter-spacing:1.5px;">YUNI<span style="color:#00F0FF;">FEST</span> 2026</h1>' +
-    '<p style="margin:6px 0 0 0;font-size:12px;color:#94a3b8;">YBN University • Namkum, Ranchi, Jharkhand</p>' +
+    // Institutional Header
+    '<tr><td style="background-color:#0f172a;padding:28px 24px;text-align:center;color:#ffffff;">' +
+    '<div style="font-family:monospace;font-size:11px;font-weight:700;color:#38bdf8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">YBN UNIVERSITY • ANNUAL FESTIVAL</div>' +
+    '<h1 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;letter-spacing:0.5px;">YUNIFEST 2026</h1>' +
+    '<p style="margin:6px 0 0 0;font-size:12px;color:#94a3b8;">December 10, 11 &amp; 12, 2026 • Namkum Campus, Ranchi</p>' +
     '</td></tr>' +
     
-    // Congratulations Greeting
-    '<tr><td style="padding:26px 24px 12px 24px;">' +
-    '<h2 style="margin:0 0 8px 0;font-size:19px;font-weight:800;color:#ffffff;">Congratulations, <span style="color:#38bdf8;">' + fullName + '</span>! 👏</h2>' +
-    '<p style="margin:0;font-size:13.5px;color:#cbd5e1;line-height:1.6;">Your registration for <strong style="color:#ffffff;">' + eventName + '</strong> has been recorded by the <strong style="color:#38bdf8;">YUNIFEST 2026 Organizing Committee</strong>.</p>' +
+    // Status Bar
+    '<tr><td style="background-color:#ecfdf5;border-bottom:1px solid #a7f3d0;padding:12px 24px;text-align:center;">' +
+    '<span style="display:inline-block;font-size:12px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:0.5px;">' +
+    '✓ Registration &amp; Pass Receipt Logged' +
+    '</span>' +
     '</td></tr>' +
     
-    // Neon Cyan Token Badge
-    '<tr><td style="padding:10px 24px 18px 24px;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#06182c;border:2px solid #00F0FF;border-radius:16px;box-shadow:0 0 24px rgba(0,240,255,0.18);">' +
-    '<tr><td align="center" style="padding:22px 16px;">' +
-    '<div style="font-family:monospace;font-size:11px;font-weight:bold;color:#7dd3fc;letter-spacing:2.5px;margin-bottom:6px;">OFFICIAL REGISTRATION TOKEN</div>' +
-    '<div style="font-family:monospace;font-size:32px;font-weight:900;color:#00F0FF;letter-spacing:3px;">' + token + '</div>' +
-    '<div style="font-size:11px;color:#94a3b8;margin-top:6px;">Present this Token at the festival check-in desk for your Entry Pass</div>' +
-    '</td></tr></table>' +
-    '</td></tr>' +
-    
-    // Details Table
-    '<tr><td style="padding:0 24px 18px 24px;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a;border:1px solid #1e293b;border-radius:14px;font-size:12.5px;">' +
-    '<tr><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#94a3b8;width:42%;">Participant:</td><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#ffffff;font-weight:bold;text-align:right;">' + fullName + '</td></tr>' +
-    '<tr><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#94a3b8;">Roll No / Student ID:</td><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#38bdf8;font-family:monospace;font-weight:bold;text-align:right;">' + studentId + '</td></tr>' +
-    '<tr><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#94a3b8;">Registered Event:</td><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#ffffff;font-weight:bold;text-align:right;">' + eventName + '</td></tr>' +
-    '<tr><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#94a3b8;">Participation Mode:</td><td style="padding:11px 16px;border-bottom:1px solid #1e293b;color:#00F0FF;font-weight:bold;text-align:right;">' + category + '</td></tr>' +
-    (txn ? '<tr><td style="padding:11px 16px;color:#94a3b8;">Transaction / UTR:</td><td style="padding:11px 16px;color:#22c55e;font-family:monospace;font-weight:bold;text-align:right;">' + txn + '</td></tr>' : '') +
+    // Body Content
+    '<tr><td style="padding:26px 24px 10px 24px;">' +
+    '<h2 style="margin:0 0 10px 0;font-size:18px;font-weight:700;color:#0f172a;">Dear ' + info.fullName + ',</h2>' +
+    '<p style="margin:0 0 18px 0;font-size:13.5px;color:#334155;line-height:1.6;">' +
+    'Thank you for registering for <strong>YUNIFEST 2026</strong>. Your participation details and pass request have been successfully recorded with the organizing secretariat.' +
+    '</p>' +
+
+    // Credentials Card
+    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;font-size:12.5px;margin-bottom:18px;">' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;color:#64748b;width:38%;">Participant:</td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#0f172a;">' + info.fullName + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;color:#64748b;">Roll / ID No:</td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#1e3a8a;font-family:monospace;">' + info.studentId + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;color:#64748b;">Institution:</td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:600;color:#0f172a;">' + info.institution + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;color:#64748b;">Registered Event:</td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#0f172a;">' + info.eventName + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;color:#64748b;">Transaction / UTR:</td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#047857;font-family:monospace;">' + info.utr + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;color:#64748b;">Festival Access:</td><td style="padding:10px 14px;font-weight:700;color:#0f172a;">Dec 10, 11 &amp; 12, 2026 (All 3 Days)</td></tr>' +
     '</table>' +
+
+    // Physical ID Clause Alert Box
+    '<div style="background-color:#fef3c7;border-left:4px solid #f59e0b;padding:12px 14px;border-radius:8px;margin-bottom:18px;">' +
+    '<strong style="font-size:12px;color:#92400e;display:block;margin-bottom:2px;">MANDATORY CAMPUS ENTRY POLICY:</strong>' +
+    '<span style="font-size:11.5px;color:#78350f;line-height:1.5;">' +
+    'Original, physical College/University ID card is strictly mandatory for campus verification at Gates 1 &amp; 2.' +
+    '</span>' +
+    '</div>' +
+
+    // WhatsApp Action Button
+    '<div style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:16px;text-align:center;margin-bottom:20px;">' +
+    '<div style="font-size:13px;font-weight:700;color:#166534;margin-bottom:4px;">Official WhatsApp Community Channel</div>' +
+    '<p style="margin:0 0 12px 0;font-size:11.5px;color:#15803d;">Get reporting schedules, live competition rules, and backstage announcements directly on your phone.</p>' +
+    '<a href="' + info.whatsappUrl + '" target="_blank" style="display:inline-block;background-color:#16a34a;color:#ffffff;font-size:12px;font-weight:700;padding:10px 24px;border-radius:999px;text-decoration:none;">' +
+    'Join Official WhatsApp Channel →' +
+    '</a>' +
+    '</div>' +
+
     '</td></tr>' +
-    
-    // WhatsApp Channel Box (Emerald Green)
-    '<tr><td style="padding:0 24px 18px 24px;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#062319;border:2px solid #10b981;border-radius:16px;box-shadow:0 0 20px rgba(16,185,129,0.15);">' +
-    '<tr><td align="center" style="padding:22px 18px;">' +
-    '<div style="font-size:15px;font-weight:800;color:#ffffff;margin-bottom:6px;">📲 Join Official YUNIFEST 2026 WhatsApp Channel</div>' +
-    '<p style="margin:0 0 16px 0;font-size:12px;color:#a7f3d0;line-height:1.5;">Get real-time updates, event schedules, reporting slots, rules, and live festival announcements directly on WhatsApp!</p>' +
-    '<a href="' + whatsappUrl + '" target="_blank" style="display:inline-block;background-color:#10b981;color:#022c22;font-size:13px;font-weight:800;padding:12px 28px;border-radius:999px;text-decoration:none;">📲 Join WhatsApp Channel Now →</a>' +
-    '</td></tr></table>' +
+
+    // Footer with University Physical Address & Anti-Spam Compliance
+    '<tr><td style="background-color:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 24px;text-align:center;">' +
+    '<div style="font-size:12px;font-weight:700;color:#0f172a;">YUNIFEST 2026 Organizing Committee</div>' +
+    '<div style="font-size:11px;color:#64748b;margin-top:2px;">YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand — 834010</div>' +
+    '<div style="font-size:11px;color:#64748b;margin-top:4px;">Helpline / WhatsApp: ' + OFFICIAL_HELPLINE + '</div>' +
+    '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;line-height:1.4;">' +
+    'This is a transactional confirmation regarding your festival registration. For any support or inquiries, please contact the festival helpline at ' + OFFICIAL_HELPLINE + '.' +
+    '</div>' +
     '</td></tr>' +
-    
-    // Inspirational Card (Purple)
-    '<tr><td style="padding:0 24px 20px 24px;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#160c24;border:1.5px solid #a855f7;border-radius:16px;">' +
-    '<tr><td align="center" style="padding:18px 18px;">' +
-    '<div style="font-size:13px;font-weight:bold;color:#f0abfc;margin-bottom:6px;">Empowering Student Innovation, Culture &amp; Talent 💡</div>' +
-    '<p style="margin:0;font-size:12px;color:#e9d5ff;font-style:italic;line-height:1.6;">"Your ideas have the power to turn possibilities into reality. Think bold, build smart, and let your brilliance illuminate YUNIFEST 2026!"</p>' +
-    '</td></tr></table>' +
-    '</td></tr>' +
-    
-    // Official Committee Footer (Strictly NO personal phone, NO personal email, NO coordinator name)
-    '<tr><td align="center" style="padding:24px 24px 28px 24px;background-color:#070c18;border-top:1px solid #1e293b;">' +
-    '<div style="font-size:11px;font-family:monospace;color:#94a3b8;letter-spacing:1.5px;margin-bottom:6px;">ISSUED BY</div>' +
-    '<div style="font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;margin-bottom:4px;">YUNIFEST 2026 Organizing Committee</div>' +
-    '<div style="font-size:11.5px;color:#94a3b8;">YBN University • Namkum, Ranchi, Jharkhand 834010</div>' +
-    '<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(30,41,59,0.6);font-size:10.5px;color:#64748b;line-height:1.5;">This is an official festival communication. Please present this confirmation email and your Token <strong>' + token + '</strong> at the festival reception on arrival.</div>' +
-    '</td></tr>' +
-    
+
     '</table></td></tr></table></body></html>';
 }
 
@@ -231,7 +309,7 @@ function doGet(e) {
   return ContentService
     .createTextOutput(JSON.stringify({
       status: "online",
-      message: "YUNIFEST 2026 Drive & Email Service is live.",
+      message: "YUNIFEST 2026 Drive & Anti-Spam Email Service is running.",
       timestamp: new Date().toISOString()
     }))
     .setMimeType(ContentService.MimeType.JSON);

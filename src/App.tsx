@@ -12,6 +12,7 @@ import { RegulationsPage } from './pages/RegulationsPage';
 import { LeadershipPage } from './pages/LeadershipPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { RegisterSuccessPage } from './pages/RegisterSuccessPage';
+import { MyPassPage } from './pages/MyPassPage';
 import { AdminLoginPage } from './pages/AdminLoginPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -55,6 +56,7 @@ export const App: React.FC = () => {
             <Route path="/leadership" element={<LeadershipPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/register/success" element={<RegisterSuccessPage />} />
+            <Route path="/my-pass" element={<MyPassPage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="*" element={<NotFoundPage />} />

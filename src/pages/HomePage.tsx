@@ -8,6 +8,7 @@ import { RulesSection } from '../components/home/RulesSection';
 import { VenueMapSection } from '../components/home/VenueMapSection';
 import { FaqSection } from '../components/home/FaqSection';
 import { CountdownTimer } from '../components/home/CountdownTimer';
+import { SocialConnectSection } from '../components/home/SocialConnectSection';
 
 export const HomePage: React.FC = () => {
   const tickerItems = [

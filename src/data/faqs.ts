@@ -40,4 +40,9 @@ export const FEST_FAQS: FAQItem[] = [
     question: "How will I receive my confirmation and entry badge?",
     answer: "Upon successful form submission, the portal generates an official Registration Code (e.g. YUNI-2026-XXXX) with a scannable verification QR badge. You can save, screenshot, or print this pass for instant campus check-in.",
   },
+  {
+    category: "general",
+    question: "Who can I contact for registration inquiries, pass verification, or campus help?",
+    answer: "You can directly reach our official festival helpline at +91 90312 74903, message us on WhatsApp at 90312 74903, or connect via Instagram @yunifest2026.official. The inquiry desk is active to assist all delegates.",
+  },
 ];
