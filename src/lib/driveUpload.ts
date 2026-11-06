@@ -87,7 +87,6 @@ export async function uploadReceiptToGoogleDrive(params: UploadReceiptParams): P
 
     const data = await response.json();
     if (data.success && data.fileUrl) {
-      console.log('Receipt successfully uploaded to Google Drive folder:', data.fileUrl);
       return data.fileUrl;
     }
 

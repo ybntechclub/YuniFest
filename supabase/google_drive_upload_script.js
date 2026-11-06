@@ -1,6 +1,6 @@
 /**
  * =========================================================================
- * YUNIFEST 2026 — Google Drive Uploader & Anti-Spam Direct Email Service
+ * YUNIFEST 2026 - Google Drive Uploader & Anti-Spam Direct Email Service
  * Target Google Drive Folder ID: 1-Z9Z7qD904fzBYjFRO3_Dip_ME96Fl1L
  * =========================================================================
  *
@@ -167,48 +167,57 @@ function sendAntiSpamEmail(data) {
   var eventName = data.eventName || "YUNIFEST 2026 Festival Pass";
   var studentId = data.studentIdNumber || "Verified Student";
   var institution = data.institutionName || "YBN University, Ranchi";
-  var amount = data.amountInr ? ("₹" + data.amountInr) : "Official Fee";
+  var amount = data.amountInr ? ("Rs. " + data.amountInr) : "Official Fee";
   var utr = data.transactionId || "Logged";
   var regCode = data.registrationCode || "";
   var whatsappUrl = data.whatsAppChannelUrl || WHATSAPP_CHANNEL_URL;
 
   // 2. High-Reputation Subject Line (Avoids spam triggers, all-caps, and spam words)
-  var emailSubject = data.subject || ("Your YUNIFEST 2026 Registration — " + fullName + (regCode ? " [" + regCode + "]" : ""));
+  var emailSubject = data.subject || ("Your YUNIFEST 2026 Registration - " + fullName + (regCode ? " [" + regCode + "]" : ""));
 
 
-  // 3. Complete Plain-Text Alternative Body (CRITICAL for bypassing Spam filters)
+  var day1 = data.day1Event || eventName || "Technical & Innovation Day";
+  var day2 = data.day2Event || "Cultural Day Showcase & Competitions";
+  var day3 = data.day3Event || "Grand Runway & EDM DJ Concert";
+
+  // 3. Complete Plain-Text Alternative Body (Clean, zero corruptible characters)
   var plainTextBody = 
     "YUNIFEST 2026: OFFICIAL REGISTRATION CONFIRMATION\n" +
     "YBN University, Ranchi, Jharkhand\n" +
     "=====================================================\n\n" +
     "Dear " + fullName + ",\n\n" +
-    "Your registration for YUNIFEST 2026 has been confirmed by the Organizing Committee. Your details are listed below.\n\n" +
-    "DELEGATE DETAILS:\n" +
+    "Your official registration in YUNIFEST 2026 is complete! Your festival pass and payment have been verified by the YUNIFEST 2026 Organizing Committee. You have confirmed entry to all three days of the festival.\n\n" +
+    (regCode ? "OFFICIAL REGISTRATION TOKEN: " + regCode + "\n" +
+               "-----------------------------------------------------\n" +
+               "Please present this Token [" + regCode + "] at the festival check-in desk.\n\n" : "") +
+    "YOUR 3-DAY FESTIVAL ITINERARY & EVENT LINEUP:\n" +
     "-----------------------------------------------------\n" +
-    (regCode ? "• Official Registration Token: " + regCode + "\n" : "") +
-    "• Participant Name: " + fullName + "\n" +
-    "• Student ID / Roll No: " + studentId + "\n" +
-    "• Institution: " + institution + "\n" +
-    "• Festival Event: " + eventName + "\n" +
-    "• Festival Dates: December 10, 11 & 12, 2026\n" +
-    "• Venue: YBN University Main Campus, Rajaulatu, Namkum, Ranchi\n" +
-    "• Payment UTR / Transaction ID: " + utr + "\n" +
-    "• Pass Fee: " + amount + "\n" +
+    "* DAY 01 // DEC 10 (Tech & Innovation): " + day1 + "\n" +
+    "* DAY 02 // DEC 11 (Cultural Showcase): " + day2 + "\n" +
+    "* DAY 03 // DEC 12 (Finale Runway & EDM): " + day3 + "\n\n" +
+    "DELEGATE CREDENTIALS:\n" +
+    "-----------------------------------------------------\n" +
+    "* Participant Name: " + fullName + "\n" +
+    "* Student ID / Roll No: " + studentId + "\n" +
+    "* Institution: " + institution + "\n" +
+    "* Payment UTR / Transaction ID: " + utr + "\n" +
+    "* Pass Fee: " + amount + " (Verified & Paid)\n" +
+    "* Festival Access: Dec 10, 11 & 12, 2026 (All 3 Days)\n" +
+    "* Venue: YBN University Main Campus, Rajaulatu, Namkum, Ranchi\n" +
     "-----------------------------------------------------\n\n" +
-    (regCode ? "Please carry this confirmation email and show Token [" + regCode + "] at the festival check-in desk.\n\n" : "") +
-    "MANDATORY CAMPUS ENTRY CLAUSE:\n" +
-    "Please carry your original, physical College/University ID card. Entry to campus gates will be verified physically on all three days.\n\n" +
-    "OFFICIAL WHATSAPP COMMUNITY:\n" +
+    "MANDATORY CAMPUS ENTRY POLICY:\n" +
+    "Original physical College/University ID card is strictly mandatory for campus verification at Gates 1 & 2 on all festival days.\n\n" +
+    "OFFICIAL WHATSAPP GROUP:\n" +
     "Join the official WhatsApp group for real-time announcements, slot schedules, and rules:\n" +
     whatsappUrl + "\n\n" +
     "Warm regards,\n" +
     "Organizing Committee, YUNIFEST 2026\n" +
-    "YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand — 834010\n" +
+    "YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand - 834010\n" +
     "-----------------------------------------------------\n" +
     "You received this confirmation because you registered for YUNIFEST 2026.";
 
 
-  // 4. Clean, Institutional White & Navy HTML Template (Matches University Letters, 0 Spam Score)
+  // 4. Clean, Institutional HTML Template
   var htmlBody = data.htmlBody || generateDeliverableEmailHtml({
     fullName: fullName,
     registrationCode: regCode,
@@ -217,7 +226,10 @@ function sendAntiSpamEmail(data) {
     institution: institution,
     amount: amount,
     utr: utr,
-    whatsappUrl: whatsappUrl
+    whatsappUrl: whatsappUrl,
+    day1Event: day1,
+    day2Event: day2,
+    day3Event: day3
   });
 
   try {
@@ -258,15 +270,15 @@ function generateDeliverableEmailHtml(info) {
     
     // Institutional Header
     '<tr><td style="background-color:#0f172a;padding:28px 24px;text-align:center;color:#ffffff;">' +
-    '<div style="font-family:monospace;font-size:11px;font-weight:700;color:#38bdf8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">YBN UNIVERSITY • ANNUAL FESTIVAL</div>' +
+    '<div style="font-family:monospace;font-size:11px;font-weight:700;color:#38bdf8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">YBN UNIVERSITY * ANNUAL FESTIVAL</div>' +
     '<h1 style="margin:0;font-size:26px;font-weight:800;color:#ffffff;letter-spacing:0.5px;">YUNIFEST 2026</h1>' +
-    '<p style="margin:6px 0 0 0;font-size:12px;color:#94a3b8;">December 10, 11 &amp; 12, 2026 • Namkum Campus, Ranchi</p>' +
+    '<p style="margin:6px 0 0 0;font-size:12px;color:#94a3b8;">December 10, 11 &amp; 12, 2026 * Namkum Campus, Ranchi</p>' +
     '</td></tr>' +
     
     // Status Bar: Verified & Confirmed
     '<tr><td style="background-color:#ecfdf5;border-bottom:1px solid #a7f3d0;padding:12px 24px;text-align:center;">' +
     '<span style="display:inline-block;font-size:12px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:0.5px;">' +
-    '✓ TRANSACTION VERIFIED &amp; PASS CONFIRMED' +
+    '[OK] TRANSACTION VERIFIED &amp; PASS CONFIRMED' +
     '</span>' +
     '</td></tr>' +
     
@@ -274,11 +286,19 @@ function generateDeliverableEmailHtml(info) {
     '<tr><td style="padding:26px 24px 10px 24px;">' +
     '<h2 style="margin:0 0 10px 0;font-size:18px;font-weight:700;color:#0f172a;">Dear ' + info.fullName + ',</h2>' +
     '<p style="margin:0 0 18px 0;font-size:13.5px;color:#334155;line-height:1.6;">' +
-    'Congratulations! Your registration payment for <strong>' + info.eventName + '</strong> has been officially verified and approved by the <strong>YUNIFEST 2026 Organizing Committee</strong>.' +
+    'Your official registration in <strong>YUNIFEST 2026</strong> is complete! Your festival pass and payment have been verified by the <strong>YUNIFEST 2026 Organizing Committee</strong>. You have confirmed entry to all three days of the festival.' +
     '</p>' +
 
     // Registration Token Box (Highlight)
     tokenHtml +
+
+    // 3-Day Festival Itinerary Table
+    '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;border:1px solid #cbd5e1;border-radius:14px;font-size:12px;margin-bottom:18px;overflow:hidden;">' +
+    '<tr><td colspan="2" style="background-color:#0f172a;padding:9px 14px;font-family:monospace;font-size:10.5px;font-weight:700;color:#38bdf8;letter-spacing:1px;text-transform:uppercase;">OFFICIAL 3-DAY FESTIVAL ITINERARY</td></tr>' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#0369a1;width:34%;font-family:monospace;vertical-align:top;">DAY 01 // DEC 10<br><span style="font-size:10px;color:#64748b;font-weight:normal;">Tech &amp; Innovation</span></td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#0f172a;">' + (info.day1Event || info.eventName) + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#7e22ce;font-family:monospace;vertical-align:top;">DAY 02 // DEC 11<br><span style="font-size:10px;color:#64748b;font-weight:normal;">Cultural Showcase</span></td><td style="padding:10px 14px;border-bottom:1px solid #e2e8f0;font-weight:700;color:#0f172a;">' + (info.day2Event || "Cultural Day Showcase &amp; Competitions") + '</td></tr>' +
+    '<tr><td style="padding:10px 14px;font-weight:700;color:#be185d;font-family:monospace;vertical-align:top;">DAY 03 // DEC 12<br><span style="font-size:10px;color:#64748b;font-weight:normal;">Finale &amp; EDM</span></td><td style="padding:10px 14px;font-weight:700;color:#0f172a;">' + (info.day3Event || "Grand Runway &amp; EDM DJ Concert") + '</td></tr>' +
+    '</table>' +
 
     // Credentials Card
     '<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;font-size:12.5px;margin-bottom:18px;">' +
@@ -304,7 +324,7 @@ function generateDeliverableEmailHtml(info) {
     '<div style="font-size:13px;font-weight:700;color:#166534;margin-bottom:4px;">Official WhatsApp Group</div>' +
     '<p style="margin:0 0 12px 0;font-size:11.5px;color:#15803d;">Get reporting schedules, live competition rules, and backstage announcements directly on your phone.</p>' +
     '<a href="' + info.whatsappUrl + '" target="_blank" style="display:inline-block;background-color:#16a34a;color:#ffffff;font-size:12px;font-weight:700;padding:10px 24px;border-radius:999px;text-decoration:none;">' +
-    'Join Official WhatsApp Group →' +
+    'Join Official WhatsApp Group ->' +
     '</a>' +
     '</div>' +
 
@@ -313,7 +333,7 @@ function generateDeliverableEmailHtml(info) {
     // Footer with University Physical Address (No phone, no coordinator names)
     '<tr><td style="background-color:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 24px;text-align:center;">' +
     '<div style="font-size:12px;font-weight:700;color:#0f172a;">YUNIFEST 2026 Organizing Committee</div>' +
-    '<div style="font-size:11px;color:#64748b;margin-top:2px;">YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand — 834010</div>' +
+    '<div style="font-size:11px;color:#64748b;margin-top:2px;">YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand - 834010</div>' +
     '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:10px;color:#94a3b8;line-height:1.4;">' +
     'This is an official festival transactional communication. Please save this email and present your Token on arrival.' +
     '</div>' +

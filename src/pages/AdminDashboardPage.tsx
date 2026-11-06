@@ -61,7 +61,6 @@ export const AdminDashboardPage: React.FC = () => {
     if (newStatus === 'confirmed' && updatedReg) {
       try {
         await sendRegistrationConfirmationEmail(updatedReg);
-        console.log(`Confirmation email dispatched to ${updatedReg.email} after admin approval.`);
       } catch (mailErr) {
         console.warn('Post-approval email dispatch note:', mailErr);
       }

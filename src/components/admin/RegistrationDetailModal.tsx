@@ -6,6 +6,7 @@ import {
   Trash2, Calendar, Gamepad2, Palette, Shirt
 } from 'lucide-react';
 import { isGoogleDriveUrl, getDriveDirectImageUrl, getDrivePreviewUrl, getDriveViewUrl, GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
+import { sendRegistrationConfirmationEmail } from '../../lib/emailService';
 
 interface RegistrationDetailModalProps {
   registration: RegistrationRecord | null;
@@ -27,6 +28,8 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
   const [verifiedNotice, setVerifiedNotice] = useState<string | null>(null);
   const [previewTab, setPreviewTab] = useState<'image' | 'iframe'>('image');
   const [imgFailed, setImgFailed] = useState(false);
+  const [isSendingMail, setIsSendingMail] = useState(false);
+  const [emailSentNotice, setEmailSentNotice] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Prevent background scroll and bind Escape key
@@ -533,6 +536,35 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Send / Resend Confirmation Email Button */}
+          <div className="pt-3 border-t border-slate-200">
+            <button
+              type="button"
+              disabled={isSendingMail}
+              onClick={async () => {
+                setIsSendingMail(true);
+                setEmailSentNotice(null);
+                try {
+                  const res = await sendRegistrationConfirmationEmail(registration);
+                  setEmailSentNotice(res.message || `Confirmation email dispatched to ${registration.email}!`);
+                } catch (e: any) {
+                  setEmailSentNotice(`Failed: ${e.message}`);
+                } finally {
+                  setIsSendingMail(false);
+                }
+              }}
+              className="w-full py-2.5 px-3 rounded-xl border border-blue-300 bg-blue-50 hover:bg-blue-100 text-[#2B59FF] font-mono text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              <span>{isSendingMail ? 'Dispatching Confirmation Email...' : 'Send Official Confirmation Email'}</span>
+            </button>
+            {emailSentNotice && (
+              <p className="font-mono text-[11px] text-center text-emerald-700 mt-1.5 font-bold">
+                ✓ {emailSentNotice}
+              </p>
+            )}
           </div>
 
           {/* Delete Action (Organizer) */}

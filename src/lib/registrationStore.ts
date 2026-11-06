@@ -475,7 +475,7 @@ class RegistrationStore {
             error: `Failed to save to Supabase: ${error.message}`
           };
         } else {
-          console.log('Successfully saved registration to Supabase:', data);
+          console.log('Successfully saved registration');
         }
       } catch (err: any) {
         console.error('Supabase remote push failed:', err);
