@@ -169,10 +169,12 @@ function sendAntiSpamEmail(data) {
   var institution = data.institutionName || "YBN University, Ranchi";
   var amount = data.amountInr ? ("₹" + data.amountInr) : "Official Fee";
   var utr = data.transactionId || "Logged";
+  var regCode = data.registrationCode || "";
   var whatsappUrl = data.whatsAppChannelUrl || WHATSAPP_CHANNEL_URL;
 
   // 2. High-Reputation Subject Line (Avoids spam triggers, all-caps, and spam words)
-  var emailSubject = data.subject || ("YUNIFEST 2026 Registration Confirmation — " + fullName);
+  var emailSubject = data.subject || ("Your YUNIFEST 2026 Registration — " + fullName + (regCode ? " [" + regCode + "]" : ""));
+
 
   // 3. Complete Plain-Text Alternative Body (CRITICAL for bypassing Spam filters)
   var plainTextBody = 
@@ -180,9 +182,10 @@ function sendAntiSpamEmail(data) {
     "YBN University, Ranchi, Jharkhand\n" +
     "=====================================================\n\n" +
     "Dear " + fullName + ",\n\n" +
-    "Your registration and pass request for YUNIFEST 2026 have been successfully recorded by the Organizing Committee.\n\n" +
+    "Your registration for YUNIFEST 2026 has been confirmed by the Organizing Committee. Your details are listed below.\n\n" +
     "DELEGATE DETAILS:\n" +
     "-----------------------------------------------------\n" +
+    (regCode ? "• Official Registration Token: " + regCode + "\n" : "") +
     "• Participant Name: " + fullName + "\n" +
     "• Student ID / Roll No: " + studentId + "\n" +
     "• Institution: " + institution + "\n" +
@@ -192,19 +195,18 @@ function sendAntiSpamEmail(data) {
     "• Payment UTR / Transaction ID: " + utr + "\n" +
     "• Pass Fee: " + amount + "\n" +
     "-----------------------------------------------------\n\n" +
+    (regCode ? "Please carry this confirmation email and show Token [" + regCode + "] at the festival check-in desk.\n\n" : "") +
     "MANDATORY CAMPUS ENTRY CLAUSE:\n" +
     "Please carry your original, physical College/University ID card. Entry to campus gates will be verified physically on all three days.\n\n" +
     "OFFICIAL WHATSAPP COMMUNITY:\n" +
     "Join the official WhatsApp channel for real-time announcements, slot schedules, and rules:\n" +
     whatsappUrl + "\n\n" +
-    "OFFICIAL HELPLINE:\n" +
-    "Phone / WhatsApp: " + OFFICIAL_HELPLINE + "\n\n" +
     "Warm regards,\n" +
     "Organizing Committee, YUNIFEST 2026\n" +
     "YBN University, Rajaulatu, Namkum, Ranchi, Jharkhand — 834010\n" +
-    "https://yunifest.ybnuniversity.ac.in\n\n" +
     "-----------------------------------------------------\n" +
-    "You received this transactional service communication because you registered for YUNIFEST 2026.";
+    "You received this confirmation because you registered for YUNIFEST 2026.";
+
 
   // 4. Clean, Institutional White & Navy HTML Template (Matches University Letters, 0 Spam Score)
   var htmlBody = data.htmlBody || generateDeliverableEmailHtml({

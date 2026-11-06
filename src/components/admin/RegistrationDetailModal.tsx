@@ -250,8 +250,9 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
             </div>
           </div>
 
-          {/* Esports Duo / Squad Roster (If Registered for Gaming) */}
-          {squadMembers && Array.isArray(squadMembers) && squadMembers.length > 0 && (
+          {/* Esports Duo / Squad Roster (If Registered for Gaming with real squad data) */}
+          {squadMembers && Array.isArray(squadMembers) && squadMembers.length > 0 &&
+           squadMembers.some((m: any) => (m.ign && m.ign.trim() && m.ign.trim() !== 'N/A') || (m.uid && m.uid.trim() && m.uid.trim() !== 'N/A') || (m.name && m.name.trim() && m.name.trim() !== 'Player')) && (
             <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 space-y-3 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-blue-950 uppercase font-black flex items-center gap-1.5 text-xs">
@@ -389,7 +390,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                   )}
                 </div>
 
-                {/* Display Area */}
+                {/* Display Area — always inline in the panel, no redirect */}
                 {isDrive ? (
                   (previewTab === 'iframe' || imgFailed) ? (
                     <div className="rounded-xl overflow-hidden border border-slate-300 bg-slate-900 shadow-inner">
@@ -401,37 +402,27 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                       />
                     </div>
                   ) : (
-                    <div 
-                      className="rounded-xl overflow-hidden border border-slate-300 max-h-64 bg-slate-100 flex items-center justify-center p-2 relative group cursor-pointer"
-                      onClick={() => window.open(driveViewUrl, '_blank')}
-                      title="Click to view full image in Google Drive"
-                    >
+                    <div className="rounded-xl overflow-hidden border border-slate-300 bg-slate-50 flex items-center justify-center p-1">
                       <img 
                         src={directImgUrl} 
                         alt={`Payment receipt for ${registration.email}`} 
                         referrerPolicy="no-referrer"
                         crossOrigin="anonymous"
                         onError={() => setImgFailed(true)}
-                        className="max-h-60 object-contain rounded-lg group-hover:scale-[1.01] transition-transform"
+                        className="max-h-72 w-full object-contain rounded-lg"
                       />
-                      <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl text-white font-mono text-xs font-bold gap-1.5 pointer-events-none">
-                        <ExternalLink className="w-4 h-4" />
-                        <span>Click to Open in Drive</span>
-                      </div>
                     </div>
                   )
                 ) : (
-                  <div 
-                    className="rounded-xl overflow-hidden border border-slate-300 max-h-64 bg-slate-50 flex items-center justify-center p-2 relative group cursor-pointer"
-                    onClick={() => window.open(registration.payment_screenshot_url, '_blank')}
-                  >
+                  <div className="rounded-xl overflow-hidden border border-slate-300 bg-slate-50 flex items-center justify-center p-1">
                     <img 
                       src={registration.payment_screenshot_url} 
                       alt={`Payment receipt for ${registration.email}`} 
-                      className="max-h-60 object-contain rounded-lg"
+                      className="max-h-72 w-full object-contain rounded-lg"
                     />
                   </div>
                 )}
+
 
                 <div className="flex items-center justify-between pt-1 border-t border-slate-200">
                   <span className="font-mono text-[10px] text-slate-500 truncate max-w-[220px]">

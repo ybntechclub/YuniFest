@@ -387,17 +387,20 @@ class RegistrationStore {
     }
 
     const amount_inr = input.amount_inr || (input.participant_type === 'ybn_student' ? 399 : 499);
+    // Temporary pending code — real YUNI-2026-XXXX token assigned only after admin confirms payment
+    const tempCode = `PENDING-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     const newRecord: RegistrationRecord = {
       ...input,
       amount_inr,
       payment_method: 'upi',
       id: "reg-" + Date.now().toString(36) + "-" + Math.random().toString(36).substring(2, 7),
-      registration_code: generateRegistrationCode(),
+      registration_code: tempCode,
       event_name: event.name,
       registration_status: "pending", // Pending manual verification by payment head
       payment_timestamp: input.payment_timestamp || new Date().toISOString(),
       created_at: new Date().toISOString()
     };
+
 
     // Save to memory and local storage
     this.registrations.unshift(newRecord);
@@ -520,7 +523,12 @@ class RegistrationStore {
     if (!reg) return false;
 
     reg.registration_status = status;
+
+    // Generate official registration token when admin confirms payment
     if (status === 'confirmed') {
+      if (!reg.registration_code || reg.registration_code.startsWith('PENDING-')) {
+        reg.registration_code = generateRegistrationCode();
+      }
       reg.payment_verified_at = reg.payment_verified_at || new Date().toISOString();
       reg.payment_verified_by = reg.payment_verified_by || 'Payment Verification Desk';
     }
@@ -529,14 +537,18 @@ class RegistrationStore {
 
     if (isSupabaseConfigured) {
       try {
+        const updatePayload: Record<string, unknown> = { 
+          registration_status: status, 
+          updated_at: reg.updated_at 
+        };
+        if (status === 'confirmed') {
+          updatePayload.registration_code = reg.registration_code;
+          updatePayload.payment_verified_at = reg.payment_verified_at;
+          updatePayload.payment_verified_by = reg.payment_verified_by;
+        }
         await supabase
           .from('registrations')
-          .update({ 
-            registration_status: status, 
-            payment_verified_at: reg.payment_verified_at,
-            payment_verified_by: reg.payment_verified_by,
-            updated_at: reg.updated_at 
-          })
+          .update(updatePayload)
           .or(`id.eq.${regId},registration_code.eq.${regId}`);
       } catch (err) {
         console.warn('Supabase update status failed:', err);
@@ -545,6 +557,7 @@ class RegistrationStore {
 
     return true;
   }
+
 
   // Manual payment verification with email confirmation simulation
   async verifyPayment(regId: string, verifiedBy: string = "Payment Head"): Promise<{ success: boolean; data?: RegistrationRecord; error?: string }> {

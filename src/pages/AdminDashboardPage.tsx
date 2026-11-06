@@ -8,6 +8,7 @@ import { RegistrationTable } from '../components/admin/RegistrationTable';
 import { RegistrationDetailModal } from '../components/admin/RegistrationDetailModal';
 import { EventManagementTab } from '../components/admin/EventManagementTab';
 import { LiveQRCodeModal } from '../components/admin/LiveQRCodeModal';
+import { sendRegistrationConfirmationEmail } from '../lib/emailService';
 
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -51,10 +52,27 @@ export const AdminDashboardPage: React.FC = () => {
     await registrationStore.updateRegistrationStatus(regId, newStatus);
     const updated = await registrationStore.getRegistrations();
     setRegistrations(updated);
+
+    // Find the fully updated record (new code gets generated on 'confirmed')
+    const updatedReg = updated.find(r => r.id === regId || r.registration_code === regId) ||
+                       updated.find(r => r.id === selectedReg?.id);
+
+    // Send confirmation email to participant when admin approves payment
+    if (newStatus === 'confirmed' && updatedReg) {
+      try {
+        await sendRegistrationConfirmationEmail(updatedReg);
+        console.log(`Confirmation email dispatched to ${updatedReg.email} after admin approval.`);
+      } catch (mailErr) {
+        console.warn('Post-approval email dispatch note:', mailErr);
+      }
+    }
+
     if (selectedReg && (selectedReg.id === regId || selectedReg.registration_code === regId)) {
-      setSelectedReg({ ...selectedReg, registration_status: newStatus });
+      // Use the fully updated record so new registration_code is reflected in modal
+      setSelectedReg(updatedReg || { ...selectedReg, registration_status: newStatus });
     }
   };
+
 
   const handleDeleteRegistration = async (regId: string) => {
     if (window.confirm("Are you sure you want to permanently delete this registration record?")) {
