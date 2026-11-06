@@ -45,12 +45,17 @@ export const Navbar: React.FC = () => {
           <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-[1.5px] border-slate-900 shadow-sm flex items-center justify-center p-0.5 overflow-hidden -rotate-6 group-hover:rotate-12 transition-all duration-300">
             <img src="/ybn-logo.png" alt="YBN University Ranchi" className="w-full h-full object-contain animate-spin-slow" />
           </div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-headline font-black text-2xl sm:text-3xl tracking-tighter text-slate-950 uppercase group-hover:text-[#2B59FF] transition-colors">
-              YUNIFEST
-            </span>
-            <span className="font-mono text-xs text-[#2B59FF] font-bold tracking-widest">
-              ’26
+          <div className="flex flex-col justify-center">
+            <div className="flex items-baseline gap-1.5 leading-none">
+              <span className="font-headline font-black text-xl sm:text-2xl tracking-tighter text-slate-950 uppercase group-hover:text-[#2B59FF] transition-colors">
+                YUNIFEST
+              </span>
+              <span className="font-mono text-[10px] sm:text-xs text-[#2B59FF] font-bold tracking-widest">
+                ’26
+              </span>
+            </div>
+            <span className="font-mono text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-600 mt-0.5 leading-tight">
+              YBN University, Ranchi
             </span>
           </div>
         </Link>

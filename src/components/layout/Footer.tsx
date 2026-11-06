@@ -389,44 +389,6 @@ export const Footer: React.FC = () => {
         </div>
       )}
 
-            {/* 3.4. TICKER 1: OFFICIAL INQUIRY DESK & INSTAGRAM HANDLES TICKER TAPE */}
-      <div className="w-full bg-black/90 border-t border-[#CCFF00]/40 py-3 relative overflow-hidden select-none backdrop-blur-md">
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
-
-        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] cursor-default">
-          {[1, 2].map((loopIndex) => (
-            <div key={loopIndex} className="flex items-center gap-8 sm:gap-12 px-6 shrink-0 font-mono text-xs sm:text-sm uppercase tracking-wider">
-              
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#CCFF00]/15 border border-[#CCFF00]/70 text-[#CCFF00]">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CCFF00] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#CCFF00]"></span>
-                </span>
-                <span className="font-black text-xs">OFFICIAL INQUIRY DESK</span>
-              </div>
-
-              <span className="text-white font-bold">
-                HELPLINE: <a href="tel:9031274903" className="text-[#CCFF00] font-black hover:underline">+91 90312 74903</a>
-              </span>
-
-              <span className="text-white/40">///</span>
-
-              <span className="text-white font-bold">
-                INSTAGRAM: <span className="text-[#CCFF00]">@YUNIFEST2026.OFFICIAL</span> • <span className="text-[#CCFF00]">@YBNRANCHI</span> • <span className="text-[#CCFF00]">@INSIDECSE_YBN</span>
-              </span>
-
-              <span className="text-white/40">///</span>
-
-              <span className="text-white font-bold">
-                DEC 10, 11 &amp; 12, 2026 • YBN UNIVERSITY CAMPUS
-              </span>
-
-              <span className="text-white/40">///</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* 3.5. ULTRA HIGH-VISIBILITY AUTO-SLIDING ENGINEERING TICKER TAPE (Continuous Right-to-Left Infinite Scroll with Neon Blinkers) */}
       <div className="w-full bg-slate-950/95 border-y border-[#CCFF00]/40 py-3.5 relative overflow-hidden select-none backdrop-blur-md">

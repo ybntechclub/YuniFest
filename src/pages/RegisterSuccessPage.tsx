@@ -203,7 +203,7 @@ export const RegisterSuccessPage: React.FC = () => {
               <div className="p-5 rounded-2xl bg-[#062319] border-2 border-[#10B981] text-center shadow-lg text-white space-y-3">
                 <div className="inline-flex items-center gap-1.5 font-headline font-bold text-sm text-[#34D399]">
                   <MessageCircle className="w-4 h-4 text-[#10B981]" />
-                  <span>Join Official YUNIFEST 2026 WhatsApp Channel</span>
+                  <span>Join Official YUNIFEST 2026 WhatsApp Group</span>
                 </div>
                 <p className="text-xs text-emerald-200/90 font-display max-w-md mx-auto leading-relaxed">
                   Get live event alerts, reporting slots, presentation guidelines, and instant announcements directly on WhatsApp!
@@ -215,7 +215,7 @@ export const RegisterSuccessPage: React.FC = () => {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#10B981] hover:bg-emerald-400 text-slate-950 font-headline font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:scale-105"
                   >
-                    <span>📲 Join WhatsApp Channel Now</span>
+                    <span>📲 Join WhatsApp Group Now</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -237,23 +237,34 @@ export const RegisterSuccessPage: React.FC = () => {
                 </p>
               </div>
 
-              {/* Email Sent Notice & Resend Action */}
-              <div className="flex flex-wrap items-center justify-between p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-xs font-mono gap-2">
-                <div className="flex items-center gap-2 text-slate-700">
-                  <Mail className="w-4 h-4 text-[#2B59FF]" />
-                  <span>Confirmation email sent to <strong>{registration.email}</strong> with Token <strong>{registration.registration_code}</strong></span>
+              {/* Email Dispatch Notice */}
+              {isPending ? (
+                <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-xs font-mono text-blue-950">
+                  <Mail className="w-4 h-4 text-[#2B59FF] shrink-0" />
+                  <span>
+                    Official Confirmation Email &amp; Entry Token will be dispatched to <strong>{registration.email}</strong> automatically once the Accounts Team verifies your transaction ID.
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  disabled={isResending}
-                  onClick={handleResendEmail}
-                  className="px-3 py-1 rounded-lg bg-white border border-slate-400 hover:border-slate-900 text-slate-900 font-bold text-[11px] transition-colors"
-                >
-                  {isResending ? 'Sending...' : 'Resend Email'}
-                </button>
-              </div>
-              {resendStatus && (
-                <p className="font-mono text-xs text-center text-emerald-700">{resendStatus}</p>
+              ) : (
+                <>
+                  <div className="flex flex-wrap items-center justify-between p-3.5 rounded-xl bg-slate-100 border border-slate-300 text-xs font-mono gap-2">
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <Mail className="w-4 h-4 text-[#2B59FF]" />
+                      <span>Confirmation email sent to <strong>{registration.email}</strong> with Token <strong>{registration.registration_code}</strong></span>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isResending}
+                      onClick={handleResendEmail}
+                      className="px-3 py-1 rounded-lg bg-white border border-slate-400 hover:border-slate-900 text-slate-900 font-bold text-[11px] transition-colors"
+                    >
+                      {isResending ? 'Sending...' : 'Resend Email'}
+                    </button>
+                  </div>
+                  {resendStatus && (
+                    <p className="font-mono text-xs text-center text-emerald-700">{resendStatus}</p>
+                  )}
+                </>
               )}
 
               <div className="text-center pt-2">

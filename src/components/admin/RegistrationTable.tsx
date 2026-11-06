@@ -308,7 +308,10 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                         {onDeleteRegistration && (
                           <button
                             type="button"
-                            onClick={() => onDeleteRegistration(reg.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeleteRegistration(reg.id);
+                            }}
                             className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
                             title="Delete Record"
                           >

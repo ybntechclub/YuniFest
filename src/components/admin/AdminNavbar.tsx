@@ -29,9 +29,14 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
               <div className="w-8 h-8 rounded-full bg-white border-[1.5px] border-slate-900 p-0.5 flex items-center justify-center shadow-sm overflow-hidden -rotate-6">
                 <img src="/ybn-logo.png" alt="YBN University" className="w-full h-full object-contain animate-spin-slow" />
               </div>
-              <span className="font-headline font-black text-slate-950 text-base">
-                YUNIFEST <span className="text-[#2B59FF]">ADMIN</span>
-              </span>
+              <div className="flex flex-col justify-center">
+                <span className="font-headline font-black text-slate-950 text-base leading-none">
+                  YUNIFEST <span className="text-[#2B59FF]">ADMIN</span>
+                </span>
+                <span className="font-mono text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-slate-600 mt-0.5 leading-tight">
+                  YBN University, Ranchi
+                </span>
+              </div>
             </Link>
 
             {/* Cloud Status Indicator */}

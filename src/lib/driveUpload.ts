@@ -36,7 +36,7 @@ export async function uploadReceiptToGoogleDrive(params: UploadReceiptParams): P
     institutionName,
     amountInr,
     participationCategory,
-    sendEmail = true
+    sendEmail = false
   } = params;
 
   const cleanEmail = email.trim().replace(/[^a-zA-Z0-9@._-]/g, '_');

@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Shield, Lock, Mail, ArrowRight, AlertCircle, Key, CheckCircle2, Sparkles } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 export const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('organizer@ybn.edu.in');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const fillDefaultCredentials = () => {
-    setEmail('organizer@ybn.edu.in');
-    setPassword('yunifest2026');
-    setError(null);
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +73,7 @@ export const AdminLoginPage: React.FC = () => {
         }
       }
 
-      setError("Invalid organizer credentials. Click 'AUTO-FILL DEMO / MASTER PASS' below to sign in instantly.");
+      setError("Invalid organizer credentials. Please check your official email and password.");
     } catch (err: any) {
       setError(err.message || "Failed to authenticate.");
     } finally {
@@ -104,22 +98,6 @@ export const AdminLoginPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Quick Fill Helper */}
-        <div className="mb-6 p-3.5 rounded-2xl bg-[#FEF08A]/60 border-[1.5px] border-slate-900 flex items-center justify-between gap-3">
-          <div className="text-[11px] font-mono leading-tight">
-            <span className="font-black block text-slate-900">COMMITTEE ACCESS:</span>
-            <span className="text-slate-700">organizer@ybn.edu.in</span>
-          </div>
-          <button
-            type="button"
-            onClick={fillDefaultCredentials}
-            className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-[#2B59FF] text-white text-[10px] font-mono font-bold tracking-wider uppercase transition-colors shrink-0 shadow-sm flex items-center gap-1"
-          >
-            <Sparkles className="w-3 h-3 text-[#CCFF00]" />
-            <span>AUTO-FILL</span>
-          </button>
-        </div>
-
         {error && (
           <div className="mb-5 p-3.5 rounded-2xl bg-red-50 border-[1.5px] border-red-500 text-red-900 text-xs flex items-start gap-2.5">
             <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
@@ -138,7 +116,7 @@ export const AdminLoginPage: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="organizer@ybn.edu.in"
+                placeholder="name@ybnuniversity.ac.in"
                 className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-medium focus:outline-none"
               />
             </div>

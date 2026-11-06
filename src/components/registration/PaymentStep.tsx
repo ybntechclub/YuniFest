@@ -180,7 +180,8 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
     try {
       const nowIso = new Date().toISOString();
 
-      // Upload screenshot to Google Drive and let Apps Script send confirmation email directly (once only)
+      // Upload screenshot to Google Drive (Do NOT send confirmation email here;
+      // email is only dispatched AFTER admin verifies the transaction)
       let finalScreenshotUrl = screenshotUrl;
       if (screenshotUrl) {
         finalScreenshotUrl = await uploadReceiptToGoogleDrive({
@@ -193,7 +194,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
           institutionName: formData.institutionName.trim(),
           amountInr: amount,
           participationCategory: formData.participationCategory,
-          sendEmail: true,
+          sendEmail: false,
         });
       }
 

@@ -3,7 +3,7 @@
 // Dark Cyberpunk Festival Theme:
 // - Direct YUNIFEST Organizing Committee Branding (No third-party club names)
 // - Glowing Neon Cyan Token Card (#00F0FF)
-// - Emerald WhatsApp Channel Action Box (#10B981)
+// - Emerald WhatsApp Group Action Box (#10B981)
 // - Official Committee Footer (NO personal phone, email, or coordinator name)
 // - STRICT: NO QR CODE INCLUDED (as requested)
 // =========================================================================
@@ -23,7 +23,7 @@ export interface EmailTemplateParams {
 
 export const DEFAULT_WHATSAPP_CHANNEL_URL = 
   (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.YUNIFEST_WHATSAPP_CHANNEL_URL) || 
-  'https://whatsapp.com/channel/0029Va9yunifest2026';
+  'https://chat.whatsapp.com/CKA2mG98J8GGrNvuGDYHmw?mode=gi_t';
 
 /**
  * Generates an email-client-compatible HTML email
@@ -147,20 +147,20 @@ export function generateRegistrationEmailHtml(params: EmailTemplateParams): stri
             </td>
           </tr>
 
-          <!-- WhatsApp Channel Banner (Neon Green Box) -->
+          <!-- WhatsApp Group Banner (Neon Green Box) -->
           <tr>
             <td style="padding: 0 24px 18px 24px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #062319; border: 2px solid #10b981; border-radius: 16px; box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);">
                 <tr>
                   <td align="center" style="padding: 22px 18px;">
                     <div style="font-size: 15px; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
-                      📲 Join Official YUNIFEST 2026 WhatsApp Channel
+                      📲 Join Official YUNIFEST 2026 WhatsApp Group
                     </div>
                     <p style="margin: 0 0 16px 0; font-size: 12px; color: #a7f3d0; line-height: 1.5; max-width: 440px;">
                       Get real-time updates, event schedules, reporting slots, rules, and live festival announcements directly on WhatsApp!
                     </p>
                     <a href="${whatsAppChannelUrl}" target="_blank" style="display: inline-block; background-color: #10b981; color: #022c22; font-size: 13px; font-weight: 800; padding: 12px 28px; border-radius: 999px; text-decoration: none; letter-spacing: 0.5px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);">
-                      📲 Join WhatsApp Channel Now →
+                      📲 Join WhatsApp Group Now →
                     </a>
                   </td>
                 </tr>

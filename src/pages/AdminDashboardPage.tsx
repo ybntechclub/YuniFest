@@ -76,10 +76,15 @@ export const AdminDashboardPage: React.FC = () => {
 
   const handleDeleteRegistration = async (regId: string) => {
     if (window.confirm("Are you sure you want to permanently delete this registration record?")) {
+      // Optimistic UI update: instantly remove from state so the admin doesn't see a delay
+      setRegistrations(prev => prev.filter(r => r.id !== regId && r.registration_code !== regId));
+      if (selectedReg && (selectedReg.id === regId || selectedReg.registration_code === regId)) {
+        setSelectedReg(null);
+      }
+
       await registrationStore.deleteRegistration(regId);
       const updated = await registrationStore.getRegistrations();
       setRegistrations(updated);
-      setSelectedReg(null);
     }
   };
 

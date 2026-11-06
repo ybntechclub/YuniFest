@@ -575,19 +575,60 @@ class RegistrationStore {
 
   // Delete registration record (Admin)
   async deleteRegistration(regId: string): Promise<boolean> {
-    this.registrations = this.registrations.filter(r => r.id !== regId && r.registration_code !== regId);
+    const rawId = (regId || '').trim();
+    if (!rawId) return false;
+
+    // Find record in memory to ensure we have both internal UUID id and human-readable registration_code
+    const existing = this.registrations.find(r => r.id === rawId || r.registration_code === rawId);
+    const targetId = existing?.id || rawId;
+    const targetCode = existing?.registration_code || (rawId.startsWith('YUNI-') || rawId.startsWith('PENDING-') ? rawId : undefined);
+
+    // Filter out from memory and persistent localStorage immediately
+    this.registrations = this.registrations.filter(r => 
+      r.id !== targetId && 
+      r.id !== rawId && 
+      r.registration_code !== targetCode && 
+      r.registration_code !== rawId
+    );
     this.saveRegistrations();
 
     if (isSupabaseConfigured) {
       try {
-        const { error } = await supabase
-          .from('registrations')
-          .delete()
-          .or(`id.eq.${regId},registration_code.eq.${regId}`);
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetId);
+        let deleted = false;
 
-        if (error) {
-          console.error('Supabase delete registration error:', error);
-          return false;
+        // 1. Delete by UUID if targetId matches UUID format
+        if (isUuid) {
+          const { error, count } = await supabase
+            .from('registrations')
+            .delete({ count: 'exact' })
+            .eq('id', targetId);
+
+          if (!error && (count ?? 0) > 0) {
+            deleted = true;
+          }
+        }
+
+        // 2. If not deleted yet, delete by registration_code (VARCHAR)
+        if (!deleted && targetCode) {
+          const { error: codeErr } = await supabase
+            .from('registrations')
+            .delete()
+            .eq('registration_code', targetCode);
+
+          if (codeErr) {
+            console.warn('Supabase delete by registration_code warning:', codeErr);
+          } else {
+            deleted = true;
+          }
+        }
+
+        // 3. Fallback: if rawId was passed and hasn't matched UUID, also attempt registration_code match
+        if (!deleted && !isUuid && rawId) {
+          await supabase
+            .from('registrations')
+            .delete()
+            .eq('registration_code', rawId);
         }
       } catch (err) {
         console.error('Failed to delete registration from Supabase:', err);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { RegistrationRecord, RegistrationStatus } from '../../types/database';
 import { 
   X, CheckCircle, Clock, XCircle, AlertCircle, User, Building, Phone, Mail, 
@@ -27,6 +27,28 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
   const [verifiedNotice, setVerifiedNotice] = useState<string | null>(null);
   const [previewTab, setPreviewTab] = useState<'image' | 'iframe'>('image');
   const [imgFailed, setImgFailed] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Prevent background scroll and bind Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
+  // Keep internal status synced if parent registration updates
+  useEffect(() => {
+    setCurrentStatus(registration.registration_status);
+  }, [registration.registration_status]);
 
   const isDrive = isGoogleDriveUrl(registration.payment_screenshot_url);
   const directImgUrl = isDrive ? getDriveDirectImageUrl(registration.payment_screenshot_url) : registration.payment_screenshot_url;
@@ -38,6 +60,14 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
     await onStatusUpdate(registration.id, status);
     setCurrentStatus(status);
     setIsUpdating(false);
+  };
+
+  // Wheel listener on outer card to guarantee smooth mouse-wheel scrolling even if cursor hovers over header
+  const handleCardWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (scrollContainerRef.current && !scrollContainerRef.current.contains(e.target as Node)) {
+      scrollContainerRef.current.scrollTop += e.deltaY;
+    }
   };
 
   // 3-Day Itinerary Data Resolution
@@ -74,33 +104,44 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
   const modelPartnerName = eventData.modelPartnerName;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 md:p-8 animate-fadeIn">
+    <div 
+      data-lenis-prevent="true"
+      onClick={onClose}
+      className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+    >
       {/* Outer Card with flex layout: Sticky Header, Smooth Mouse-Scrollable Body, Clean Footer */}
-      <div className="relative w-full max-w-2xl bg-white border-[2px] border-slate-900 rounded-[32px] shadow-solid-pop-lg text-slate-950 my-auto max-h-[92vh] flex flex-col overflow-hidden">
+      <div 
+        data-lenis-prevent="true"
+        onClick={(e) => e.stopPropagation()}
+        onWheel={handleCardWheel}
+        className="relative w-full max-w-2xl bg-white border-[1.5px] sm:border-[2px] border-slate-900 rounded-[24px] sm:rounded-[32px] shadow-solid-pop-lg text-slate-950 my-auto max-h-[94vh] sm:max-h-[90vh] flex flex-col overflow-hidden"
+      >
         
         {/* Pinned Header */}
-        <div className="p-6 sm:p-7 pb-4 shrink-0 border-b-[1.5px] border-slate-900/10 bg-white relative z-10">
+        <div className="p-4 sm:p-6 md:p-7 pb-3 sm:pb-4 shrink-0 border-b-[1.5px] border-slate-900/10 bg-white relative z-10">
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 border-[1.5px] border-slate-900 shadow-sm transition-transform hover:scale-105"
+            className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 p-1.5 sm:p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 border border-slate-900 shadow-sm transition-transform hover:scale-105 z-20"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
-          <div className="flex items-center gap-2 mb-2 pr-12 flex-wrap">
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-2 pr-10 sm:pr-12 flex-wrap">
             <span className="font-mono text-xs sm:text-sm font-black text-[#2B59FF] px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200">
               {registration.registration_code}
             </span>
-            <span className={`text-[11px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+            <span className={`text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider px-2 sm:px-2.5 py-0.5 rounded-full border ${
               registration.participant_type === 'ybn_student'
                 ? 'bg-[#FEF08A] text-slate-950 border-slate-900'
                 : 'bg-[#E0E7FF] text-[#2B59FF] border-blue-300'
             }`}>
               {registration.participant_type === 'ybn_student' ? "YBN Internal Student" : "Visiting Delegate"}
             </span>
-            <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
+            <span className={`text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
               currentStatus === 'confirmed'
                 ? 'bg-emerald-100 text-emerald-950 border-emerald-400'
                 : 'bg-amber-100 text-amber-950 border-amber-400'
@@ -109,32 +150,38 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
             </span>
           </div>
 
-          <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 truncate">
+          <h2 className="font-headline font-black text-xl sm:text-2xl md:text-3xl text-slate-950 truncate">
             {registration.full_name}
           </h2>
-          <p className="font-mono text-xs text-slate-500 mt-1">
+          <p className="font-mono text-[11px] sm:text-xs text-slate-500 mt-1">
             Student ID / Roll No: <strong className="text-slate-900">{registration.student_id_number}</strong>
           </p>
         </div>
 
         {/* Scrollable Modal Content: Fully responsive to standard mouse wheel scrolling */}
-        <div className="overflow-y-auto p-6 sm:p-7 pt-4 space-y-4 flex-1 overscroll-contain">
+        <div 
+          ref={scrollContainerRef}
+          data-lenis-prevent="true"
+          onWheel={(e) => e.stopPropagation()}
+          className="overflow-y-auto p-4 sm:p-6 md:p-7 pt-3 sm:pt-4 space-y-3.5 sm:space-y-4 flex-1 overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           
           {/* 3-DAY FESTIVAL ITINERARY BREAKDOWN */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#F6F7F9] to-white border-[1.5px] border-slate-900 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs font-black uppercase text-[#2B59FF] flex items-center gap-1.5">
+          <div className="p-3.5 sm:p-5 rounded-2xl bg-gradient-to-br from-[#F6F7F9] to-white border-[1.5px] border-slate-900 space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-1.5">
+              <span className="font-mono text-[11px] sm:text-xs font-black uppercase text-[#2B59FF] flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#2B59FF]" />
                 <span>3-DAY FESTIVAL ITINERARY BREAKDOWN</span>
               </span>
-              <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#FEF08A] text-slate-950 border border-slate-900">
+              <span className="font-mono text-[9px] sm:text-[10px] font-bold px-2 sm:px-2.5 py-0.5 rounded-full bg-[#FEF08A] text-slate-950 border border-slate-900">
                 PAY ONCE • 3 DAYS ACCESS
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 font-mono text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5 font-mono text-xs">
               {/* Day 1 */}
-              <div className="p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
+              <div className="p-2.5 sm:p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 font-black uppercase">DAY 01 // DEC 10</span>
                   <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 text-blue-900 font-bold">TECH</span>
@@ -148,7 +195,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               </div>
 
               {/* Day 2 */}
-              <div className="p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
+              <div className="p-2.5 sm:p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 font-black uppercase">DAY 02 // DEC 11</span>
                   <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 font-bold">CULTURAL</span>
@@ -162,7 +209,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               </div>
 
               {/* Day 3 */}
-              <div className="p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
+              <div className="p-2.5 sm:p-3 rounded-xl bg-white border border-slate-300 space-y-1 shadow-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-slate-400 font-black uppercase">DAY 03 // DEC 12</span>
                   <span className="text-[9px] px-1.5 py-0.2 rounded bg-pink-100 text-pink-900 font-bold">FINALE</span>
@@ -215,36 +262,36 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
           </div>
 
           {/* Academic & Affiliation Profile */}
-          <div className="p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300 space-y-2 text-xs font-mono">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F7F9] border border-slate-300 space-y-2 text-xs font-mono">
             <div>
               <span className="text-slate-500 block text-[10px] uppercase font-bold">Institution / College:</span>
-              <span className="font-bold text-slate-950 text-sm">{registration.institution_name}</span>
+              <span className="font-bold text-slate-950 text-xs sm:text-sm">{registration.institution_name}</span>
             </div>
             {registration.department && (
               <div>
                 <span className="text-slate-500 block text-[10px] uppercase font-bold">Department / Faculty:</span>
-                <span className="font-bold text-slate-950">{registration.department}</span>
+                <span className="font-bold text-slate-950 text-xs">{registration.department}</span>
               </div>
             )}
             <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200">
               <div>
                 <span className="text-slate-500 block text-[10px] uppercase font-bold">Course / Degree:</span>
-                <span className="font-bold text-slate-950">{registration.course}</span>
+                <span className="font-bold text-slate-950 text-xs">{registration.course}</span>
               </div>
               <div>
                 <span className="text-slate-500 block text-[10px] uppercase font-bold">Academic Year:</span>
-                <span className="font-bold text-slate-950">{registration.academic_year}</span>
+                <span className="font-bold text-slate-950 text-xs">{registration.academic_year}</span>
               </div>
             </div>
           </div>
 
           {/* Contact Details */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-            <div className="p-3.5 rounded-xl bg-white border border-slate-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-white border border-slate-300">
               <span className="text-slate-500 block text-[10px] uppercase font-bold">EMAIL:</span>
-              <span className="font-bold text-slate-950 truncate block mt-0.5">{registration.email}</span>
+              <span className="font-bold text-slate-950 break-all block mt-0.5">{registration.email}</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-white border border-slate-300">
+            <div className="p-3 rounded-xl bg-white border border-slate-300">
               <span className="text-slate-500 block text-[10px] uppercase font-bold">PHONE / WHATSAPP:</span>
               <span className="font-bold text-slate-950 truncate block mt-0.5">{registration.mobile}</span>
             </div>
@@ -253,7 +300,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
           {/* Esports Duo / Squad Roster (If Registered for Gaming with real squad data) */}
           {squadMembers && Array.isArray(squadMembers) && squadMembers.length > 0 &&
            squadMembers.some((m: any) => (m.ign && m.ign.trim() && m.ign.trim() !== 'N/A') || (m.uid && m.uid.trim() && m.uid.trim() !== 'N/A') || (m.name && m.name.trim() && m.name.trim() !== 'Player')) && (
-            <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 space-y-3 font-mono text-xs">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 space-y-3 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-blue-950 uppercase font-black flex items-center gap-1.5 text-xs">
                   <Gamepad2 className="w-4 h-4 text-[#2B59FF]" />
@@ -289,7 +336,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
 
           {/* Team / Project details if non-gaming */}
           {registration.team_name && (!squadMembers || squadMembers.length === 0) && (
-            <div className="p-4 rounded-2xl bg-[#FEF08A]/40 border border-slate-900 text-xs font-mono">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FEF08A]/40 border border-slate-900 text-xs font-mono">
               <span className="text-slate-700 uppercase font-bold block text-[10px]">TEAM / PROJECT TITLE:</span>
               <span className="font-bold text-slate-950 text-sm">{registration.team_name}</span>
               {registration.team_details && (
@@ -301,13 +348,13 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
           )}
 
           {/* Payment Verification Review (Manual Verification by Payment Head) */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[#FEF08A]/30 border-[1.5px] border-slate-900 space-y-3 font-mono text-xs">
+          <div className="p-3.5 sm:p-5 rounded-2xl bg-[#FEF08A]/30 border-[1.5px] border-slate-900 space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between">
               <span className="font-headline font-bold uppercase text-slate-950 flex items-center gap-1.5 text-xs">
                 <CreditCard className="w-4 h-4 text-[#2B59FF]" />
                 <span>Payment Verification Review</span>
               </span>
-              <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase border ${
+              <span className={`px-2 sm:px-2.5 py-0.5 rounded-full font-bold text-[9px] sm:text-[10px] uppercase border ${
                 currentStatus === 'confirmed' 
                   ? 'bg-emerald-100 text-emerald-900 border-emerald-400' 
                   : 'bg-amber-100 text-amber-900 border-amber-400'
@@ -316,16 +363,16 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 bg-white p-3 rounded-xl border border-slate-300">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 bg-white p-3 rounded-xl border border-slate-300">
               <div>
                 <span className="text-slate-400 block text-[10px]">FEE AMOUNT:</span>
-                <span className="font-headline font-black text-slate-950 text-base">
+                <span className="font-headline font-black text-slate-950 text-sm sm:text-base">
                   ₹{registration.amount_inr || (registration.participant_type === 'ybn_student' ? 399 : 499)}
                 </span>
               </div>
               <div>
                 <span className="text-slate-400 block text-[10px]">TRANSACTION / UTR ID:</span>
-                <span className="font-bold text-slate-950 select-all text-xs">
+                <span className="font-bold text-slate-950 select-all text-xs break-all">
                   {registration.transaction_id || "Not submitted"}
                 </span>
               </div>
@@ -341,7 +388,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
 
             {/* Receipt Screenshot Preview & Google Drive View */}
             {registration.payment_screenshot_url && (
-              <div className="space-y-3 p-3.5 rounded-2xl bg-white border border-slate-300">
+              <div className="space-y-3 p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-300">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <span className="text-slate-900 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                     <FileImage className="w-4 h-4 text-[#2B59FF]" />
@@ -349,19 +396,19 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                   </span>
 
                   {isDrive ? (
-                    <div className="flex items-center gap-2">
-                      <div className="inline-flex rounded-lg border border-slate-300 p-0.5 bg-slate-100 text-[11px] font-bold">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="inline-flex rounded-lg border border-slate-300 p-0.5 bg-slate-100 text-[10px] sm:text-[11px] font-bold">
                         <button
                           type="button"
                           onClick={() => setPreviewTab('image')}
-                          className={`px-2.5 py-1 rounded-md transition-colors ${previewTab === 'image' && !imgFailed ? 'bg-white shadow text-slate-950' : 'text-slate-600 hover:text-slate-950'}`}
+                          className={`px-2 sm:px-2.5 py-1 rounded-md transition-colors ${previewTab === 'image' && !imgFailed ? 'bg-white shadow text-slate-950' : 'text-slate-600 hover:text-slate-950'}`}
                         >
                           Photo View
                         </button>
                         <button
                           type="button"
                           onClick={() => setPreviewTab('iframe')}
-                          className={`px-2.5 py-1 rounded-md transition-colors ${previewTab === 'iframe' || imgFailed ? 'bg-white shadow text-[#2B59FF]' : 'text-slate-600 hover:text-slate-950'}`}
+                          className={`px-2 sm:px-2.5 py-1 rounded-md transition-colors ${previewTab === 'iframe' || imgFailed ? 'bg-white shadow text-[#2B59FF]' : 'text-slate-600 hover:text-slate-950'}`}
                         >
                           Drive Player
                         </button>
@@ -371,10 +418,10 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                         href={driveViewUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-[#2B59FF] hover:bg-blue-100 border border-blue-200 transition-colors"
+                        className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-1 rounded-lg bg-blue-50 text-[#2B59FF] hover:bg-blue-100 border border-blue-200 transition-colors"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
-                        <span>Open Drive ↗</span>
+                        <span>Drive ↗</span>
                       </a>
                     </div>
                   ) : (
@@ -397,36 +444,34 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                       <iframe
                         src={driveEmbedUrl}
                         title="Google Drive Receipt Preview"
-                        className="w-full h-72 border-0"
+                        className="w-full h-64 sm:h-72 border-0"
                         allow="autoplay"
                       />
                     </div>
                   ) : (
                     <div className="rounded-xl overflow-hidden border border-slate-300 bg-slate-50 flex items-center justify-center p-1">
-                      <img 
-                        src={directImgUrl} 
-                        alt={`Payment receipt for ${registration.email}`} 
+                      <img
+                        src={directImgUrl}
+                        alt="Payment receipt preview"
                         referrerPolicy="no-referrer"
-                        crossOrigin="anonymous"
+                        className="max-h-64 sm:max-h-80 w-full object-contain bg-white rounded-lg select-none"
                         onError={() => setImgFailed(true)}
-                        className="max-h-72 w-full object-contain rounded-lg"
                       />
                     </div>
                   )
                 ) : (
                   <div className="rounded-xl overflow-hidden border border-slate-300 bg-slate-50 flex items-center justify-center p-1">
-                    <img 
-                      src={registration.payment_screenshot_url} 
-                      alt={`Payment receipt for ${registration.email}`} 
-                      className="max-h-72 w-full object-contain rounded-lg"
+                    <img
+                      src={registration.payment_screenshot_url}
+                      alt="Payment receipt preview"
+                      className="max-h-64 sm:max-h-80 w-full object-contain bg-white rounded-lg select-none"
                     />
                   </div>
                 )}
 
-
-                <div className="flex items-center justify-between pt-1 border-t border-slate-200">
-                  <span className="font-mono text-[10px] text-slate-500 truncate max-w-[220px]">
-                    UTR: <strong className="text-slate-800">{registration.transaction_id || 'N/A'}</strong>
+                <div className="flex items-center justify-between text-slate-500 text-[10px] pt-1">
+                  <span>
+                    Google Drive Status: <strong className="text-slate-900">{isDrive ? 'Stored in Cloud Folder' : 'Base64 Local'}</strong>
                   </span>
                   <a
                     href={GOOGLE_DRIVE_FOLDER_URL}
@@ -471,7 +516,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
             <label className="block text-xs font-mono font-bold uppercase tracking-wider text-slate-700 mb-2">
               Update Registration Status:
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {(['confirmed', 'pending', 'waitlisted', 'rejected'] as RegistrationStatus[]).map((st) => (
                 <button
                   key={st}
