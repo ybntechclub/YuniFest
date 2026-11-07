@@ -100,7 +100,11 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
             <div>
               <span className="text-slate-500 block mb-0.5">Capacity:</span>
               <span className="font-bold text-[#2B59FF]">
-                {event.capacity ? `${event.capacity} ${event.capacity_unit}` : 'Open Admission'}
+                {event.slug === 'treasure-hunting' 
+                  ? '6 Teams (5 members each)' 
+                  : event.capacity 
+                  ? `${event.capacity} ${event.capacity_unit}` 
+                  : 'Open Admission'}
               </span>
             </div>
           </div>

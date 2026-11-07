@@ -143,11 +143,11 @@ SET
   updated_at = NOW()
 WHERE slug = 'ramp-walk-fashion-show';
 
--- 2. Model Representation & Poster Making (Merged Single Event, IKS Theme)
+-- 2. Model Representation (Theme: Indian Knowledge System)
 UPDATE public.events
 SET 
-  name = 'Model Representation & Poster Making',
-  description = 'Showcase innovative working/static models or research posters celebrating the Indian Knowledge System (IKS) — traditional sciences, indigenous technology, heritage architecture & Vedic mathematics.',
+  name = 'Model Representation',
+  description = 'Showcase innovative working and static 3D models celebrating the Indian Knowledge System (IKS) — traditional sciences, indigenous technology, heritage architecture & Vedic mathematics.',
   category = 'technical',
   event_day = 'day_1',
   timing_display = 'Morning Session // 10:00 AM',
@@ -157,7 +157,7 @@ SET
   capacity_unit = 'teams',
   rules = ARRAY[
     'Official Theme: Indian Knowledge System (IKS) / Bhartiya Gyan Parampara.',
-    'Participants can present either a Working/Static 3D Model OR an Academic/Cultural Poster (A1/A2 size).',
+    'Participants must present a Working or Static 3D Model related to the theme.',
     'Teams of 1 to 4 members permitted.',
     '5-minute live briefing and presentation to the jury panel.',
     'Originality of concept, IKS depth, societal utility, and presentation carry key marks.'
@@ -166,7 +166,55 @@ SET
   faculty_coordinator = 'Dr. Asha Puran Mam',
   icon_name = 'Cpu',
   updated_at = NOW()
-WHERE slug IN ('model-presentation', 'poster-making');
+WHERE slug = 'model-presentation';
+
+-- 2.1 Poster Making (Theme: Indian Knowledge System)
+UPDATE public.events
+SET 
+  name = 'Poster Making',
+  description = 'Design creative academic & cultural research posters (A1/A2) celebrating the Indian Knowledge System (IKS), indigenous heritage, and traditional knowledge.',
+  category = 'technical',
+  event_day = 'day_1',
+  timing_display = 'Morning Session // 10:00 AM',
+  venue = 'YBN Innovation & Exhibition Gallery',
+  eligible_participant_types = 'all',
+  capacity = 60,
+  capacity_unit = 'teams',
+  rules = ARRAY[
+    'Official Theme: Indian Knowledge System (IKS) / Bhartiya Gyan Parampara.',
+    'Poster format: Academic or Cultural Research Poster (A1 or A2 sheet / flex display).',
+    'Teams of 1 to 2 members permitted (or individual participation).',
+    'Bring your own drawing/coloring materials or pre-printed digital research posters.',
+    'Evaluation based on relevance to theme, clarity of information, visual aesthetics, and explanation to judges.'
+  ],
+  student_coordinator = 'Aryan Sharma',
+  faculty_coordinator = 'Dr. Asha Puran Mam',
+  icon_name = 'Cpu',
+  updated_at = NOW()
+WHERE slug = 'poster-making';
+
+-- 2.2 Creative Craft Workshop
+UPDATE public.events
+SET 
+  name = 'Creative Craft Workshop',
+  eligible_participant_types = 'all',
+  student_coordinator = 'Sanjana Kumari',
+  updated_at = NOW()
+WHERE slug = 'creative-craft-workshop';
+
+-- 2.3 Quiz Competition
+UPDATE public.events
+SET 
+  student_coordinator = 'Kamil Hussain',
+  updated_at = NOW()
+WHERE slug = 'quiz-competition';
+
+-- 2.4 Reel Competition
+UPDATE public.events
+SET 
+  student_coordinator = 'Megha Kumari',
+  updated_at = NOW()
+WHERE slug = 'reel-competition';
 
 -- 3. Face Painting & Tattoo Making (Body Art & Temporary Tattooing)
 UPDATE public.events

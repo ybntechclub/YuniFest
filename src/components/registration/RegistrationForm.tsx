@@ -44,7 +44,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     const seen = new Set<string>();
     return eligibleEvents.filter(e => {
       if (e.event_day !== 'day_1') return false;
-      if (e.slug === 'poster-making') return false; // Merged into model-presentation
       const cleanName = e.name.trim().toLowerCase();
       if (seen.has(cleanName)) return false;
       seen.add(cleanName);
@@ -127,8 +126,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     if (preselectedEventSlug && !hasInitializedFromUrlRef.current && eligibleEvents.length > 0) {
       const match = eligibleEvents.find(e => 
         e.slug === preselectedEventSlug || 
-        e.id === preselectedEventSlug ||
-        (preselectedEventSlug === 'poster-making' && e.slug === 'model-presentation')
+        e.id === preselectedEventSlug
       );
       if (match) {
         if (match.event_day === 'day_1') setDay1EventId(match.id);

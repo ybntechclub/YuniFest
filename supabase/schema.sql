@@ -218,7 +218,7 @@ INSERT INTO public.events (
     'creative', 'day_1', 'Schedule to be announced', 'Design Studio, Block B',
     true, 'ybn_only', 50, 'participants',
     ARRAY['Basic crafting materials provided by host faculty.', 'Bring scissors and measuring tools.', 'Certificates awarded upon project submission.'],
-    'Anmol Kumar', 'Dr. Chinnmaya Mam', 'Scissors', 'gold'
+    'Sanjana Kumari', 'Dr. Chinnmaya Mam', 'Scissors', 'gold'
   ),
   (
     'food-fest-flea-market',

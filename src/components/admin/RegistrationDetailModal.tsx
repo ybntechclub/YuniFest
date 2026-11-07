@@ -80,7 +80,8 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
   const day1Name = selectedByDay.day_1?.name || (
     registration.event_name?.toLowerCase().includes('gaming') ? 'Gaming Tournament (Free Fire & BGMI)' :
     registration.event_name?.toLowerCase().includes('face') ? 'Face Painting & Tattoo Making' :
-    registration.event_name?.toLowerCase().includes('model') ? 'Model Representation & Poster Making' :
+    registration.event_name?.toLowerCase().includes('model') ? 'Model Representation' :
+    registration.event_name?.toLowerCase().includes('poster') ? 'Poster Making' :
     registration.event_name?.toLowerCase().includes('sketch') ? 'Live Sketch Competition' :
     'General Delegate Attendance (No Competition)'
   );

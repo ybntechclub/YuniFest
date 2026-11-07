@@ -351,16 +351,18 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
     );
   }
 
-  // 3. MODEL REPRESENTATION & POSTER MAKING — Single Event, Theme Indian Knowledge System (IKS)
+  // 3. MODEL REPRESENTATION & POSTER MAKING — Theme Indian Knowledge System (IKS)
   if (slug === 'model-presentation' || slug === 'poster-making') {
-    const selectedFormat = eventSpecificData.iksFormat || 'Working / Static 3D Model';
+    const isModel = slug === 'model-presentation';
+    const defaultFormat = isModel ? 'Working / Static 3D Model' : 'Scientific / Cultural Poster (A1/A2)';
+    const selectedFormat = eventSpecificData.iksFormat || defaultFormat;
 
     return (
       <div className="p-6 rounded-2xl bg-[#D1FAE5]/60 border-[1.5px] border-slate-900 space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-emerald-950 text-xs font-black uppercase tracking-wider">
             <Sparkles className="w-4 h-4 text-emerald-700" />
-            <span>Model Representation &amp; Poster Making (Single Combined Event)</span>
+            <span>{isModel ? 'Model Representation' : 'Poster Making'} (Official Entry)</span>
           </div>
           <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-slate-900 text-slate-950">
             THEME: IKS
@@ -376,16 +378,11 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
             Presentation Medium / Format <span className="text-red-500">*</span>
           </label>
           <div className="grid grid-cols-2 gap-3">
-            {['Working / Static 3D Model', 'Scientific / Cultural Poster (A1/A2)'].map((fmt) => (
+            {[isModel ? 'Working / Static 3D Model' : 'Scientific / Cultural Poster (A1/A2)'].map((fmt) => (
               <button
                 key={fmt}
                 type="button"
-                onClick={() => setEventSpecificData(prev => ({ ...prev, iksFormat: fmt }))}
-                className={`py-2.5 px-3 rounded-xl text-xs font-bold border-[1.5px] border-slate-900 transition-all ${
-                  selectedFormat === fmt
-                    ? 'bg-slate-950 text-white shadow-sm'
-                    : 'bg-white text-slate-800 hover:bg-slate-100'
-                }`}
+                className="py-2.5 px-3 rounded-xl text-xs font-bold border-[1.5px] border-slate-900 bg-slate-950 text-white shadow-sm"
               >
                 {fmt}
               </button>
@@ -395,7 +392,7 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
 
         <div>
           <label className="block text-xs font-bold text-slate-800 mb-1">
-            Project / Prototype / Poster Title <span className="text-red-500">*</span>
+            {isModel ? 'Model / Prototype Title' : 'Research / Poster Title'} <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -405,7 +402,7 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
               setTeamName(val);
               setEventSpecificData(prev => ({ ...prev, iksProjectTitle: val }));
             }}
-            placeholder="e.g. Vedic Geometry in Ancient Temple Acoustics & Earthquake Resistance"
+            placeholder={isModel ? "e.g. Working Solar Telemetry & Vedic Irrigation Model" : "e.g. Vedic Geometry in Ancient Temple Acoustics"}
             className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none"
           />
           {errors.teamName && <p className="text-xs text-red-600 mt-1">{errors.teamName}</p>}
@@ -417,7 +414,7 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
           </label>
           <textarea
             rows={2}
-            value={eventSpecificData.iksTeamMembers !== undefined ? eventSpecificData.iksTeamMembers : teamDetails}
+            value={eventSpecificData.iksTeamMembers || ''}
             onChange={(e) => {
               const val = e.target.value;
               setTeamDetails(val);
@@ -470,7 +467,7 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
           </label>
           <input
             type="text"
-            value={eventSpecificData.modelPartnerName !== undefined ? eventSpecificData.modelPartnerName : teamDetails}
+            value={eventSpecificData.modelPartnerName || ''}
             onChange={(e) => {
               const val = e.target.value;
               setTeamDetails(val);
@@ -611,8 +608,12 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
             <span>Treasure Hunting Expedition Team</span>
           </div>
           <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-slate-900 text-slate-950">
-            CAP: 25 TEAMS ONLY
+            CAP: 6 TEAMS ONLY (5 MEMBERS EACH)
           </span>
+        </div>
+
+        <div className="p-3 rounded-xl bg-white border border-amber-300 font-mono text-xs text-amber-900">
+          <span className="font-bold">Team Roster Requirement:</span> Exactly 5 members per team from YBN University. Strictly capped at 6 teams.
         </div>
 
         <div>
@@ -631,13 +632,13 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
 
         <div>
           <label className="block text-xs font-bold text-slate-800 mb-1">
-            Team Members with Student ID Numbers <span className="text-red-500">*</span>
+            5 Team Members with Roll / Student ID Numbers <span className="text-red-500">*</span>
           </label>
           <textarea
-            rows={3}
+            rows={5}
             value={teamDetails}
             onChange={(e) => setTeamDetails(e.target.value)}
-            placeholder="1. Lead Name (Captain) - ID: ...&#10;2. Member 2 - ID: ...&#10;3. Member 3 - ID: ..."
+            placeholder="1. Team Captain - Roll No: ...&#10;2. Member 2 - Roll No: ...&#10;3. Member 3 - Roll No: ...&#10;4. Member 4 - Roll No: ...&#10;5. Member 5 - Roll No: ..."
             className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 focus:outline-none resize-none font-mono"
           />
           {errors.teamDetails && <p className="text-xs text-red-600 mt-1">{errors.teamDetails}</p>}
