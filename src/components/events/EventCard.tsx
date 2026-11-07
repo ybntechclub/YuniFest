@@ -102,8 +102,9 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onOpenDetails, regi
           <span className="text-slate-500 font-bold">SLOTS &amp; QUOTA:</span>
           {event.capacity ? (
             <span className={`font-bold ${isFull ? 'text-red-600' : 'text-[#2B59FF]'}`}>
-              {registeredCount} / {event.capacity} {event.capacity_unit.toUpperCase()}
-              {event.slug === 'treasure-hunting' && ' [CAP: 25]'}
+              {event.slug === 'treasure-hunting'
+                ? `${registeredCount} / 6 TEAMS (5 MEMBERS EACH)`
+                : `${registeredCount} / ${event.capacity} ${event.capacity_unit.toUpperCase()}`}
             </span>
           ) : (
             <span className="text-emerald-700 font-bold">OPEN REGISTRATION</span>

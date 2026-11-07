@@ -3,7 +3,7 @@ import { INITIAL_EVENTS } from '../data/initialEvents';
 import { supabase, isSupabaseConfigured } from './supabase';
 import { generateRegistrationCode } from './utils';
 
-const EVENTS_STORAGE_KEY = 'yunifest_events_v3_2026';
+const EVENTS_STORAGE_KEY = 'yunifest_events_v5_2026';
 const REGISTRATIONS_STORAGE_KEY = 'yunifest_registrations_v1';
 const EVENT_OVERRIDES_KEY = 'yunifest_event_overrides_v1';
 
@@ -23,6 +23,9 @@ class RegistrationStore {
     try {
       localStorage.removeItem('yunifest_events_v1');
       localStorage.removeItem('yunifest_events_v2');
+      localStorage.removeItem('yunifest_events_v3_2026');
+      localStorage.removeItem('yunifest_events_v4_2026');
+      localStorage.removeItem(EVENT_OVERRIDES_KEY);
     } catch {
       // ignore
     }
@@ -32,10 +35,10 @@ class RegistrationStore {
     if (storedEvents) {
       try {
         const parsed = JSON.parse(storedEvents);
-        // Verify that latest Day 1 events (like model-presentation open to 'all') are present
-        const hasLatestEvents = Array.isArray(parsed) && parsed.some(
-          (e: EventItem) => e.slug === 'model-presentation' && e.eligible_participant_types === 'all'
-        );
+        // Verify that latest Day 1 events (Model Representation and Poster Making as separate events) are present
+        const hasLatestEvents = Array.isArray(parsed) && 
+          parsed.some((e: EventItem) => e.slug === 'model-presentation' && e.name === 'Model Representation') &&
+          parsed.some((e: EventItem) => e.slug === 'poster-making' && e.name === 'Poster Making');
         if (hasLatestEvents) {
           this.events = parsed;
         } else {
@@ -155,12 +158,6 @@ class RegistrationStore {
     if (!identifier) return undefined;
     const clean = identifier.trim();
     const withoutPrefix = clean.replace(/^evt-/, '');
-
-    // Alias poster-making to combined model-presentation event
-    if (clean === 'poster-making' || withoutPrefix === 'poster-making') {
-      const merged = this.events.find(e => e.slug === 'model-presentation');
-      if (merged) return merged;
-    }
 
     // Safety fallback for 3-day composite festival pass
     if (clean === 'fest-3day-pass' || clean === 'fest-pass') {

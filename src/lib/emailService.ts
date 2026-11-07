@@ -46,7 +46,8 @@ export async function sendRegistrationConfirmationEmail(
   const day1Event = selectedByDay.day_1?.name || (
     record.event_name?.toLowerCase().includes('gaming') ? 'Gaming Tournament (Free Fire & BGMI)' :
     record.event_name?.toLowerCase().includes('face') ? 'Face Painting & Tattoo Making' :
-    record.event_name?.toLowerCase().includes('model') ? 'Model Representation & Poster Making' :
+    record.event_name?.toLowerCase().includes('model') ? 'Model Representation' :
+    record.event_name?.toLowerCase().includes('poster') ? 'Poster Making' :
     record.event_name?.toLowerCase().includes('sketch') ? 'Live Sketch Competition' :
     record.event_name || 'Technical & Innovation Day'
   );

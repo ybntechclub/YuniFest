@@ -13,7 +13,7 @@ export const FEST_FAQS: FAQItem[] = [
   {
     category: "eligibility",
     question: "Can students from other colleges or universities participate?",
-    answer: "Yes! Students from external colleges and universities are warmly welcomed to participate in designated inter-college competitions: Dance Competition, Singing Competition, Quiz Competition, Poster Making, Reel Competition, Mimicry Competition, Stand-up Comedy, Gaming Tournament (Free Fire & BGMI), and Treasure Hunting.",
+    answer: "Yes! Students from external colleges and universities are warmly welcomed to participate in designated open competitions: Dance Competition, Singing Competition, Quiz Competition, Model Representation, Poster Making, Reel Competition, Mimicry Competition, Stand-up Comedy, Gaming Tournament (Free Fire & BGMI), Creative Craft Workshop, and Face Painting & Tattoo Making. (Note: Treasure Hunting, Food Fest, and Ramp Walk are restricted to YBN University students).",
   },
   {
     category: "eligibility",

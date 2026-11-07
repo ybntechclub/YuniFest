@@ -20,7 +20,7 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({ registrations, eve
   const treasureHuntingCount = registrations.filter(
     r => r.event_id === treasureHuntingEvent?.id && r.registration_status !== 'rejected'
   ).length;
-  const treasureMaxCapacity = treasureHuntingEvent?.capacity || 25;
+  const treasureMaxCapacity = treasureHuntingEvent?.capacity || 6;
   const treasurePercent = Math.min(100, Math.round((treasureHuntingCount / treasureMaxCapacity) * 100));
 
   return (

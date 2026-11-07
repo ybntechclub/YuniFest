@@ -30,8 +30,8 @@ export const INITIAL_EVENTS: EventItem[] = [
   {
     id: "evt-model-presentation",
     slug: "model-presentation",
-    name: "Model Representation & Poster Making",
-    description: "Showcase innovative working/static models or research posters celebrating the Indian Knowledge System (IKS) — traditional sciences, indigenous technology, heritage architecture & Vedic mathematics.",
+    name: "Model Representation",
+    description: "Showcase innovative working and static 3D models celebrating the Indian Knowledge System (IKS) — traditional sciences, indigenous technology, heritage architecture & Vedic mathematics.",
     category: "technical",
     event_day: "day_1",
     timing_display: "Morning Session // 10:00 AM",
@@ -42,7 +42,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     capacity_unit: "teams",
     rules: [
       "Official Theme: Indian Knowledge System (IKS) / Bhartiya Gyan Parampara.",
-      "Participants can present either a Working/Static 3D Model OR an Academic/Cultural Poster (A1/A2 size).",
+      "Participants must present a Working or Static 3D Model related to the theme.",
       "Teams of 1 to 4 members permitted.",
       "5-minute live briefing and presentation to the jury panel.",
       "Originality of concept, IKS depth, societal utility, and presentation carry key marks."
@@ -51,6 +51,31 @@ export const INITIAL_EVENTS: EventItem[] = [
     faculty_coordinator: "Dr. Asha Puran Mam",
     icon_name: "Cpu",
     accent_color: "gold",
+  },
+  {
+    id: "evt-poster-making",
+    slug: "poster-making",
+    name: "Poster Making",
+    description: "Design and present creative academic & cultural research posters celebrating the Indian Knowledge System (IKS), indigenous heritage, and traditional knowledge.",
+    category: "technical",
+    event_day: "day_1",
+    timing_display: "Morning Session // 10:00 AM",
+    venue: "YBN Innovation & Exhibition Gallery",
+    registration_open: true,
+    eligible_participant_types: "all",
+    capacity: 60,
+    capacity_unit: "teams",
+    rules: [
+      "Official Theme: Indian Knowledge System (IKS) / Bhartiya Gyan Parampara.",
+      "Poster format: Academic or Cultural Research Poster (A1 or A2 sheet / flex display).",
+      "Teams of 1 to 2 members permitted (or individual participation).",
+      "Bring your own drawing/coloring materials or pre-printed digital research posters.",
+      "Evaluation based on relevance to theme, clarity of information, visual aesthetics, and explanation to judges."
+    ],
+    student_coordinator: "Aryan Sharma",
+    faculty_coordinator: "Dr. Asha Puran Mam",
+    icon_name: "Cpu",
+    accent_color: "cyan",
   },
   {
     id: "evt-face-painting",
@@ -87,7 +112,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     timing_display: "Schedule to be announced",
     venue: "Design Studio, Block B",
     registration_open: true,
-    eligible_participant_types: "ybn_only",
+    eligible_participant_types: "all",
     capacity: 50,
     capacity_unit: "participants",
     rules: [
@@ -160,12 +185,13 @@ export const INITIAL_EVENTS: EventItem[] = [
     timing_display: "Schedule to be announced",
     venue: "Entire Campus Grounds",
     registration_open: true,
-    eligible_participant_types: "all", // Open to both YBN and Outside
-    capacity: 6, // Exactly 6 teams
+    eligible_participant_types: "ybn_only", // Restricted to YBN University students only
+    capacity: 6, // Exactly 6 teams (5 members each)
     capacity_unit: "teams",
     rules: [
       "Strictly limited to only 6 teams on a first-come, first-registered basis.",
-      "Each team must consist of exactly 5 members (30 participants maximum).",
+      "Each team must consist of exactly 5 members from YBN University (30 participants total).",
+      "Exclusive to bonafide YBN University students only.",
       "Clues must be solved sequentially across campus checkpoints without interfering with other teams.",
       "Tampering with physical clue markers results in immediate disqualification.",
       "Physical student ID card verification required before start packet release."
@@ -243,7 +269,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Must tag official fest handles and use official festival hashtags #YUNIFEST2026.",
       "Content must be original; zero plagiarism or inappropriate language."
     ],
-    student_coordinator: "Aryan Sharma",
+    student_coordinator: "Megha Kumari",
     faculty_coordinator: "Dr. Asha Puran Mam",
     icon_name: "Video",
     accent_color: "magenta",
@@ -285,12 +311,13 @@ export const INITIAL_EVENTS: EventItem[] = [
     timing_display: "Evening Gala // 05:00 PM",
     venue: "Grand Open-Air Main Stage",
     registration_open: true,
-    eligible_participant_types: "all",
+    eligible_participant_types: "ybn_only", // Restricted to YBN University students only
     capacity: null, // NO MAX SEAT / UNLIMITED PARTICIPATION
     capacity_unit: "participants",
     rules: [
+      "Exclusive to bonafide YBN University students.",
       "Official Runway Themes: 1. 'Waste to Wow' (Creative Eco-Fashion & Recycled Sustainable Couture) OR 2. 'Divas and Beasts' (High Glamour, Mythological Elegance & Avant-Garde Fantasy).",
-      "No maximum seat limit — open to all passionate delegates and student models.",
+      "No maximum seat limit — open to all passionate YBN student models.",
       "Costume styling and background music tracks must be registered with coordinators 2 hours prior to the showcase.",
       "Choreographed runway sequence featuring solo walks and duo pairings."
     ],
