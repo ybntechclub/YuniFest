@@ -49,7 +49,7 @@ export const RulesSection: React.FC = () => {
                 ORIGINAL PHYSICAL ID CARD MANDATORY AT ALL CAMPUS GATES
               </h3>
               <p className="font-display text-xs sm:text-sm text-slate-800 leading-relaxed">
-                Every registered participant (both YBN University students and external college delegates) must produce their physical institutional ID card at Campus Gate 1 &amp; 2. Digital photos, phone gallery screenshots, or unverified photocopies will not be accepted.
+                Every registered participant (both YBN University internal students and visiting college students) must produce their physical institutional ID card at Campus Gate 1 &amp; 2. Digital photos, phone gallery screenshots, or unverified photocopies will not be accepted.
               </p>
             </div>
 
@@ -57,7 +57,7 @@ export const RulesSection: React.FC = () => {
               to="/register"
               className="btn-voltage text-xs py-3.5 px-8 shrink-0 self-start md:self-auto"
             >
-              <span>REGISTER FOR PASS</span>
+              <span>REGISTER NOW</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -66,7 +66,7 @@ export const RulesSection: React.FC = () => {
         {/* 2 Clean Streamlined High-Contrast Eligibility Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
           
-          {/* Card A: External College Delegates */}
+          {/* Card A: Visiting College Students / Visitors */}
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -76,7 +76,7 @@ export const RulesSection: React.FC = () => {
           >
             <div>
               <div className="flex items-center justify-between font-mono text-xs font-bold text-slate-600 mb-4">
-                <span>[ OPTION B // VISITING DELEGATES ]</span>
+                <span>[ OPTION B // VISITORS (OUTSIDE STUDENTS) ]</span>
                 <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-[#2B59FF] text-white border border-slate-900 uppercase">
                   OPEN NATIONWIDE
                 </span>

@@ -134,7 +134,7 @@ export const SchedulePage: React.FC = () => {
                   to="/register"
                   className="btn-voltage text-xs py-2.5 px-6"
                 >
-                  <span>GET FESTIVAL PASS</span>
+                  <span>REGISTER NOW</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

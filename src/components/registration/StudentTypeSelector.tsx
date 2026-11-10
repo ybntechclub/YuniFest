@@ -18,7 +18,7 @@ export const StudentTypeSelector: React.FC<StudentTypeSelectorProps> = ({ select
           Select Institutional Affiliation
         </h2>
         <p className="font-display text-xs sm:text-sm text-slate-600 mt-2 max-w-xl mx-auto">
-          Choose between bonafide YBN University students and visiting delegates from external colleges across India.
+          Choose between bonafide YBN University internal students and visitors from external colleges across India.
         </p>
       </div>
 
@@ -53,11 +53,6 @@ export const StudentTypeSelector: React.FC<StudentTypeSelectorProps> = ({ select
               YBN University Student
             </h3>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-900 text-slate-950 font-mono text-xs font-black mb-3 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#2B59FF]" />
-              <span>ENTRY PASS: ₹399</span>
-            </div>
-
             <p className="font-display text-xs sm:text-sm text-slate-700 leading-relaxed mb-6">
               Currently enrolled in any faculty, department, or school of YBN University, Ranchi. Full access across all internal showcases and open competitions.
             </p>
@@ -91,20 +86,15 @@ export const StudentTypeSelector: React.FC<StudentTypeSelectorProps> = ({ select
             </div>
 
             <div className="font-mono text-[11px] font-bold uppercase tracking-widest text-[#2B59FF]">
-              [ OPTION B // VISITING DELEGATE ]
+              [ OPTION B // VISITOR (OUTSIDE COLLEGE) ]
             </div>
             
             <h3 className="font-headline font-black text-2xl text-slate-950 mt-1 mb-2">
               Other College Student
             </h3>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-900 text-slate-950 font-mono text-xs font-black mb-3 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#2B59FF]" />
-              <span>ENTRY PASS: ₹499</span>
-            </div>
-
             <p className="font-display text-xs sm:text-sm text-slate-700 leading-relaxed mb-6">
-              Visiting delegate representing any recognized college or university. Eligible for 9 flagship competitions including Dance, Singing, Gaming &amp; Treasure Hunt.
+              Visiting scholar or outside student representing any recognized college or university. Eligible for 9 flagship competitions including Dance, Singing, Gaming &amp; Treasure Hunt.
             </p>
           </div>
 

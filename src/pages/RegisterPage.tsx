@@ -63,7 +63,7 @@ export const RegisterPage: React.FC = () => {
             </span>
           </h1>
           <p className="font-display text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
-            Admission Fee: <strong className="text-slate-950 font-bold bg-[#FEF08A] px-2 py-0.5 rounded border border-slate-900 font-mono">₹399 (YBN Students)</strong> • <strong className="text-slate-950 font-bold bg-[#E0E7FF] px-2 py-0.5 rounded border border-blue-400 font-mono">₹499 (Outside Delegates)</strong> • Original Physical ID Mandatory.
+            Admission Fee: <strong className="text-slate-950 font-bold bg-[#FEF08A] px-2 py-0.5 rounded border border-slate-900 font-mono">₹399 (YBN Internal)</strong> • <strong className="text-slate-950 font-bold bg-[#E0E7FF] px-2 py-0.5 rounded border border-blue-400 font-mono">₹499 (Visitors)</strong> • Original Physical ID Mandatory.
           </p>
         </div>
 

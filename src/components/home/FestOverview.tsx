@@ -252,7 +252,7 @@ export const FestOverview: React.FC = () => {
                 to="/register"
                 className="btn-voltage w-full text-center text-xs justify-center py-2.5"
               >
-                <span>GENERATE PASS</span>
+                <span>REGISTER NOW</span>
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
             </div>

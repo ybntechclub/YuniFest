@@ -19,11 +19,44 @@ import { NotFoundPage } from './pages/NotFoundPage';
 
 // Scroll to top component on route changes
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => {
+          if ((window as any).lenis) {
+            (window as any).lenis.scrollTo(el, { offset: -70 });
+          } else {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 50);
+        return;
+      }
+    }
+
+    if ((window as any).lenis) {
+      (window as any).lenis.scrollTo(0, { immediate: true });
+    }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [pathname]);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    const timer = setTimeout(() => {
+      if (!hash) {
+        if ((window as any).lenis) {
+          (window as any).lenis.scrollTo(0, { immediate: true });
+        }
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+    }, 30);
+
+    return () => clearTimeout(timer);
+  }, [pathname, hash]);
 
   return null;
 };

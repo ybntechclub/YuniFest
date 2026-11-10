@@ -317,7 +317,11 @@ export const INITIAL_EVENTS: EventItem[] = [
     rules: [
       "Exclusive to bonafide YBN University students.",
       "Official Runway Themes: 1. 'Waste to Wow' (Creative Eco-Fashion & Recycled Sustainable Couture) OR 2. 'Divas and Beasts' (High Glamour, Mythological Elegance & Avant-Garde Fantasy).",
+<<<<<<< HEAD
+      "No maximum seat limit — open to all passionate visitors, internal students and models.",
+=======
       "No maximum seat limit — open to all passionate YBN student models.",
+>>>>>>> 3be4a91ba6744ed3722e29a057256cdd639307dd
       "Costume styling and background music tracks must be registered with coordinators 2 hours prior to the showcase.",
       "Choreographed runway sequence featuring solo walks and duo pairings."
     ],

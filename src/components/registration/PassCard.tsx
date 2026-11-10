@@ -121,7 +121,7 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
                   DAY 1 // DEC 10
                 </span>
                 <p className="font-headline font-bold text-xs sm:text-sm text-slate-950">
-                  {selectedEventsByDay.day_1?.name || 'General Festival Delegate'}
+                  {selectedEventsByDay.day_1?.name || 'General Festival Visitor'}
                 </p>
                 {selectedEventsByDay.day_1 && (
                   <span className="font-mono text-[9px] text-emerald-700 font-bold block">
@@ -136,7 +136,7 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
                   DAY 2 // DEC 11
                 </span>
                 <p className="font-headline font-bold text-xs sm:text-sm text-slate-950">
-                  {selectedEventsByDay.day_2?.name || 'General Festival Delegate'}
+                  {selectedEventsByDay.day_2?.name || 'General Festival Visitor'}
                 </p>
                 {selectedEventsByDay.day_2 && (
                   <span className="font-mono text-[9px] text-emerald-700 font-bold block">
@@ -213,7 +213,7 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
               AFFILIATION &amp; DEGREE:
             </span>
             <span className="font-bold text-slate-800 text-xs block mt-0.5">
-              {registration.participant_type === 'ybn_student' ? "YBN Student" : "Visiting Delegate"} • {registration.course} ({registration.academic_year})
+              {registration.participant_type === 'ybn_student' ? "YBN Internal Student" : "Visitor (Outside Student)"} • {registration.course} ({registration.academic_year})
             </span>
           </div>
         </div>
@@ -237,7 +237,7 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
                   registration.event_name?.toLowerCase().includes('face') ? 'Face Painting & Tattoo' :
                   registration.event_name?.toLowerCase().includes('model') ? 'Model & Poster Making' :
                   registration.event_name?.toLowerCase().includes('sketch') ? 'Live Sketch Competition' :
-                  'General Delegate Access'
+                  'General Visitor / Internal Access'
                 )}
               </strong>
             </div>
@@ -250,7 +250,7 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
                   registration.event_name?.toLowerCase().includes('treasure') ? 'Treasure Hunting' :
                   registration.event_name?.toLowerCase().includes('reel') ? 'Reel Competition' :
                   registration.event_name?.toLowerCase().includes('mimicry') ? 'Mimicry & Stand-up' :
-                  'General Delegate Access'
+                  'General Visitor / Internal Access'
                 )}
               </strong>
             </div>

@@ -182,7 +182,7 @@ export const DayByDayPreview: React.FC = () => {
   const current = daysData[activeDay];
 
   return (
-    <section className="py-20 sm:py-28 bg-[#F6F7F9] relative border-t-[1.5px] border-slate-900/15">
+    <section id="schedule" className="py-20 sm:py-28 bg-[#F6F7F9] relative border-t-[1.5px] border-slate-900/15 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
         {/* Header */}

@@ -90,7 +90,7 @@ export const MyPassPage: React.FC = () => {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="e.g. YUNI-2026-9812 or 9876543210 or delegate@mail.com"
+                  placeholder="e.g. YUNI-2026-9812 or 9876543210 or visitor@mail.com"
                   className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none transition-colors"
                 />
                 <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -236,13 +236,13 @@ export const MyPassPage: React.FC = () => {
               Haven't registered for YUNIFEST 2026 yet?
             </h4>
             <p className="font-display text-xs text-slate-600 mt-1 mb-4">
-              Access all 3 days with a single pass: ₹399 for YBN students and ₹499 for outside delegates.
+              Access all 3 days with a single pass: ₹399 for YBN internal students and ₹499 for visitors.
             </p>
             <Link
               to="/register"
               className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2B59FF] hover:underline uppercase tracking-wider font-mono"
             >
-              <span>CLAIM FESTIVAL PASS</span>
+              <span>REGISTER NOW</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

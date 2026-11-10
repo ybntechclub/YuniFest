@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Sparkles, FileText } from 'lucide-react';
 import { RollText } from '../ui/RollText';
+import { CountdownTimer } from './CountdownTimer';
 
 export const HeroSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,12 +15,17 @@ export const HeroSection: React.FC = () => {
     }
   }, []);
 
-  const sponsorLogos = [
-    { name: "YBN INNOVATION", sub: "FACULTY OF TECH" },
-    { name: "NIGHTLIGHT", sub: "CAMPUS LIVE" },
-    { name: "RED BULL", sub: "ESPORTS ARENA" },
-    { name: "AGRITECH GUILD", sub: "RANCHI" },
-    { name: "CULTURAL WING", sub: "JHARKHAND" },
+  const tickerItems = [
+    "YUNIFEST 2026",
+    "YBN UNIVERSITY, RANCHI",
+    "DECEMBER 10, 11 & 12, 2026",
+    "15+ STAGE SHOWCASES",
+    "ESPORTS: BGMI & FREE FIRE",
+    "TREASURE HUNT (CAP: 6 TEAMS)",
+    "DANCE & SINGING BATTLES",
+    "GRAND FASHION RUNWAY",
+    "OPEN-AIR MEGA EDM DJ NIGHT",
+    "PASS: ₹399 INTERNAL / ₹499 VISITOR",
   ];
 
   const lineVariants = {
@@ -37,244 +43,257 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="relative pt-24 sm:pt-28 pb-12 sm:pb-16 bg-[#F6F7F9] text-slate-950 overflow-hidden">
+    <section className="relative pt-16 sm:pt-20 pb-2 sm:pb-3 bg-[#F6F7F9] text-slate-950 overflow-hidden">
       
       {/* Decorative Minimalist Geometric Ambient Glows */}
       <div className="absolute top-10 right-1/4 w-96 h-96 bg-[#FEF08A]/40 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
       <div className="absolute bottom-10 left-10 w-80 h-80 bg-[#2B59FF]/10 rounded-full blur-3xl pointer-events-none" />
 
+      {/* 1. Kinetic Ticker Tape (Replacing previous top badges as requested in Screenshot 1 -> Screenshot 2) */}
+      <div className="w-full border-y-[1.5px] border-slate-900 bg-[#FEF08A] py-1.5 sm:py-2 mb-3 sm:mb-5 overflow-hidden ticker-tape shadow-xs relative z-20">
+        <div className="flex whitespace-nowrap animate-marquee">
+          {[...tickerItems, ...tickerItems, ...tickerItems].map((item, idx) => (
+            <div key={idx} className="flex items-center mx-4 sm:mx-6">
+              <span className="font-headline font-black text-xs sm:text-sm tracking-wider uppercase text-slate-950 hover:text-[#2B59FF] transition-colors">
+                {item}
+              </span>
+              <span className="font-mono text-xs text-slate-950 mx-3 sm:mx-4 font-black">
+                ///
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
-        {/* Top Editorial Status Badges */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-wrap items-center gap-3 mb-5 sm:mb-6"
-        >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#2B59FF] animate-pulse" />
-            <span>YBN UNIVERSITY, RANCHI • DEC 10-12, 2026</span>
-          </div>
-
-          <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FEF08A] border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 shadow-sm">
-            <Sparkles className="w-3 h-3 text-slate-900" />
-            <span>DELEGATE PASS: ₹399 / ₹499</span>
-          </div>
-
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 text-slate-700">
-            <span className="font-editorial italic text-sm sm:text-base text-[#2B59FF] font-semibold">✨ Three Days of Pure Energy</span>
-          </div>
-        </motion.div>
-
-        {/* Hero Main Headline (Balanced Editorial Typography & Cinematic Masked Reveal) */}
-        <div className="mb-8 sm:mb-10">
-          <div className="max-w-5xl">
-            
-            {/* Line 1: WE CONNECT + Luxury Editorial Youth & Culture */}
-            <div className="overflow-hidden py-0.5">
-              <motion.h1
-                custom={0}
-                variants={lineVariants}
-                initial="hidden"
-                animate="visible"
-                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
-              >
-                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
-                  WE CONNECT
-                </span>{' '}
-                <span className="font-editorial italic font-normal text-[#2B59FF] text-[1.12em] sm:text-[1.18em] normal-case tracking-normal inline-block hover:scale-105 transition-transform cursor-default">
-                  Youth &amp; Culture
-                </span>
-              </motion.h1>
-            </div>
-
-            {/* Line 2: THROUGH UNIQUE [IN-REAL-LIFE] */}
-            <div className="overflow-hidden py-1 sm:py-1.5">
-              <motion.div
-                custom={1}
-                variants={lineVariants}
-                initial="hidden"
-                animate="visible"
-                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] flex flex-wrap items-center gap-x-3 gap-y-2 select-none"
-              >
-                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
-                  THROUGH UNIQUE
-                </span>
-                
-                {/* Electric Blue Pill with Continuous Shimmer Sweep Reflection */}
-                <span className="relative inline-flex items-center gap-2 px-3.5 sm:px-4 py-0.5 sm:py-1 bg-[#2B59FF] text-white rounded-2xl border-[1.5px] border-slate-900 shadow-solid-pop hover:shadow-solid-pop-lg hover:-translate-y-0.5 hover:scale-105 active:scale-95 transition-all duration-300 group cursor-default overflow-hidden">
-                  <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/35 to-transparent -skew-x-12 animate-shimmer pointer-events-none" />
-                  <span className="relative z-10 font-black tracking-normal text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] xl:text-[3rem] leading-none">
-                    IN-REAL-LIFE
+        {/* Split Hero Content: Left Side Text & CTAs + Right Side Dance / Concert Arena Video Bar */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch mb-2.5 sm:mb-3">
+          
+          {/* Left Column: Headline, Description & Action Buttons (7 Cols on desktop) */}
+          <div className="lg:col-span-7 flex flex-col justify-between">
+            <div>
+              {/* Line 1: WE CONNECT + Luxury Editorial Youth & Culture */}
+              <div className="overflow-hidden py-0.5">
+                <motion.h1
+                  custom={0}
+                  variants={lineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[2.65rem] xl:text-[3.15rem] tracking-tight text-slate-950 uppercase leading-[1.05] select-none"
+                >
+                  <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                    WE CONNECT
+                  </span>{' '}
+                  <span className="font-editorial italic font-normal text-[#2B59FF] text-[1.1em] normal-case tracking-normal inline-block hover:scale-105 transition-transform cursor-default">
+                    Youth &amp; Culture
                   </span>
-                  <span className="relative z-10 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#FEF08A] animate-pulse shrink-0" />
-                </span>
-              </motion.div>
+                </motion.h1>
+              </div>
+
+              {/* Line 2: THROUGH UNIQUE [IN-REAL-LIFE] */}
+              <div className="overflow-hidden py-0.5 sm:py-1">
+                <motion.div
+                  custom={1}
+                  variants={lineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[2.65rem] xl:text-[3.15rem] tracking-tight text-slate-950 uppercase leading-[1.05] flex flex-wrap items-center gap-x-2.5 gap-y-1.5 select-none"
+                >
+                  <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                    THROUGH UNIQUE
+                  </span>
+                  
+                  {/* Electric Blue Pill with Continuous Shimmer Sweep Reflection */}
+                  <span className="relative inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-0.5 bg-[#2B59FF] text-white rounded-2xl border-[1.5px] border-slate-900 shadow-solid-pop hover:shadow-solid-pop-lg hover:-translate-y-0.5 hover:scale-105 active:scale-95 transition-all duration-300 group cursor-default overflow-hidden">
+                    <span className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/35 to-transparent -skew-x-12 animate-shimmer pointer-events-none" />
+                    <span className="relative z-10 font-black tracking-normal text-xl sm:text-2xl md:text-3xl lg:text-[2.1rem] xl:text-[2.35rem] leading-none">
+                      IN-REAL-LIFE
+                    </span>
+                    <span className="relative z-10 w-2 h-2 rounded-full bg-[#FEF08A] animate-pulse shrink-0" />
+                  </span>
+                </motion.div>
+              </div>
+
+              {/* Line 3: EXPERIENCES + Editorial Accent Note + Floating Sticker */}
+              <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-2 sm:gap-3">
+                <motion.h1
+                  custom={2}
+                  variants={lineVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[2.65rem] xl:text-[3.15rem] tracking-tight text-slate-950 uppercase leading-[1.05] select-none"
+                >
+                  <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
+                    EXPERIENCES
+                  </span>
+                </motion.h1>
+
+                {/* Editorial Accent Note */}
+                <motion.span
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="font-editorial italic text-slate-500 hover:text-slate-900 text-base sm:text-lg md:text-xl normal-case tracking-normal inline-block select-none transition-colors"
+                >
+                  ~ live at YBN campus
+                </motion.span>
+
+                {/* Floating Animated Sticker Badge */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -8 }}
+                  animate={{ scale: 1, rotate: [-2, 2, -2] }}
+                  transition={{
+                    scale: { duration: 0.5, delay: 0.45 },
+                    rotate: { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-[#FEF08A] text-slate-900 text-[10px] sm:text-[11px] font-mono font-black uppercase rounded-full border-[1.5px] border-slate-900 shadow-xs select-none"
+                >
+                  <Sparkles className="w-3 h-3 text-[#2B59FF]" />
+                  <span>DEC 10-12</span>
+                </motion.div>
+              </div>
+
+              {/* Supporting Text */}
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="mt-3.5 sm:mt-4 font-display text-sm sm:text-base text-slate-700 max-w-xl leading-relaxed"
+              >
+                <strong className="text-slate-950 font-bold">YUNIFEST 2026</strong> translates university spirit into unforgettable moments. Three relentless days of competitions, innovation galleries, battle royale gaming, and live concerts.
+              </motion.p>
             </div>
 
-            {/* Line 3: EXPERIENCES + Editorial Accent Note + Floating Sticker */}
-            <div className="overflow-hidden py-0.5 flex flex-wrap items-center gap-3 sm:gap-4">
-              <motion.h1
-                custom={2}
-                variants={lineVariants}
-                initial="hidden"
-                animate="visible"
-                className="font-headline font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[4rem] tracking-tight text-slate-950 uppercase leading-[1.05] sm:leading-[1.02] select-none"
-              >
-                <span className="hover:text-[#2B59FF] transition-colors duration-200 cursor-default">
-                  EXPERIENCES
-                </span>
-              </motion.h1>
-
-              {/* Attractive Editorial Accent Note */}
-              <motion.span
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="font-editorial italic text-slate-500 hover:text-slate-900 text-xl sm:text-2xl normal-case tracking-normal inline-block select-none transition-colors"
-              >
-                ~ live at YBN campus
-              </motion.span>
-
-              {/* Floating Animated Sticker Badge */}
-              <motion.div
-                initial={{ scale: 0, rotate: -8 }}
-                animate={{ scale: 1, rotate: [-2, 2, -2] }}
-                transition={{
-                  scale: { duration: 0.5, delay: 0.45 },
-                  rotate: { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
-                }}
-                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 bg-[#FEF08A] text-slate-900 text-xs font-mono font-black uppercase rounded-full border-[1.5px] border-slate-900 shadow-solid-pop select-none hover:scale-110 transition-transform cursor-default"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2B59FF]" />
-                <span>DEC 10-12 • RAJAULATU ARENA</span>
-              </motion.div>
-            </div>
-
-          </div>
-
-          {/* Supporting Text & CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-6 flex flex-col md:flex-row md:items-center justify-between gap-6 pt-4 border-t-[1.5px] border-slate-900/15"
-          >
-            <p className="font-display text-sm sm:text-base text-slate-700 max-w-xl leading-relaxed">
-              <strong className="text-slate-950">YUNIFEST 2026</strong> translates university spirit into unforgettable moments. Three relentless days of competitions, innovation galleries, battle royale gaming, and live concerts.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
+            {/* Action Buttons CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-4 sm:mt-5 flex flex-wrap items-center gap-3 pt-3 border-t-[1.5px] border-slate-900/10"
+            >
               <Link
                 to="/register"
-                className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-6 sm:px-7"
+                className="btn-voltage inline-flex items-center gap-2 text-xs py-3 sm:py-3.5 px-6 sm:px-7"
               >
-                <RollText text="GET PASS NOW" highlightColor="text-white" />
+                <RollText text="REGISTER NOW" highlightColor="text-white" />
                 <span className="w-2 h-2 rounded-full bg-[#FEF08A]" />
               </Link>
 
-              <Link
-                to="/events"
-                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3.5 px-5 sm:px-6"
+              <a
+                href="/#pricing"
+                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3 sm:py-3.5 px-5 sm:px-6"
               >
-                <RollText text="VIEW EVENTS" highlightColor="text-[#2B59FF]" />
+                <RollText text="VIEW PASS PLANS" highlightColor="text-[#2B59FF]" />
                 <ArrowUpRight className="w-4 h-4 text-slate-900" />
-              </Link>
+              </a>
 
               <a
                 href="/yunifest-2026-brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs py-3.5 px-5 rounded-full bg-white hover:bg-[#FEF08A] text-slate-900 border-[1.5px] border-slate-900 font-display font-bold uppercase tracking-wider transition-all shadow-sm hover:-translate-y-0.5 group"
+                className="inline-flex items-center gap-2 text-xs py-3 sm:py-3.5 px-4 sm:px-5 rounded-full bg-white hover:bg-[#FEF08A] text-slate-950 border-[1.5px] border-slate-900 font-display font-bold uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5 group"
                 title="Open Official Festival Schedule & Brochure (PDF)"
               >
                 <FileText className="w-4 h-4 text-[#2B59FF]" />
                 <span>SCHEDULE PDF</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
+            </motion.div>
+          </div>
+
+          {/* Right Column: The Dance Bar / Concert Arena Video Visual (5 Cols on desktop) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="lg:col-span-5 relative rounded-[28px] sm:rounded-[32px] border-[1.5px] border-slate-900 overflow-hidden bg-slate-950 shadow-solid-pop-lg h-[310px] sm:h-[350px] lg:h-[380px] xl:h-[405px] min-h-[310px] lg:min-h-[380px] flex flex-col justify-between p-5 sm:p-6 text-white group"
+          >
+            {/* Looping Authentic Concert Crowd Video */}
+            <video
+              ref={videoRef}
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/festival-crowd-poster.jpg"
+              className="absolute inset-0 w-full h-full object-cover scale-105 filter brightness-95 contrast-105 group-hover:scale-110 transition-transform duration-700"
+            >
+              <source src="/festival-crowd.mp4" type="video/mp4" />
+            </video>
+
+            {/* Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-slate-950/50 pointer-events-none" />
+
+            {/* Top Floating Badges: Live Arena Tag + Equalizer Waveform Bars */}
+            <div className="relative z-10 flex items-center justify-between gap-2 flex-wrap">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border-[1.5px] border-slate-900 text-slate-950 font-mono text-[10px] sm:text-[11px] font-bold shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                <span>CAMPUS LIVE // FESTIVAL ARENA</span>
+              </div>
+
+              {/* Music / Dance Equalizer Waveform Bars */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-[#FEF08A] font-mono text-[10px] font-bold">
+                <div className="flex items-end gap-0.5 h-3">
+                  <span className="w-0.5 bg-[#FEF08A] rounded-full animate-pulse h-2" />
+                  <span className="w-0.5 bg-[#FEF08A] rounded-full animate-bounce h-3" />
+                  <span className="w-0.5 bg-[#FEF08A] rounded-full animate-pulse h-1.5" />
+                  <span className="w-0.5 bg-[#FEF08A] rounded-full animate-bounce h-2.5" />
+                </div>
+                <span>LIVE DANCE BARS</span>
+              </div>
+            </div>
+
+            {/* Middle Badge / Tier Indicator */}
+            <div className="relative z-10 my-auto py-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 text-white font-mono text-[10px]">
+                <span className="text-[#FEF08A] font-bold">15+ EVENTS</span>
+                <span className="text-white/40">•</span>
+                <span>3 DAYS</span>
+                <span className="text-white/40">•</span>
+                <span className="text-emerald-400 font-bold">₹399 INTERNAL / ₹499 VISITOR</span>
+              </span>
+            </div>
+
+            {/* Bottom Content & Register Now CTA */}
+            <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 pt-2.5 border-t border-white/15">
+              <div>
+                <span className="font-mono text-[10px] text-[#FEF08A] uppercase font-bold tracking-widest block mb-0.5">
+                  [ ANNUAL MEGA FESTIVAL ]
+                </span>
+                <h3 className="font-headline font-black text-lg sm:text-xl text-white uppercase tracking-tight leading-tight">
+                  One fest, endless vibes.
+                </h3>
+              </div>
+
+              <Link
+                to="/register"
+                className="inline-flex items-center gap-1.5 bg-white hover:bg-[#FEF08A] text-slate-950 px-3.5 py-1.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all shadow-md border-[1.5px] border-slate-900 self-start sm:self-auto shrink-0 hover:scale-105"
+              >
+                <span>REGISTER NOW</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </motion.div>
+
         </div>
 
-        {/* Framed Cinematic Concert Video Arena (Editorial Neo-Card with 1.5px Dark Border) */}
+        {/* 3. Stage Activation Countdown Banner (Integrated at bottom of HeroSection as requested) */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.98, y: 25 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="relative rounded-[32px] sm:rounded-[40px] border-[1.5px] border-slate-900 overflow-hidden bg-slate-950 shadow-solid-pop-lg h-[340px] sm:h-[460px] lg:h-[540px]"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          className="pt-2.5 sm:pt-3 border-t-[1.5px] border-slate-900/15"
         >
-          {/* Looping Authentic Concert Crowd Video */}
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster="/festival-crowd-poster.jpg"
-            className="absolute inset-0 w-full h-full object-cover scale-105 filter brightness-95 contrast-105"
-          >
-            <source src="/festival-crowd.mp4" type="video/mp4" />
-          </video>
-
-          {/* Gradients & Framing */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40 pointer-events-none" />
-
-          {/* Floating Live Badge Top Left */}
-          <div className="absolute top-5 left-5 sm:top-8 sm:left-8 z-10 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border-[1.5px] border-slate-900 text-slate-900 font-mono text-xs font-bold shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-            <span>CAMPUS LIVE // FESTIVAL ARENA</span>
-          </div>
-
-          {/* Floating Stats Badge Top Right */}
-          <div className="absolute top-5 right-5 sm:top-8 sm:right-8 z-10 hidden sm:flex items-center gap-3 px-4 py-2 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-white/20 text-white font-mono text-xs">
-            <span className="text-[#FEF08A] font-bold">15+ EVENTS</span>
-            <span className="text-white/40">•</span>
-            <span>3 DAYS</span>
-            <span className="text-white/40">•</span>
-            <span className="text-emerald-400 font-bold">₹399 / ₹499 PASS</span>
-          </div>
-
-          {/* Video Bottom Overlays */}
-          <div className="absolute bottom-6 left-6 right-6 sm:bottom-10 sm:left-10 sm:right-10 z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 text-white">
-            <div className="max-w-lg">
-              <span className="font-mono text-[10px] text-[#FEF08A] uppercase font-bold tracking-widest block mb-1">
-                [ ANNUAL MEGA FESTIVAL ]
-              </span>
-              <h3 className="font-headline font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
-                YUNIFEST – One fest, endless vibes.
-              </h3>
+          <div className="flex flex-wrap items-center justify-between font-mono text-[10px] sm:text-xs uppercase tracking-widest text-slate-600 mb-2 px-1 font-bold gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[#2B59FF]">[ STAGE ACTIVATION COUNTDOWN ]</span>
+              <span className="font-editorial italic text-xs sm:text-sm text-slate-500 font-semibold">• Live Ticking</span>
             </div>
-
-            <Link
-              to="/register"
-              className="inline-flex items-center gap-2 self-start sm:self-auto bg-white text-slate-950 hover:bg-[#FEF08A] px-6 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all shadow-lg border-[1.5px] border-slate-900"
-            >
-              <span>CLAIM YOUR BADGE</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
+            <span>DEC 10, 2026 // 10:00 AM IST • YBN CAMPUS MAIN ARENA</span>
           </div>
+          <CountdownTimer />
         </motion.div>
-
-        {/* Minimalist Monochromatic Brand Marks Strip */}
-        <div className="mt-8 pt-6 border-t-[1.5px] border-slate-900/15 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <span className="font-mono text-xs uppercase font-bold tracking-wider text-slate-500 shrink-0">
-            [ INSTITUTIONAL PILLARS &amp; ALLIANCES ]
-          </span>
-
-          <div className="flex items-center flex-wrap gap-6 sm:gap-10">
-            {sponsorLogos.map((brand, i) => (
-              <div key={i} className="flex flex-col group cursor-default">
-                <span className="font-headline font-black text-xs sm:text-sm tracking-wider text-slate-900 uppercase group-hover:text-[#2B59FF] transition-colors">
-                  {brand.name}
-                </span>
-                <span className="font-mono text-[9px] text-slate-500 tracking-widest uppercase">
-                  {brand.sub}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
 
       </div>
     </section>

@@ -173,7 +173,7 @@ export async function sendConfirmationEmailByAddress(
       email: cleanEmail,
       mobile: 'N/A',
       institution_name: 'YBN University, Ranchi',
-      course: 'Festival Delegate',
+      course: 'Festival Visitor / Internal',
       academic_year: '2026',
       student_id_number: 'VERIFIED',
       id_card_confirmed: true,

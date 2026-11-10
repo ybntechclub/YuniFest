@@ -12,12 +12,12 @@ export const RollText: React.FC<RollTextProps> = ({
   highlightColor = "text-[#2B59FF]"
 }) => {
   return (
-    <span className={`relative inline-flex overflow-hidden h-[1.3em] align-top group ${className}`}>
-      <span className="flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1/2">
-        <span className="inline-block transition-colors duration-200">
+    <span className={`relative inline-flex overflow-hidden h-[1.3em] align-top whitespace-nowrap group ${className}`}>
+      <span className="flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1/2 whitespace-nowrap">
+        <span className="inline-block transition-colors duration-200 whitespace-nowrap">
           {text}
         </span>
-        <span className={`inline-block ${highlightColor} transition-colors duration-200`}>
+        <span className={`inline-block ${highlightColor} transition-colors duration-200 whitespace-nowrap`}>
           {text}
         </span>
       </span>

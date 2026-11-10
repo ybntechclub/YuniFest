@@ -127,7 +127,7 @@ export const RegisterSuccessPage: React.FC = () => {
                 <div>
                   <span className="text-slate-500 block text-[10px]">EVENT ALLOCATION:</span>
                   <span className="font-bold text-[#2B59FF] text-sm">{registration.event_name}</span>
-                  <span className="text-slate-500 block text-[11px] mt-0.5">Tier: {registration.participant_type === 'ybn_student' ? "YBN Internal (₹399)" : "Outside Delegate (₹499)"}</span>
+                  <span className="text-slate-500 block text-[11px] mt-0.5">Tier: {registration.participant_type === 'ybn_student' ? "YBN Internal (₹399)" : "Visitor / Outside Student (₹499)"}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px]">TRANSACTION / UTR ID:</span>
@@ -233,7 +233,7 @@ export const RegisterSuccessPage: React.FC = () => {
                   YBN University Campus • Namkum, Ranchi, Jharkhand
                 </div>
                 <p className="text-[10.5px] text-slate-600 pt-1 border-t border-slate-200 mt-2">
-                  Keep your Registration Token handy for check-in and delegate pass collection on event day.
+                  Keep your Registration Token handy for check-in and entry pass collection on event day.
                 </p>
               </div>
 

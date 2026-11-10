@@ -22,12 +22,31 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'OVERVIEW', path: '/' },
-    { label: 'EVENTS', path: '/events' },
+    { label: 'EVENTS', path: '/#schedule' },
+
     { label: 'SCHEDULE', path: '/schedule' },
     { label: 'REGULATIONS', path: '/regulations' },
+    { label: 'PRICE', path: '/#pricing' },
     { label: 'LEADERSHIP', path: '/leadership' },
     { label: 'MY PASS', path: '/my-pass' },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    if (path.startsWith('/#')) {
+      const hash = path.substring(2);
+      if (location.pathname === '/') {
+        e.preventDefault();
+        const el = document.getElementById(hash);
+        if (el) {
+          if ((window as any).lenis) {
+            (window as any).lenis.scrollTo(el, { offset: -70 });
+          } else {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }
+    }
+  };
 
   const isActive = (path: string) => {
     if (path.startsWith('/#')) return false;
@@ -35,11 +54,10 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-8 ${
-      scrolled ? 'bg-[#F6F7F9]/85 backdrop-blur-md py-3 border-b border-slate-200' : 'pt-5 pb-3'
-    }`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-8 ${scrolled ? 'bg-[#F6F7F9]/85 backdrop-blur-md py-3 border-b border-slate-200' : 'pt-5 pb-3'
+      }`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        
+
         {/* Left: Minimalist Bold Brand Logo with Official YBN University Emblem (Smooth Rotated Design) */}
         <Link to="/" className="flex items-center gap-3 group focus:outline-none shrink-0">
           <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-[1.5px] border-slate-900 shadow-sm flex items-center justify-center p-0.5 overflow-hidden -rotate-6 group-hover:rotate-12 transition-all duration-300">
@@ -61,16 +79,16 @@ export const Navbar: React.FC = () => {
         </Link>
 
         {/* Center: Floating Crisp Minimalist Pill Menu */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 bg-white/90 backdrop-blur-md px-8 py-3 rounded-full border-[1.5px] border-slate-900 shadow-sm">
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8 bg-white/90 backdrop-blur-md px-5 sm:px-6 xl:px-8 py-2.5 sm:py-3 rounded-full border-[1.5px] border-slate-900 shadow-sm shrink-0">
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
-              className={`font-display text-xs font-bold tracking-wider uppercase transition-colors ${
-                isActive(link.path)
+              onClick={(e) => handleNavClick(e, link.path)}
+              className={`font-display text-xs font-bold tracking-wider uppercase transition-colors whitespace-nowrap shrink-0 ${isActive(link.path)
                   ? 'text-[#2B59FF]'
                   : 'text-slate-700 hover:text-slate-950'
-              }`}
+                }`}
             >
               <RollText text={link.label} highlightColor="text-[#2B59FF]" />
             </Link>
@@ -78,7 +96,7 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* Right: Solid Black Pill Button with Accent Dot */}
-        <div className="hidden sm:flex items-center gap-3 shrink-0">
+        <div className="hidden sm:flex items-center gap-2 xl:gap-3 shrink-0">
           <a
             href="/yunifest-2026-brochure.pdf"
             target="_blank"
@@ -104,7 +122,7 @@ export const Navbar: React.FC = () => {
             to="/register"
             className="inline-flex items-center gap-2 bg-slate-950 hover:bg-[#2B59FF] text-white px-6 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-sm group border-[1.5px] border-slate-950"
           >
-            <RollText text="CLAIM PASS" highlightColor="text-white" />
+            <RollText text="REGISTER NOW" highlightColor="text-white" />
             <span className="w-2 h-2 rounded-full bg-[#FEF08A] group-hover:scale-125 transition-transform" />
           </Link>
         </div>
@@ -115,7 +133,7 @@ export const Navbar: React.FC = () => {
             to="/register"
             className="bg-slate-950 text-white px-4 py-1.5 rounded-full font-display text-xs font-bold uppercase tracking-wider border border-slate-950"
           >
-            REGISTER
+            REGISTER NOW
           </Link>
 
           <button
@@ -138,11 +156,11 @@ export const Navbar: React.FC = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`py-2 px-3 rounded-xl transition-colors ${
-                  isActive(link.path)
+                onClick={(e) => handleNavClick(e, link.path)}
+                className={`py-2 px-3 rounded-xl transition-colors whitespace-nowrap ${isActive(link.path)
                     ? 'bg-[#2B59FF]/10 text-[#2B59FF]'
                     : 'text-slate-800 hover:bg-slate-100'
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -174,7 +192,7 @@ export const Navbar: React.FC = () => {
               to="/register"
               className="btn-voltage w-full text-center py-3 text-xs justify-center"
             >
-              <span>REGISTER FOR FESTIVAL PASS</span>
+              <span>REGISTER NOW</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>

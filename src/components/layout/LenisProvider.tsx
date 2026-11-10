@@ -23,6 +23,8 @@ export const LenisProvider: React.FC<LenisProviderProps> = ({ children }) => {
       touchMultiplier: 1.5,
     });
 
+    (window as any).lenis = lenis;
+
     let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
@@ -33,6 +35,7 @@ export const LenisProvider: React.FC<LenisProviderProps> = ({ children }) => {
 
     return () => {
       cancelAnimationFrame(rafId);
+      delete (window as any).lenis;
       lenis.destroy();
     };
   }, []);

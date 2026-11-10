@@ -84,7 +84,7 @@ export const Footer: React.FC = () => {
               to="/register"
               className="inline-flex items-center gap-2.5 bg-white hover:bg-[#CCFF00] hover:text-black text-slate-950 px-6 py-2.5 sm:px-7 sm:py-3 rounded-full font-sans text-xs sm:text-sm font-bold transition-all duration-300 hover:scale-105 shadow-2xl group border border-transparent"
             >
-              <span>CLAIM PASS</span>
+              <span>REGISTER NOW</span>
               <span className="w-2 h-2 rounded-full bg-[#8B5CF6] group-hover:scale-125 transition-transform" />
             </Link>
           </div>
@@ -228,7 +228,7 @@ export const Footer: React.FC = () => {
                 ADMISSION POLICY:
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Delegate passes: ₹399 (YBN students) / ₹499 (Visiting scholars). Physical college/university ID card is strictly mandatory for campus entry.
+                Festival passes: ₹399 (Internal students) / ₹499 (Visitors). Physical college/university ID card is strictly mandatory for campus entry.
               </p>
             </div>
 

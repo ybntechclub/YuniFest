@@ -121,7 +121,7 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
           >
             <option value="all">All Participants</option>
             <option value="ybn_student">YBN Students</option>
-            <option value="outside_student">Visiting Delegates</option>
+            <option value="outside_student">Visitors (Outside Students)</option>
           </select>
 
           {/* Status Filter */}

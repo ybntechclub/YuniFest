@@ -188,10 +188,10 @@ export const LeadershipPage: React.FC = () => {
         <div className="p-8 sm:p-10 rounded-[32px] bg-white border-[1.5px] border-slate-900 shadow-solid-pop flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h3 className="font-headline font-black text-2xl text-slate-950 uppercase">
-              Ready to claim your festival pass?
+              Ready to register for your festival pass?
             </h3>
             <p className="font-display text-xs sm:text-sm text-slate-600">
-              Delegate passes: ₹399 (Internal) / ₹499 (External). Physical College ID card is mandatory at check-in.
+              Festival passes: ₹399 (Internal) / ₹499 (Visitors). Physical College ID card is mandatory at check-in.
             </p>
           </div>
 
@@ -199,7 +199,7 @@ export const LeadershipPage: React.FC = () => {
             to="/register"
             className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-8 shrink-0"
           >
-            <span>REGISTER FOR PASS</span>
+            <span>REGISTER NOW</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>

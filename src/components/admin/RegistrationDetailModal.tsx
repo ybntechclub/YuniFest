@@ -83,7 +83,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
     registration.event_name?.toLowerCase().includes('model') ? 'Model Representation' :
     registration.event_name?.toLowerCase().includes('poster') ? 'Poster Making' :
     registration.event_name?.toLowerCase().includes('sketch') ? 'Live Sketch Competition' :
-    'General Delegate Attendance (No Competition)'
+    'General Visitor / Internal Attendance (No Competition)'
   );
 
   const day2Name = selectedByDay.day_2?.name || (
@@ -92,7 +92,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
     registration.event_name?.toLowerCase().includes('treasure') ? 'Treasure Hunting' :
     registration.event_name?.toLowerCase().includes('reel') ? 'Reel Competition' :
     registration.event_name?.toLowerCase().includes('mimicry') ? 'Mimicry & Stand-up Comedy' :
-    'General Delegate Attendance (No Competition)'
+    'General Visitor / Internal Attendance (No Competition)'
   );
 
   const day3Name = selectedByDay.day_3?.name || (
@@ -143,7 +143,7 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
                 ? 'bg-[#FEF08A] text-slate-950 border-slate-900'
                 : 'bg-[#E0E7FF] text-[#2B59FF] border-blue-300'
             }`}>
-              {registration.participant_type === 'ybn_student' ? "YBN Internal Student" : "Visiting Delegate"}
+              {registration.participant_type === 'ybn_student' ? "YBN Internal Student" : "Visitor (Outside Student)"}
             </span>
             <span className={`text-[9px] sm:text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
               currentStatus === 'confirmed'

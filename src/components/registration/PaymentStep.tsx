@@ -272,7 +272,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
       <div className="p-5 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="font-mono text-[10px] uppercase font-bold text-slate-500 tracking-wider block">
-            {participantType === 'ybn_student' ? "YBN UNIVERSITY STUDENT TIER" : "VISITING DELEGATE TIER"}
+            {participantType === 'ybn_student' ? "YBN UNIVERSITY INTERNAL TIER" : "VISITOR TIER (OUTSIDE STUDENT)"}
           </span>
           <h3 className="font-headline font-bold text-lg text-slate-950 mt-0.5">
             {selectedEvent.name}

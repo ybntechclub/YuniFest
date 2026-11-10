@@ -43,6 +43,6 @@ export const FEST_FAQS: FAQItem[] = [
   {
     category: "general",
     question: "Who can I contact for registration inquiries, pass verification, or campus help?",
-    answer: "You can directly reach our official festival helpline at +91 90312 74903, message us on WhatsApp at 90312 74903, or connect via Instagram @yunifest2026.official. The inquiry desk is active to assist all delegates.",
+    answer: "You can directly reach our official festival helpline at +91 90312 74903, message us on WhatsApp at 90312 74903, or connect via Instagram @yunifest2026.official. The inquiry desk is active to assist all visitors and internal participants.",
   },
 ];

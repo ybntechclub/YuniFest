@@ -37,7 +37,7 @@ export const RegulationsPage: React.FC = () => {
                 ORIGINAL PHYSICAL ID CARD REQUIRED FOR CAMPUS ENTRY
               </h2>
               <p className="font-display text-xs sm:text-sm text-slate-800 max-w-3xl leading-relaxed">
-                Every registered attendee (both YBN University students and external college delegates) must carry and produce their original, physical institutional ID card at Campus Gate 1 &amp; 2. Digital images, phone screenshots, or photocopies alone are not permitted.
+                Every registered attendee (both YBN University internal students and visiting college students) must carry and produce their original, physical institutional ID card at Campus Gate 1 &amp; 2. Digital images, phone screenshots, or photocopies alone are not permitted.
               </p>
             </div>
 
@@ -59,7 +59,7 @@ export const RegulationsPage: React.FC = () => {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="font-mono text-xs font-bold text-[#2B59FF]">
-                  [ OPTION B // INTER-COLLEGE DELEGATES ]
+                  [ OPTION B // VISITORS (OUTSIDE STUDENTS) ]
                 </span>
                 <span className="font-mono text-[10px] px-3 py-1 rounded-full bg-[#E0E7FF] text-[#2B59FF] border border-blue-300 font-bold uppercase">
                   OPEN NATIONWIDE
@@ -159,7 +159,7 @@ export const RegulationsPage: React.FC = () => {
             </div>
             <div className="p-5 rounded-2xl bg-[#F6F7F9] border border-slate-200 space-y-1">
               <strong className="text-slate-950 block font-bold">2. Decorum &amp; Sportsmanship:</strong>
-              <p>Participants must accept the jury's decisions as final. Respect fellow delegates, organizers, and campus infrastructure at all times.</p>
+              <p>Participants must accept the jury's decisions as final. Respect fellow visitors, internal participants, organizers, and campus infrastructure at all times.</p>
             </div>
             <div className="p-5 rounded-2xl bg-[#F6F7F9] border border-slate-200 space-y-1">
               <strong className="text-slate-950 block font-bold">3. Check-In Window:</strong>

@@ -210,7 +210,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
   // Count how many events are chosen
   const selectedCount = [day1EventId, day2EventId, day3EventId].filter(Boolean).length;
 
-  // Validate Step 2 (Delegate Profile)
+  // Validate Step 2 (Participant Profile)
   const validateStep2 = (): boolean => {
     const errs: Record<string, string> = {};
 
@@ -429,11 +429,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-8 border-b-[1.5px] border-slate-900/10 gap-3">
         <div>
           <span className="font-mono text-xs uppercase font-bold tracking-widest text-[#2B59FF]">
-            {currentStep === 2 ? '[ STEP 02 // DELEGATE PROFILE ]' : '[ STEP 03 // 3-DAY EVENT SELECTION ]'}
+            {currentStep === 2 ? '[ STEP 02 // PARTICIPANT PROFILE ]' : '[ STEP 03 // 3-DAY EVENT SELECTION ]'}
           </span>
           <h3 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 mt-1">
             {currentStep === 2 
-              ? (participantType === 'ybn_student' ? "YBN Student Credentials" : "Visiting Delegate Profile")
+              ? (participantType === 'ybn_student' ? "YBN Internal Student Credentials" : "Visitor Profile (Outside Student)")
               : "Select 3-Day Festival Competitions"
             }
           </h3>
@@ -684,7 +684,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               <span>3-DAY FESTIVAL EVENT REGULATION</span>
             </div>
             <p className="font-display text-xs text-slate-800 leading-relaxed">
-              <strong>Single Competition Per Day:</strong> To avoid schedule conflicts across stages, you can select at most <strong>one competition per day</strong> (or general delegate access). Your one-time pass fee covers entry to all three days!
+              <strong>Single Competition Per Day:</strong> To avoid schedule conflicts across stages, you can select at most <strong>one competition per day</strong> (or general visitor / internal access). Your one-time pass fee covers entry to all three days!
             </p>
           </div>
 
@@ -722,7 +722,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                   }`}
                 >
                   <div>
-                    <span className="font-headline font-bold text-xs block">None / General Delegate</span>
+                    <span className="font-headline font-bold text-xs block">None / General Visitor</span>
                     <span className={`text-[10px] font-mono ${day1EventId === '' ? 'text-slate-400' : 'text-slate-500'}`}>
                       No competition • Campus access
                     </span>
@@ -783,7 +783,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 onChange={(e) => handleSelectDay1(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs font-bold text-slate-950 focus:outline-none"
               >
-                <option value="">None / General Delegate Attendance (No Day 1 Competition)</option>
+                <option value="">None / General Visitor Attendance (No Day 1 Competition)</option>
                 {day1Events.map((evt) => (
                   <option key={evt.id} value={evt.id}>
                     {evt.name} — {evt.venue}
@@ -837,7 +837,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 onChange={(e) => handleSelectDay2(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none"
               >
-                <option value="">None / General Delegate Attendance (No Day 2 Competition)</option>
+                <option value="">None / General Visitor Attendance (No Day 2 Competition)</option>
                 {day2Events.map((evt) => (
                   <option key={evt.id} value={evt.id}>
                     {evt.name} — {evt.venue}
@@ -891,7 +891,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 onChange={(e) => handleSelectDay3(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none"
               >
-                <option value="">None / General Delegate Attendance (Audience for Runway &amp; EDM Night)</option>
+                <option value="">None / General Visitor Attendance (Audience for Runway &amp; EDM Night)</option>
                 {day3Events.map((evt) => (
                   <option key={evt.id} value={evt.id}>
                     {evt.name} — {evt.venue}
@@ -934,11 +934,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-xs">
               <div className="p-2.5 rounded-lg bg-[#F6F7F9] border border-slate-200">
                 <strong className="text-slate-500 block text-[10px]">DAY 1 (DEC 10)</strong>
-                <span className="font-bold text-slate-950">{selectedDay1Event ? selectedDay1Event.name : 'General Delegate'}</span>
+                <span className="font-bold text-slate-950">{selectedDay1Event ? selectedDay1Event.name : 'General Visitor'}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-[#F6F7F9] border border-slate-200">
                 <strong className="text-slate-500 block text-[10px]">DAY 2 (DEC 11)</strong>
-                <span className="font-bold text-slate-950">{selectedDay2Event ? selectedDay2Event.name : 'General Delegate'}</span>
+                <span className="font-bold text-slate-950">{selectedDay2Event ? selectedDay2Event.name : 'General Visitor'}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-[#F6F7F9] border border-slate-200">
                 <strong className="text-slate-500 block text-[10px]">DAY 3 (DEC 12)</strong>
