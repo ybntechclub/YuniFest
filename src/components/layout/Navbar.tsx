@@ -22,9 +22,9 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'OVERVIEW', path: '/' },
+    { label: 'PRICE', path: '/#pricing' },
     { label: 'SCHEDULE', path: '/schedule' },
     { label: 'REGULATIONS', path: '/regulations' },
-    { label: 'PRICE', path: '/#pricing' },
     { label: 'LEADERSHIP', path: '/leadership' },
     { label: 'MY PASS', path: '/my-pass' },
   ];
