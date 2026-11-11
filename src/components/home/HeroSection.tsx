@@ -240,7 +240,7 @@ export const HeroSection: React.FC = () => {
                   <span className="w-0.5 bg-[#FEF08A] rounded-full animate-pulse h-1.5" />
                   <span className="w-0.5 bg-[#FEF08A] rounded-full animate-bounce h-2.5" />
                 </div>
-                <span>LIVE DANCE BARS</span>
+                <span>MASSIVE DJ NIGHT</span>
               </div>
             </div>
 

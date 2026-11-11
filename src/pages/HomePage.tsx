@@ -15,14 +15,17 @@ export const HomePage: React.FC = () => {
       {/* 1. Minimalist Editorial Hero Section with Top Kinetic Ticker, Split Content + Dance Arena, and Integrated Countdown */}
       <HeroSection />
 
-      {/* 2. Manifesto & Work Showcases (Exact 6-Card Neo-Brutalist Layout) */}
+      {/* 2. Plans and Pricing Section */}
+      <PricingSection />
+
+
+      {/* 3. Manifesto & Work Showcases (Exact 6-Card Neo-Brutalist Layout) */}
+
       <FestOverview />
 
-      {/* 3. Three-Day Itinerary (Schedule) */}
+      {/* 4. Three-Day Itinerary (Schedule) */}
       <DayByDayPreview />
 
-      {/* 4. Plans and Pricing Section */}
-      <PricingSection />
 
       {/* 5. High-Voltage Secret Celebrity DJ Night Teaser */}
       <MysteryDjSection />

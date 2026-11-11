@@ -22,8 +22,6 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'OVERVIEW', path: '/' },
-    { label: 'EVENTS', path: '/#schedule' },
-
     { label: 'SCHEDULE', path: '/schedule' },
     { label: 'REGULATIONS', path: '/regulations' },
     { label: 'PRICE', path: '/#pricing' },
@@ -86,8 +84,8 @@ export const Navbar: React.FC = () => {
               to={link.path}
               onClick={(e) => handleNavClick(e, link.path)}
               className={`font-display text-xs font-bold tracking-wider uppercase transition-colors whitespace-nowrap shrink-0 ${isActive(link.path)
-                  ? 'text-[#2B59FF]'
-                  : 'text-slate-700 hover:text-slate-950'
+                ? 'text-[#2B59FF]'
+                : 'text-slate-700 hover:text-slate-950'
                 }`}
             >
               <RollText text={link.label} highlightColor="text-[#2B59FF]" />
@@ -158,8 +156,8 @@ export const Navbar: React.FC = () => {
                 to={link.path}
                 onClick={(e) => handleNavClick(e, link.path)}
                 className={`py-2 px-3 rounded-xl transition-colors whitespace-nowrap ${isActive(link.path)
-                    ? 'bg-[#2B59FF]/10 text-[#2B59FF]'
-                    : 'text-slate-800 hover:bg-slate-100'
+                  ? 'bg-[#2B59FF]/10 text-[#2B59FF]'
+                  : 'text-slate-800 hover:bg-slate-100'
                   }`}
               >
                 {link.label}
