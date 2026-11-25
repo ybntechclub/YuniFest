@@ -93,8 +93,8 @@ export const Navbar: React.FC = () => {
           ))}
         </nav>
 
-        {/* Right: Solid Black Pill Button with Accent Dot */}
-        <div className="hidden sm:flex items-center gap-2 xl:gap-3 shrink-0">
+        {/* Right: Solid Black Pill Button with Accent Dot (Desktop only) */}
+        <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
           <a
             href="/yunifest-2026-brochure.pdf"
             target="_blank"
@@ -125,13 +125,14 @@ export const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile / Tablet Toggle (< 1024px): Single REGISTER NOW button + Menu */}
         <div className="flex items-center gap-2 lg:hidden">
           <Link
             to="/register"
-            className="bg-slate-950 text-white px-4 py-1.5 rounded-full font-display text-xs font-bold uppercase tracking-wider border border-slate-950"
+            className="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-[#2B59FF] text-white px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all shadow-sm border border-slate-950"
           >
-            REGISTER NOW
+            <span>REGISTER NOW</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FEF08A]" />
           </Link>
 
           <button
