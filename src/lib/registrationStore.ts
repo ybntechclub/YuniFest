@@ -684,6 +684,52 @@ class RegistrationStore {
     return local || null;
   }
 
+  // Lookup registration specifically by Name and/or Email (as requested in Wireframe Sketch 2)
+  async getRegistrationByNameAndEmail(name: string, email: string): Promise<RegistrationRecord | null> {
+    const cleanName = (name || '').trim();
+    const cleanEmail = (email || '').trim();
+    if (!cleanName && !cleanEmail) return null;
+
+    if (isSupabaseConfigured) {
+      try {
+        let query = supabase.from('registrations').select('*');
+        if (cleanEmail && cleanName) {
+          query = query.or(`email.ilike.%${cleanEmail}%,full_name.ilike.%${cleanName}%`);
+        } else if (cleanEmail) {
+          query = query.ilike('email', `%${cleanEmail}%`);
+        } else {
+          query = query.ilike('full_name', `%${cleanName}%`);
+        }
+
+        const { data, error } = await query
+          .order('created_at', { ascending: false })
+          .limit(1);
+
+        if (!error && data && data.length > 0) {
+          const row = data[0];
+          return {
+            ...row,
+            event_name: this.getEventBySlugOrId(row.event_id)?.name || 'YUNIFEST 2026 Pass'
+          } as RegistrationRecord;
+        }
+      } catch (err) {
+        console.warn('Supabase getRegistrationByNameAndEmail error:', err);
+      }
+    }
+
+    // Local store fallback
+    const lowerName = cleanName.toLowerCase();
+    const lowerEmail = cleanEmail.toLowerCase();
+    const local = this.registrations.find(r => {
+      const matchEmail = cleanEmail && r.email?.toLowerCase().includes(lowerEmail);
+      const matchName = cleanName && r.full_name?.toLowerCase().includes(lowerName);
+      if (cleanEmail && cleanName) return matchEmail || matchName;
+      return matchEmail || matchName;
+    });
+
+    return local || null;
+  }
+
   // Export registrations as CSV
   exportRegistrationsToCSV(records: RegistrationRecord[]): string {
     const headers = [

@@ -25,7 +25,6 @@ export const Navbar: React.FC = () => {
     { label: 'SCHEDULE', path: '/schedule' },
     { label: 'REGULATIONS', path: '/regulations' },
     { label: 'LEADERSHIP', path: '/leadership' },
-    { label: 'MY PASS', path: '/my-pass' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
@@ -92,19 +91,38 @@ export const Navbar: React.FC = () => {
           ))}
         </nav>
 
-        {/* Right: Solid Black Pill Button with Accent Dot (Desktop only) */}
+        {/* Right: Solid Action Buttons - MY PASS alongside REGISTER NOW */}
         <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
           <Link
+            to="/my-pass"
+            className={`inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all border-[1.5px] border-slate-900 shadow-xs hover:shadow-solid-pop hover:scale-105 active:scale-95 ${isActive('/my-pass')
+              ? 'bg-[#0A367B] text-white border-[#0A367B]'
+              : 'bg-white hover:bg-slate-50 text-slate-900'
+              }`}
+          >
+            <QrCode className="w-3.5 h-3.5 text-[#0A367B]" />
+            <span>MY PASS</span>
+          </Link>
+
+          <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-slate-950 hover:bg-[#2B59FF] text-white px-6 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-sm group border-[1.5px] border-slate-950"
+            className="inline-flex items-center gap-2 bg-slate-950 hover:bg-[#2B59FF] text-white px-5 sm:px-6 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-sm group border-[1.5px] border-slate-900"
           >
             <RollText text="REGISTER NOW" highlightColor="text-white" />
             <span className="w-2 h-2 rounded-full bg-[#FEF08A] group-hover:scale-125 transition-transform" />
           </Link>
         </div>
 
-        {/* Mobile / Tablet Toggle (< 1024px): Single REGISTER NOW button + Menu */}
+        {/* Mobile / Tablet Toggle (< 1024px): MY PASS + REGISTER NOW + Menu Toggle */}
         <div className="flex items-center gap-2 lg:hidden">
+          <Link
+            to="/my-pass"
+            className="inline-flex items-center gap-1 bg-white text-slate-950 border border-slate-900 px-3 py-2 rounded-full font-display text-xs font-bold uppercase tracking-wider shadow-2xs"
+          >
+            <QrCode className="w-3 h-3 text-[#0A367B]" />
+            <span className="hidden sm:inline">PASS</span>
+          </Link>
+
           <Link
             to="/register"
             className="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-[#2B59FF] text-white px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all shadow-sm border border-slate-950"
@@ -143,6 +161,17 @@ export const Navbar: React.FC = () => {
               </Link>
             ))}
 
+            <Link
+              to="/my-pass"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-slate-100 text-slate-900 font-display font-bold text-xs uppercase"
+            >
+              <div className="flex items-center gap-2">
+                <QrCode className="w-4 h-4 text-[#0A367B]" />
+                <span>MY PASS (DOWNLOAD TOKEN)</span>
+              </div>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
           <div className="pt-4 border-t border-slate-200">

@@ -32,6 +32,8 @@ export default {
         }
       },
       fontFamily: {
+        sourceserif: ['"Source Serif 4"', 'Georgia', 'serif'],
+        roboto: ['"Roboto"', 'sans-serif'],
         headline: ['"Plus Jakarta Sans"', '"Inter"', 'sans-serif'],
         anton: ['"Anton"', 'sans-serif'],
         editorial: ['"Playfair Display"', '"Fraunces"', 'serif'],

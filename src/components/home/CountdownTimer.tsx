@@ -40,10 +40,10 @@ export const CountdownTimer: React.FC = () => {
   }, []);
 
   const timeUnits = [
-    { label: 'DAYS', value: timeLeft.days, color: 'text-slate-950' },
-    { label: 'HOURS', value: timeLeft.hours, color: 'text-[#2B59FF]' },
-    { label: 'MINUTES', value: timeLeft.minutes, color: 'text-slate-950' },
-    { label: 'SECONDS', value: timeLeft.seconds, color: 'text-slate-950' },
+    { label: 'DAYS', value: timeLeft.days, color: 'text-[#0A367B]' },
+    { label: 'HOURS', value: timeLeft.hours, color: 'text-blue-600' },
+    { label: 'MINUTES', value: timeLeft.minutes, color: 'text-[#0A367B]' },
+    { label: 'SECONDS', value: timeLeft.seconds, color: 'text-[#0A367B]' },
   ];
 
   return (
@@ -52,12 +52,12 @@ export const CountdownTimer: React.FC = () => {
         {timeUnits.map((unit) => (
           <div
             key={unit.label}
-            className="bg-white border-[1.5px] border-slate-900 crosshair-corner flex flex-col items-center justify-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl shadow-xs hover:shadow-solid-pop transition-all"
+            className="bg-white border border-slate-200/90 rounded-2xl shadow-xs hover:shadow-md transition-shadow flex flex-col items-center justify-center py-2 sm:py-2.5 px-2 sm:px-4"
           >
-            <div className={`font-headline text-2xl sm:text-3xl md:text-4xl font-black ${unit.color} tracking-tight leading-none`}>
+            <div className={`font-sourceserif text-2xl sm:text-3xl md:text-4xl font-bold ${unit.color} tracking-tight leading-none`}>
               {String(unit.value).padStart(2, '0')}
             </div>
-            <div className="font-mono text-[9px] sm:text-[11px] text-slate-600 font-black uppercase tracking-wider sm:tracking-widest mt-1">
+            <div className="font-roboto text-[9px] sm:text-[11px] text-[#3869A6] font-bold uppercase tracking-wider mt-1">
               {unit.label}
             </div>
           </div>

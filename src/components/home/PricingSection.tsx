@@ -23,7 +23,6 @@ export const PricingSection: React.FC = () => {
         'Free Entry to Grand Fashion Runway',
         'Free Access to Open-Air Mega EDM DJ Night',
         'Official Verified Festival Entry Token',
-        'Physical YBN Student ID Card Required',
       ],
     },
     {
@@ -44,13 +43,12 @@ export const PricingSection: React.FC = () => {
         'Free Entry to Grand Fashion Runway',
         'Free Access to Open-Air Mega EDM DJ Night',
         'Official Verified Festival Entry Token',
-        'Physical College/University ID Card Required',
       ],
     },
   ];
 
   return (
-    <section id="pricing" className="py-20 sm:py-28 bg-[#F6F7F9] relative border-t-[1.5px] border-slate-900/15 scroll-mt-20">
+    <section id="pricing" className="pt-10 sm:pt-12 pb-16 sm:pb-24 bg-[#F6F7F9] relative border-t-[1.5px] border-slate-900/15 scroll-mt-20">
       
       {/* Decorative ambient glows */}
       <div className="absolute top-1/3 left-10 w-96 h-96 bg-[#2B59FF]/5 rounded-full blur-3xl pointer-events-none" />

@@ -244,4 +244,29 @@
   .glossy-shine {
     background: linear-gradient(135deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
   }
+
+  /* Print Styles: strictly print only the festival pass card */
+  @media print {
+    body {
+      background: #FFFFFF !important;
+    }
+    body * {
+      visibility: hidden !important;
+    }
+    #printable-pass, #printable-pass * {
+      visibility: visible !important;
+    }
+    #printable-pass {
+      position: fixed !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 100% !important;
+      max-width: 650px !important;
+      margin: 0 !important;
+      box-shadow: none !important;
+      border: 2px solid #0F172A !important;
+      background: #FFFFFF !important;
+    }
+  }
 }
