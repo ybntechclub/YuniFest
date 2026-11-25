@@ -228,14 +228,6 @@ export const HeroSection: React.FC = () => {
                   One fest, endless vibes.
                 </h3>
               </div>
-
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-1.5 bg-white hover:bg-[#FEF08A] text-slate-950 px-3.5 py-1.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all shadow-md border-[1.5px] border-slate-900 self-start sm:self-auto shrink-0 hover:scale-105"
-              >
-                <span>REGISTER NOW</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </Link>
             </div>
           </motion.div>
 

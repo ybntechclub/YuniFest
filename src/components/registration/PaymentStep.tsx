@@ -56,23 +56,7 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Clean VPA links matching NPCI standard (pure VPA allows phone app to query verified bank beneficiary directly)
-  const upiTapAndGoLink = `upi://pay?pa=${officialUpiId}&cu=INR`;
-  const gpayTapAndGoLink = `tez://upi/pay?pa=${officialUpiId}&cu=INR`;
-  const phonepeTapAndGoLink = `phonepe://pay?pa=${officialUpiId}&cu=INR`;
-  const paytmTapAndGoLink = `paytmmp://pay?pa=${officialUpiId}&cu=INR`;
 
-  const handleLaunchUpi = (url: string) => {
-    // Auto-copy verified UPI ID to clipboard so it is instantly available if app asks for manual input
-    try {
-      navigator.clipboard.writeText(officialUpiId);
-      setCopiedUpi(true);
-      setTimeout(() => setCopiedUpi(false), 3000);
-    } catch {
-      // ignore
-    }
-    window.location.href = url;
-  };
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText(officialUpiId);
@@ -343,89 +327,33 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             </div>
           </div>
 
-          {/* Direct Mobile UPI App & Quick Action Suite */}
+          {/* Scan & Pay Actions: Download to Gallery & View PDF Standee */}
           <div className="mt-4 flex flex-col w-full gap-2.5 pt-2.5 border-t border-white/10">
-            
-            {/* Clean Pure VPA Direct Links: Native <a> tags without conflicting parameters */}
-            <div className="flex flex-col gap-2.5 w-full sm:hidden">
-              
-              {/* Primary Direct Native <a> Link */}
-              <a
-                href={upiTapAndGoLink}
-                onClick={handleCopyUpi}
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#2B59FF] hover:bg-blue-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95"
-              >
-                <Smartphone className="w-4 h-4 text-[#FEF08A]" />
-                <span>TAP TO PAY (DIRECT UPI LINK)</span>
-              </a>
+            {/* Download QR to Photo Gallery (For PhonePe / GPay Gallery Scan) */}
+            <a
+              href="/official-upi-qr.png"
+              download="yunifest-official-upi-qr.png"
+              className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#FEF08A] hover:bg-[#CCFF00] text-slate-950 font-mono text-xs font-bold transition-all shadow-md active:scale-95 border-[1.5px] border-slate-900 group"
+              title="Download official QR Code to scan directly from your phone gallery"
+            >
+              <Download className="w-4 h-4 text-slate-950 group-hover:translate-y-0.5 transition-transform" />
+              <span>DOWNLOAD QR TO GALLERY</span>
+            </a>
 
-              {/* Direct App Native <a> Launchers */}
-              <div className="grid grid-cols-3 gap-1.5 w-full">
-                <a
-                  href={gpayTapAndGoLink}
-                  onClick={handleCopyUpi}
-                  className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                  title="Open Google Pay (Pure VPA Direct Link)"
-                >
-                  <span>GPay</span>
-                </a>
-                <a
-                  href={phonepeTapAndGoLink}
-                  onClick={handleCopyUpi}
-                  className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                  title="Open PhonePe (Pure VPA Direct Link)"
-                >
-                  <span>PhonePe</span>
-                </a>
-                <a
-                  href={paytmTapAndGoLink}
-                  onClick={handleCopyUpi}
-                  className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                  title="Open Paytm (Pure VPA Direct Link)"
-                >
-                  <span>Paytm</span>
-                </a>
-              </div>
+            {/* View Official Bank Standee PDF */}
+            <a
+              href="/federal-bank-upi-qr.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center"
+              title="Open Official Federal Bank Payment Standee PDF"
+            >
+              <FileText className="w-3.5 h-3.5 text-[#FEF08A]" />
+              <span>View Official Bank Standee (PDF) ↗</span>
+            </a>
 
-              {/* Alternate 1-Tap Save QR to Scan from Gallery */}
-              <a
-                href="/official-upi-qr.png"
-                download="yunifest-official-upi-qr.png"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#FEF08A] hover:bg-[#CCFF00] text-slate-950 font-mono text-[11px] font-bold transition-all border border-slate-900 active:scale-95 mt-0.5"
-                title="If phone link blocks, save QR and scan from gallery for 100% instant payment"
-              >
-                <Download className="w-3.5 h-3.5 text-slate-950" />
-                <span>OR SAVE QR &amp; SCAN FROM GALLERY</span>
-              </a>
-
-              {/* Fee Instruction */}
-              <div className="text-center font-mono text-[10px] text-slate-300">
-                <span>Direct VPA: <strong>{officialUpiId}</strong> &bull; Fee: <strong>₹{amount}</strong></span>
-              </div>
-            </div>
-
-            {/* Save QR Image & Standee Links */}
-            <div className="flex items-center justify-between gap-2 pt-1 text-[11px] font-mono text-slate-400">
-              <a
-                href="/official-upi-qr.png"
-                download="yunifest-official-upi-qr.png"
-                className="inline-flex items-center gap-1 hover:text-[#CCFF00] transition-colors py-1"
-                title="Save official QR image to phone gallery for scanning in GPay/PhonePe"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Save QR Image</span>
-              </a>
-
-              <a
-                href="/federal-bank-upi-qr.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:text-[#CCFF00] transition-colors py-1"
-                title="Open Official Federal Bank Payment Standee PDF"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Standee (PDF) ↗</span>
-              </a>
+            <div className="text-center font-mono text-[10px] text-slate-400">
+              <span>Scan directly with <strong>GPay, PhonePe, Paytm, or BHIM</strong></span>
             </div>
           </div>
         </div>
@@ -477,39 +405,42 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 text-xs font-display text-slate-700 space-y-2">
+          <div className="p-4 rounded-2xl bg-[#E0E7FF]/60 border border-blue-300 text-xs font-display text-slate-700 space-y-2.5">
             <h4 className="font-bold text-[#2B59FF] uppercase tracking-wider flex items-center gap-1.5 font-mono text-[11px]">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>How to Complete Payment:</span>
+              <span>How to Pay (Scan &amp; Pay or Gallery):</span>
             </h4>
-            <ol className="list-decimal list-inside space-y-1.5 text-slate-600 leading-relaxed font-sans text-xs">
-              <li>Open <strong>Google Pay, PhonePe, Paytm, or BHIM</strong>.</li>
-              <li>Scan the Federal Bank QR code or pay to: <strong>{officialUpiId}</strong>.</li>
-              <li>Verify beneficiary shows as <strong>{beneficiaryName}</strong>.</li>
-              <li>Pay the exact fee amount of <strong>₹{amount}</strong>.</li>
-              <li>Copy the <strong>12-digit UTR / Transaction ID</strong> and take a screenshot of the receipt.</li>
-            </ol>
-          </div>
+            
+            <div className="space-y-2 text-slate-700 font-sans text-xs">
+              <div className="p-2.5 rounded-xl bg-white border border-blue-200 space-y-1">
+                <strong className="text-slate-900 font-bold block font-mono text-[11px]">
+                  Method 1: Scan Directly (If viewing on PC / Laptop)
+                </strong>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  Open <strong>Google Pay, PhonePe, Paytm, or BHIM</strong> &rarr; scan the Federal Bank QR code on screen &rarr; pay <strong>₹{amount}</strong>.
+                </p>
+              </div>
 
-          {/* Bank Security / Troubleshooting Callout */}
-          <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-300/80 text-[11px] font-sans text-amber-900 space-y-1.5">
-            <div className="flex items-center gap-1.5 font-bold font-mono text-amber-950 text-xs">
-              <HelpCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-              <span>Having Trouble with 'Tap To Pay' on Phone?</span>
-            </div>
-            <p className="text-amber-800 leading-relaxed">
-              If your UPI app displays <em>"Unable to send to this receiver from external link"</em>, this is an automatic bank security restriction on browser links for institutional merchant accounts.
-            </p>
-            <div className="pt-1 flex flex-col sm:flex-row gap-2 font-mono text-[10px] font-bold">
-              <span className="bg-amber-100 text-amber-900 px-2 py-1 rounded border border-amber-300">
-                1. Copy UPI ID: <strong>{officialUpiId}</strong>
-              </span>
-              <span className="bg-amber-100 text-amber-900 px-2 py-1 rounded border border-amber-300">
-                2. Open GPay/PhonePe &rarr; Pay UPI ID
-              </span>
-              <span className="bg-amber-100 text-amber-900 px-2 py-1 rounded border border-amber-300">
-                3. Or Scan QR from Gallery
-              </span>
+              <div className="p-2.5 rounded-xl bg-white border border-blue-200 space-y-1">
+                <strong className="text-slate-900 font-bold block font-mono text-[11px]">
+                  Method 2: Scan from Gallery (If viewing on your Phone)
+                </strong>
+                <ol className="list-decimal list-inside space-y-0.5 text-slate-600 text-[11px] leading-relaxed">
+                  <li>Tap <strong>"DOWNLOAD QR TO GALLERY"</strong> button above.</li>
+                  <li>Open <strong>PhonePe, Google Pay, or Paytm</strong>.</li>
+                  <li>Tap the <strong>Scanner icon</strong> &rarr; tap the <strong>Gallery icon</strong> &rarr; select the downloaded QR.</li>
+                  <li>Enter <strong>₹{amount}</strong> &amp; complete payment.</li>
+                </ol>
+              </div>
+
+              <div className="p-2.5 rounded-xl bg-white border border-blue-200 space-y-1">
+                <strong className="text-slate-900 font-bold block font-mono text-[11px]">
+                  Method 3: Pay to UPI ID
+                </strong>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  Tap <strong>COPY</strong> next to <strong>{officialUpiId}</strong> above &rarr; open your UPI app &rarr; tap <strong>Pay to UPI ID</strong> &rarr; paste &amp; pay <strong>₹{amount}</strong>.
+                </p>
+              </div>
             </div>
           </div>
         </div>
