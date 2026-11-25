@@ -56,11 +56,11 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Tap & Go Direct Links: Pure merchant VPA redirect without amount parameter so users simply enter amount and pay
-  const upiTapAndGoLink = `upi://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
-  const gpayTapAndGoLink = `tez://upi/pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
-  const phonepeTapAndGoLink = `phonepe://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
-  const paytmTapAndGoLink = `paytmmp://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
+  // Clean VPA links matching NPCI standard (pure VPA allows phone app to query verified bank beneficiary directly)
+  const upiTapAndGoLink = `upi://pay?pa=${officialUpiId}&cu=INR`;
+  const gpayTapAndGoLink = `tez://upi/pay?pa=${officialUpiId}&cu=INR`;
+  const phonepeTapAndGoLink = `phonepe://pay?pa=${officialUpiId}&cu=INR`;
+  const paytmTapAndGoLink = `paytmmp://pay?pa=${officialUpiId}&cu=INR`;
 
   const handleLaunchUpi = (url: string) => {
     // Auto-copy verified UPI ID to clipboard so it is instantly available if app asks for manual input
@@ -346,48 +346,62 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
           {/* Direct Mobile UPI App & Quick Action Suite */}
           <div className="mt-4 flex flex-col w-full gap-2.5 pt-2.5 border-t border-white/10">
             
-            {/* Primary Tap & Go - Direct Redirect (No pre-set amount) */}
-            <button
-              type="button"
-              onClick={() => handleLaunchUpi(upiTapAndGoLink)}
-              className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-[#2B59FF] hover:bg-blue-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 sm:hidden"
-            >
-              <Smartphone className="w-4 h-4 text-[#FEF08A]" />
-              <span>TAP &amp; GO — OPEN UPI APP</span>
-            </button>
+            {/* Clean Pure VPA Direct Links: Native <a> tags without conflicting parameters */}
+            <div className="flex flex-col gap-2.5 w-full sm:hidden">
+              
+              {/* Primary Direct Native <a> Link */}
+              <a
+                href={upiTapAndGoLink}
+                onClick={handleCopyUpi}
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#2B59FF] hover:bg-blue-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95"
+              >
+                <Smartphone className="w-4 h-4 text-[#FEF08A]" />
+                <span>TAP TO PAY (DIRECT UPI LINK)</span>
+              </a>
 
-            {/* Direct App Launchers: GPay, PhonePe, Paytm (Tap & Go) */}
-            <div className="grid grid-cols-3 gap-1.5 w-full sm:hidden">
-              <button
-                type="button"
-                onClick={() => handleLaunchUpi(gpayTapAndGoLink)}
-                className="py-2.5 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                title="Open Google Pay (Tap & Go)"
-              >
-                <span>GPay</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleLaunchUpi(phonepeTapAndGoLink)}
-                className="py-2.5 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                title="Open PhonePe (Tap & Go)"
-              >
-                <span>PhonePe</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleLaunchUpi(paytmTapAndGoLink)}
-                className="py-2.5 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                title="Open Paytm (Tap & Go)"
-              >
-                <span>Paytm</span>
-              </button>
-            </div>
+              {/* Direct App Native <a> Launchers */}
+              <div className="grid grid-cols-3 gap-1.5 w-full">
+                <a
+                  href={gpayTapAndGoLink}
+                  onClick={handleCopyUpi}
+                  className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
+                  title="Open Google Pay (Pure VPA Direct Link)"
+                >
+                  <span>GPay</span>
+                </a>
+                <a
+                  href={phonepeTapAndGoLink}
+                  onClick={handleCopyUpi}
+                  className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
+                  title="Open PhonePe (Pure VPA Direct Link)"
+                >
+                  <span>PhonePe</span>
+                </a>
+                <a
+                  href={paytmTapAndGoLink}
+                  onClick={handleCopyUpi}
+                  className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
+                  title="Open Paytm (Pure VPA Direct Link)"
+                >
+                  <span>Paytm</span>
+                </a>
+              </div>
 
-            {/* Clear Tap & Go Instruction */}
-            <div className="p-2 rounded-xl bg-white/10 border border-white/15 text-center font-mono text-[11px] text-white sm:hidden flex items-center justify-center gap-1.5">
-              <span className="text-[#FEF08A] font-bold">⚡ Tap &amp; Go:</span>
-              <span>Open app &rarr; enter <strong>₹{amount}</strong> &amp; pay</span>
+              {/* Alternate 1-Tap Save QR to Scan from Gallery */}
+              <a
+                href="/official-upi-qr.png"
+                download="yunifest-official-upi-qr.png"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#FEF08A] hover:bg-[#CCFF00] text-slate-950 font-mono text-[11px] font-bold transition-all border border-slate-900 active:scale-95 mt-0.5"
+                title="If phone link blocks, save QR and scan from gallery for 100% instant payment"
+              >
+                <Download className="w-3.5 h-3.5 text-slate-950" />
+                <span>OR SAVE QR &amp; SCAN FROM GALLERY</span>
+              </a>
+
+              {/* Fee Instruction */}
+              <div className="text-center font-mono text-[10px] text-slate-300">
+                <span>Direct VPA: <strong>{officialUpiId}</strong> &bull; Fee: <strong>₹{amount}</strong></span>
+              </div>
             </div>
 
             {/* Save QR Image & Standee Links */}

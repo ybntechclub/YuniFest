@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Sparkles, FileText } from 'lucide-react';
-import { RollText } from '../ui/RollText';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { CountdownTimer } from './CountdownTimer';
 
 export const HeroSection: React.FC = () => {
@@ -164,42 +163,6 @@ export const HeroSection: React.FC = () => {
                 <strong className="text-slate-950 font-bold">YUNIFEST 2026</strong> translates university spirit into unforgettable moments. Three relentless days of competitions, innovation galleries, battle royale gaming, and live concerts.
               </motion.p>
             </div>
-
-            {/* Action Buttons CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-4 sm:mt-5 flex flex-wrap items-center gap-3 pt-3 border-t-[1.5px] border-slate-900/10"
-            >
-              <Link
-                to="/register"
-                className="btn-voltage inline-flex items-center gap-2 text-xs py-3 sm:py-3.5 px-6 sm:px-7"
-              >
-                <RollText text="REGISTER NOW" highlightColor="text-white" />
-                <span className="w-2 h-2 rounded-full bg-[#FEF08A]" />
-              </Link>
-
-              <a
-                href="/#pricing"
-                className="btn-outline-luxe inline-flex items-center gap-2 text-xs py-3 sm:py-3.5 px-5 sm:px-6"
-              >
-                <RollText text="VIEW PASS PLANS" highlightColor="text-[#2B59FF]" />
-                <ArrowUpRight className="w-4 h-4 text-slate-900" />
-              </a>
-
-              <a
-                href="/yunifest-2026-brochure.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs py-3 sm:py-3.5 px-4 sm:px-5 rounded-full bg-white hover:bg-[#FEF08A] text-slate-950 border-[1.5px] border-slate-900 font-display font-bold uppercase tracking-wider transition-all shadow-xs hover:-translate-y-0.5 group"
-                title="Open Official Festival Schedule & Brochure (PDF)"
-              >
-                <FileText className="w-4 h-4 text-[#2B59FF]" />
-                <span>SCHEDULE PDF</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-            </motion.div>
           </div>
 
           {/* Right Column: The Dance Bar / Concert Arena Video Visual (5 Cols on desktop) */}
