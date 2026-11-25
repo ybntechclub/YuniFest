@@ -56,19 +56,11 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Strict decimal formatting (e.g. 399.00) required by NPCI standard
-  const formattedAmount = amount.toFixed(2);
-
-  // Option 2: Pre-set exact amount with mode=02 (Secure Intent/QR mode)
-  const upiLinkWithAmount = `upi://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&am=${formattedAmount}&cu=INR&mode=02`;
-
-  // App-specific deep links with strict decimal amount
-  const gpayLink = `tez://upi/pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&am=${formattedAmount}&cu=INR&mode=02`;
-  const phonepeLink = `phonepe://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&am=${formattedAmount}&cu=INR&mode=02`;
-  const paytmLink = `paytmmp://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&am=${formattedAmount}&cu=INR&mode=02`;
-
-  // Fallback direct link without fixed amount (in case PhonePe/bank policy restricts external browser amount locking)
-  const upiDirectLink = `upi://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
+  // Tap & Go Direct Links: Pure merchant VPA redirect without amount parameter so users simply enter amount and pay
+  const upiTapAndGoLink = `upi://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
+  const gpayTapAndGoLink = `tez://upi/pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
+  const phonepeTapAndGoLink = `phonepe://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
+  const paytmTapAndGoLink = `paytmmp://pay?pa=${officialUpiId}&pn=${encodeURIComponent(beneficiaryName)}&cu=INR`;
 
   const handleLaunchUpi = (url: string) => {
     // Auto-copy verified UPI ID to clipboard so it is instantly available if app asks for manual input
@@ -354,54 +346,48 @@ export const PaymentStep: React.FC<PaymentStepProps> = ({
           {/* Direct Mobile UPI App & Quick Action Suite */}
           <div className="mt-4 flex flex-col w-full gap-2.5 pt-2.5 border-t border-white/10">
             
-            {/* Primary Tap To Pay with Strict Decimal Amount (am=399.00 / mode=02) */}
+            {/* Primary Tap & Go - Direct Redirect (No pre-set amount) */}
             <button
               type="button"
-              onClick={() => handleLaunchUpi(upiLinkWithAmount)}
-              className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#2B59FF] hover:bg-blue-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 sm:hidden"
+              onClick={() => handleLaunchUpi(upiTapAndGoLink)}
+              className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-[#2B59FF] hover:bg-blue-600 text-white font-mono text-xs font-bold transition-all shadow-md active:scale-95 sm:hidden"
             >
               <Smartphone className="w-4 h-4 text-[#FEF08A]" />
-              <span>TAP TO PAY IN UPI APP (₹{amount})</span>
+              <span>TAP &amp; GO — OPEN UPI APP</span>
             </button>
 
-            {/* Direct App Launchers: GPay, PhonePe, Paytm with Pre-set Amount */}
+            {/* Direct App Launchers: GPay, PhonePe, Paytm (Tap & Go) */}
             <div className="grid grid-cols-3 gap-1.5 w-full sm:hidden">
               <button
                 type="button"
-                onClick={() => handleLaunchUpi(gpayLink)}
-                className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[10px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                title="Pay ₹399/₹499 directly with Google Pay"
+                onClick={() => handleLaunchUpi(gpayTapAndGoLink)}
+                className="py-2.5 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
+                title="Open Google Pay (Tap & Go)"
               >
-                <span>GPay (₹{amount})</span>
+                <span>GPay</span>
               </button>
               <button
                 type="button"
-                onClick={() => handleLaunchUpi(phonepeLink)}
-                className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[10px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                title="Pay ₹399/₹499 directly with PhonePe"
+                onClick={() => handleLaunchUpi(phonepeTapAndGoLink)}
+                className="py-2.5 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
+                title="Open PhonePe (Tap & Go)"
               >
-                <span>PhonePe (₹{amount})</span>
+                <span>PhonePe</span>
               </button>
               <button
                 type="button"
-                onClick={() => handleLaunchUpi(paytmLink)}
-                className="py-2 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[10px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
-                title="Pay ₹399/₹499 directly with Paytm"
+                onClick={() => handleLaunchUpi(paytmTapAndGoLink)}
+                className="py-2.5 px-1 rounded-lg bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] font-bold border border-white/15 transition-all text-center flex items-center justify-center gap-1 active:scale-95"
+                title="Open Paytm (Tap & Go)"
               >
-                <span>Paytm (₹{amount})</span>
+                <span>Paytm</span>
               </button>
             </div>
 
-            {/* Instant Fallback Link without amount (if a user's bank blocks external fixed amounts) */}
-            <div className="text-center font-mono text-[10px] text-slate-400 sm:hidden">
-              <button
-                type="button"
-                onClick={() => handleLaunchUpi(upiDirectLink)}
-                className="hover:text-[#FEF08A] underline transition-colors"
-                title="Open app without pre-set amount if your bank restricts fixed web links"
-              >
-                Bank blocked amount? Tap here to open app directly &rarr;
-              </button>
+            {/* Clear Tap & Go Instruction */}
+            <div className="p-2 rounded-xl bg-white/10 border border-white/15 text-center font-mono text-[11px] text-white sm:hidden flex items-center justify-center gap-1.5">
+              <span className="text-[#FEF08A] font-bold">⚡ Tap &amp; Go:</span>
+              <span>Open app &rarr; enter <strong>₹{amount}</strong> &amp; pay</span>
             </div>
 
             {/* Save QR Image & Standee Links */}
