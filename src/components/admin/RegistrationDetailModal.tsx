@@ -100,12 +100,43 @@ export const RegistrationDetailModal: React.FC<RegistrationDetailModalProps> = (
     'Grand Runway & EDM DJ Concert (Audience Entry)'
   );
 
-  const squadMembers = eventData.squadMembers;
-  const isDuo = eventData.gamingFormat === 'duo' || (Array.isArray(squadMembers) && squadMembers.length === 2);
-  const rampWalkTheme = eventData.rampWalkTheme;
-  const iksFormat = eventData.iksFormat;
-  const faceArtCategory = eventData.faceArtCategory;
-  const modelPartnerName = eventData.modelPartnerName;
+  // Check whether participant actually selected the corresponding events across the 3 days
+  const isGaming = Boolean(
+    selectedByDay.day_1?.slug?.toLowerCase().includes('gaming') ||
+    selectedByDay.day_1?.name?.toLowerCase().includes('gaming') ||
+    registration.event_name?.toLowerCase().includes('gaming')
+  );
+
+  const isRampWalk = Boolean(
+    selectedByDay.day_3?.slug?.toLowerCase().includes('ramp') ||
+    selectedByDay.day_3?.name?.toLowerCase().includes('ramp') ||
+    registration.event_name?.toLowerCase().includes('ramp')
+  );
+
+  const isIksOrModel = Boolean(
+    selectedByDay.day_1?.slug?.toLowerCase().includes('model') ||
+    selectedByDay.day_1?.slug?.toLowerCase().includes('iks') ||
+    selectedByDay.day_1?.name?.toLowerCase().includes('model') ||
+    selectedByDay.day_1?.name?.toLowerCase().includes('iks') ||
+    registration.event_name?.toLowerCase().includes('model') ||
+    registration.event_name?.toLowerCase().includes('iks')
+  );
+
+  const isFaceArt = Boolean(
+    selectedByDay.day_1?.slug?.toLowerCase().includes('face') ||
+    selectedByDay.day_1?.slug?.toLowerCase().includes('tattoo') ||
+    selectedByDay.day_1?.name?.toLowerCase().includes('face') ||
+    selectedByDay.day_1?.name?.toLowerCase().includes('tattoo') ||
+    registration.event_name?.toLowerCase().includes('face') ||
+    registration.event_name?.toLowerCase().includes('tattoo')
+  );
+
+  const squadMembers = isGaming ? eventData.squadMembers : null;
+  const isDuo = isGaming && (eventData.gamingFormat === 'duo' || (Array.isArray(squadMembers) && squadMembers.length === 2));
+  const rampWalkTheme = isRampWalk ? eventData.rampWalkTheme : null;
+  const iksFormat = isIksOrModel ? eventData.iksFormat : null;
+  const faceArtCategory = isFaceArt ? eventData.faceArtCategory : null;
+  const modelPartnerName = isFaceArt ? eventData.modelPartnerName : null;
 
   return (
     <div 

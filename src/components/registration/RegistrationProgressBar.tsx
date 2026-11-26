@@ -28,7 +28,7 @@ export const RegistrationProgressBar: React.FC<RegistrationProgressBarProps> = (
       num: 2 as RegistrationStep,
       id: 'profile',
       title: 'PARTICIPANT PROFILE',
-      subtitle: 'Personal & College ID',
+      subtitle: 'Personal & Student Details',
       icon: UserCheck,
     },
     {

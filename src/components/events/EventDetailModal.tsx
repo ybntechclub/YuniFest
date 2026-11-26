@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EventItem } from '../../types/database';
 import { OFFICIAL_COORDINATORS } from '../../data/coordinators';
-import { X, Calendar, Clock, MapPin, Users, ShieldCheck, ArrowRight, CheckCircle2, Phone } from 'lucide-react';
+import { X, Calendar, Clock, MapPin, Users, ArrowRight, CheckCircle2, Phone } from 'lucide-react';
 
 interface EventDetailModalProps {
   event: EventItem | null;
@@ -156,14 +156,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
               </ul>
             </div>
           )}
-
-          {/* Mandatory Physical ID Reminder */}
-          <div className="p-4 rounded-2xl bg-[#FEF08A]/50 border border-slate-900 text-xs font-display flex items-start gap-2.5 text-slate-900">
-            <ShieldCheck className="w-4 h-4 text-slate-950 shrink-0 mt-0.5" />
-            <span>
-              <strong>Mandatory ID Requirement:</strong> Physical original ID card from college/university is mandatory at campus entry and stage roll-call.
-            </span>
-          </div>
 
         </div>
 

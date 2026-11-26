@@ -228,7 +228,7 @@ export const Footer: React.FC = () => {
                 ADMISSION POLICY:
               </span>
               <p className="text-slate-300 text-[11px] leading-relaxed">
-                Festival passes: ₹399 (Internal students) / ₹499 (Visitors). Physical college/university ID card is strictly mandatory for campus entry.
+                Festival passes: ₹399 (Internal students) / ₹499 (Visitors). Present your digital festival QR pass for campus entry.
               </p>
             </div>
 
@@ -326,7 +326,7 @@ export const Footer: React.FC = () => {
           {/* Quick Compliance Links */}
           <div className="flex items-center gap-6 text-[11px] text-white/50">
             <Link to="/regulations" className="hover:text-white transition-colors">
-              MANDATORY ID POLICY
+              CAMPUS REGULATIONS
             </Link>
             <Link to="/admin" className="hover:text-[#CCFF00] transition-colors">
               COMMITTEE LOGIN

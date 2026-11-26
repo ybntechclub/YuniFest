@@ -191,7 +191,7 @@ export const LeadershipPage: React.FC = () => {
               Ready to register for your festival pass?
             </h3>
             <p className="font-display text-xs sm:text-sm text-slate-600">
-              Festival passes: ₹399 (Internal) / ₹499 (Visitors). Physical College ID card is mandatory at check-in.
+              Festival passes: ₹399 (Internal) / ₹499 (Visitors). Present your digital festival pass at check-in.
             </p>
           </div>
 

@@ -99,7 +99,7 @@ export const StudentTypeSelector: React.FC<StudentTypeSelectorProps> = ({ select
           </div>
 
           <div className="pt-4 border-t border-slate-900/15 font-mono text-[11px] text-slate-700 flex items-center justify-between">
-            <span>Requires: College ID Card</span>
+            <span>Valid for All Colleges</span>
             <span className="font-black text-slate-950">SELECT →</span>
           </div>
         </button>

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { RegistrationRecord } from '../../types/database';
-import { Printer, ShieldCheck, Calendar, MapPin, ArrowRight, UserCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Printer, Calendar, MapPin, ArrowRight, UserCheck, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface PassCardProps {
@@ -25,10 +25,41 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
   });
 
   const selectedEventsByDay = registration.event_specific_data?.selectedEventsByDay;
-  const squadMembers = registration.event_specific_data?.squadMembers;
-  const rampWalkTheme = registration.event_specific_data?.rampWalkTheme;
-  const iksFormat = registration.event_specific_data?.iksFormat;
-  const faceArtCategory = registration.event_specific_data?.faceArtCategory;
+
+  const isGaming = Boolean(
+    selectedEventsByDay?.day_1?.slug?.toLowerCase().includes('gaming') ||
+    selectedEventsByDay?.day_1?.name?.toLowerCase().includes('gaming') ||
+    registration.event_name?.toLowerCase().includes('gaming')
+  );
+
+  const isRampWalk = Boolean(
+    selectedEventsByDay?.day_3?.slug?.toLowerCase().includes('ramp') ||
+    selectedEventsByDay?.day_3?.name?.toLowerCase().includes('ramp') ||
+    registration.event_name?.toLowerCase().includes('ramp')
+  );
+
+  const isIksOrModel = Boolean(
+    selectedEventsByDay?.day_1?.slug?.toLowerCase().includes('model') ||
+    selectedEventsByDay?.day_1?.slug?.toLowerCase().includes('iks') ||
+    selectedEventsByDay?.day_1?.name?.toLowerCase().includes('model') ||
+    selectedEventsByDay?.day_1?.name?.toLowerCase().includes('iks') ||
+    registration.event_name?.toLowerCase().includes('model') ||
+    registration.event_name?.toLowerCase().includes('iks')
+  );
+
+  const isFaceArt = Boolean(
+    selectedEventsByDay?.day_1?.slug?.toLowerCase().includes('face') ||
+    selectedEventsByDay?.day_1?.slug?.toLowerCase().includes('tattoo') ||
+    selectedEventsByDay?.day_1?.name?.toLowerCase().includes('face') ||
+    selectedEventsByDay?.day_1?.name?.toLowerCase().includes('tattoo') ||
+    registration.event_name?.toLowerCase().includes('face') ||
+    registration.event_name?.toLowerCase().includes('tattoo')
+  );
+
+  const squadMembers = isGaming ? registration.event_specific_data?.squadMembers : null;
+  const rampWalkTheme = isRampWalk ? registration.event_specific_data?.rampWalkTheme : null;
+  const iksFormat = isIksOrModel ? registration.event_specific_data?.iksFormat : null;
+  const faceArtCategory = isFaceArt ? registration.event_specific_data?.faceArtCategory : null;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -328,14 +359,6 @@ export const PassCard: React.FC<PassCardProps> = ({ registration }) => {
             <span className="font-bold text-slate-950">{registration.team_name}</span>
           </div>
         )}
-
-        {/* Mandatory Physical ID Warning Footer */}
-        <div className="pt-6 flex items-start gap-3 bg-[#FEF08A]/30 -mx-6 -mb-6 sm:-mx-10 sm:-mb-10 p-6 sm:p-8 border-t-[1.5px] border-slate-900">
-          <ShieldCheck className="w-5 h-5 text-slate-950 shrink-0 mt-0.5" />
-          <p className="font-display text-xs text-slate-800 leading-relaxed">
-            <strong className="text-slate-950 font-bold">MANDATORY CHECK-IN CLAUSE:</strong> Original, physical College / University ID card must be presented alongside this scannable QR badge at Campus Gate 1 &amp; 2 for all three days (Dec 10, 11 &amp; 12, 2026).
-          </p>
-        </div>
 
       </div>
 

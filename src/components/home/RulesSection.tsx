@@ -32,37 +32,6 @@ export const RulesSection: React.FC = () => {
           </Link>
         </div>
 
-        {/* Mandatory ID Clause - Butter Yellow Neo-Brutalist Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55 }}
-          className="mb-10 p-8 sm:p-10 rounded-[32px] bg-[#FEF08A] border-[1.5px] border-slate-900 shadow-solid-pop relative overflow-hidden"
-        >
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-3xl">
-              <span className="font-mono text-xs uppercase tracking-widest text-slate-900 font-bold block">
-                [ STRICT PROCTORIAL MANDATE ]
-              </span>
-              <h3 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 uppercase">
-                ORIGINAL PHYSICAL ID CARD MANDATORY AT ALL CAMPUS GATES
-              </h3>
-              <p className="font-display text-xs sm:text-sm text-slate-800 leading-relaxed">
-                Every registered participant (both YBN University internal students and visiting college students) must produce their physical institutional ID card at Campus Gate 1 &amp; 2. Digital photos, phone gallery screenshots, or unverified photocopies will not be accepted.
-              </p>
-            </div>
-
-            <Link
-              to="/register"
-              className="btn-voltage text-xs py-3.5 px-8 shrink-0 self-start md:self-auto"
-            >
-              <span>REGISTER NOW</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </motion.div>
-
         {/* 2 Clean Streamlined High-Contrast Eligibility Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10">
           
@@ -113,7 +82,7 @@ export const RulesSection: React.FC = () => {
             </div>
 
             <div className="mt-8 pt-4 border-t border-slate-200 flex items-center justify-between text-xs font-mono text-slate-500">
-              <span>Required: College Student ID</span>
+              <span>Open to All College Students</span>
               <Link to="/regulations" className="text-[#2B59FF] font-bold hover:underline flex items-center gap-1">
                 VIEW RULES →
               </Link>

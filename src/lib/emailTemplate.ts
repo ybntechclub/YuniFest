@@ -216,17 +216,17 @@ export function generateRegistrationEmailHtml(params: EmailTemplateParams): stri
             </td>
           </tr>
 
-          <!-- Mandatory Campus Entry Policy -->
+          <!-- Campus Entry Guidelines -->
           <tr>
             <td style="padding: 0 24px 18px 24px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #1c1917; border-left: 4px solid #f59e0b; border-radius: 8px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #1c1917; border-left: 4px solid #2B59FF; border-radius: 8px;">
                 <tr>
                   <td style="padding: 12px 16px;">
-                    <div style="font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: bold; color: #fbbf24; text-transform: uppercase; margin-bottom: 4px;">
-                      MANDATORY CAMPUS ENTRY POLICY
+                    <div style="font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: bold; color: #93c5fd; text-transform: uppercase; margin-bottom: 4px;">
+                      CAMPUS ENTRY GUIDELINES
                     </div>
                     <div style="font-size: 12px; color: #d6d3d1; line-height: 1.5;">
-                      Original physical College/University ID card is strictly mandatory for campus verification at Gates 1 &amp; 2 on all festival days.
+                      Please present your official YUNIFEST digital QR pass on your mobile device or as a printed pass at Campus Gates 1 &amp; 2 on festival days.
                     </div>
                   </td>
                 </tr>

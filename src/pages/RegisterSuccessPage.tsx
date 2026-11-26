@@ -3,7 +3,7 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { RegistrationRecord } from '../types/database';
 import { PassCard } from '../components/registration/PassCard';
-import { CheckCircle2, ArrowRight, Home, Sparkles, ShieldCheck, Clock, AlertCircle, Mail, FileImage, MessageCircle, ExternalLink } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Home, Sparkles, Clock, AlertCircle, Mail, FileImage, MessageCircle, ExternalLink } from 'lucide-react';
 import { isGoogleDriveUrl, getDriveDirectImageUrl, getDrivePreviewUrl, getDriveViewUrl } from '../lib/driveUpload';
 import { DEFAULT_WHATSAPP_CHANNEL_URL } from '../lib/emailTemplate';
 import { sendRegistrationConfirmationEmail } from '../lib/emailService';
@@ -302,33 +302,15 @@ export const RegisterSuccessPage: React.FC = () => {
           </>
         )}
 
-        {/* Instructions Box */}
-        <div className="max-w-2xl mx-auto mt-8 p-6 sm:p-8 rounded-[28px] bg-white border-[1.5px] border-slate-900 text-xs sm:text-sm text-slate-700 space-y-3 shadow-sm">
-          <h3 className="font-headline font-bold text-slate-950 text-sm uppercase tracking-wider flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[#2B59FF]" />
-            <span>Check-in Instructions &amp; Guidelines</span>
-          </h3>
-          <ul className="space-y-2 list-disc list-inside text-slate-600 text-xs leading-relaxed font-display">
-            <li>
-              <strong className="text-slate-950">Original Physical ID:</strong> Carry your physical College / University ID card alongside this QR code pass to Campus Gate 1 &amp; 2.
-            </li>
-            <li>
-              <strong className="text-slate-950">Reporting Time:</strong> Verification desks open from 8:30 AM onwards on December 10, 2026.
-            </li>
-            <li>
-              <strong className="text-slate-950">Multiple Events:</strong> If you plan to participate in another event, submit a separate registration for that competition.
-            </li>
-          </ul>
-
-          <div className="pt-2 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-950 font-bold font-mono transition-colors"
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>Back to Festival Home</span>
-            </Link>
-          </div>
+        {/* Return to Festival Homepage */}
+        <div className="pt-8 text-center">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-950 font-bold font-mono transition-colors"
+          >
+            <Home className="w-3.5 h-3.5" />
+            <span>Back to Festival Home</span>
+          </Link>
         </div>
 
       </div>

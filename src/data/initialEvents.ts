@@ -20,7 +20,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Participants must choose between BGMI or Free Fire upon registration.",
       "Players must carry their own mobile devices with the respective game updated to the latest patch.",
       "Emulators, hacks, or third-party game modifications will lead to immediate disqualification.",
-      "Valid physical College/University ID card is mandatory at physical check-in."
+      "Official YUNIFEST festival pass is required for check-in."
     ],
     student_coordinator: "Rounak Dubey",
     faculty_coordinator: "Neha Lakra Mam",
@@ -194,7 +194,7 @@ export const INITIAL_EVENTS: EventItem[] = [
       "Exclusive to bonafide YBN University students only.",
       "Clues must be solved sequentially across campus checkpoints without interfering with other teams.",
       "Tampering with physical clue markers results in immediate disqualification.",
-      "Physical student ID card verification required before start packet release."
+      "Official festival pass verification required before start packet release."
     ],
     student_coordinator: "Agrani Shrivastava",
     faculty_coordinator: "Dr. Sapna Kasari",
@@ -341,7 +341,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     capacity: null,
     capacity_unit: "participants",
     rules: [
-      "All competition finalists and registered participants must attend with ID cards.",
+      "All competition finalists and registered participants must attend with their official festival pass.",
       "Certificates and trophies conferred by University dignitaries."
     ],
     student_coordinator: "Core Committee",
@@ -363,7 +363,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     capacity: null,
     capacity_unit: "participants",
     rules: [
-      "Strict entry with YUNIFEST 2026 Registration QR Pass and College/University ID.",
+      "Strict entry with YUNIFEST 2026 Registration QR Pass.",
       "University security and disciplinary protocols apply throughout the arena.",
       "No outside beverages or bags permitted inside main stadium enclosure."
     ],

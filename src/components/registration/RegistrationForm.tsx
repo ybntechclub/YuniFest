@@ -244,7 +244,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }
 
     if (!idCardConfirmed) {
-      errs.idCardConfirmed = "You must confirm carrying your physical College/University ID card.";
+      errs.idCardConfirmed = "You must agree to the festival rules and campus code of conduct.";
     }
 
     setErrors(errs);
@@ -393,11 +393,22 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             ? (eventSpecificData.gamingFormat === 'duo' ? 'Duo' : 'Squad')
             : participationCategory,
           eventSpecificData: {
-            ...eventSpecificData,
-            gamingFormat: eventSpecificData.gamingFormat || 'squad',
+            gamingFormat: selectedDay1Event?.slug === 'gaming-tournament' ? (eventSpecificData.gamingFormat || 'squad') : undefined,
             squadMembers: selectedDay1Event?.slug === 'gaming-tournament'
               ? (eventSpecificData.squadMembers || []).slice(0, eventSpecificData.gamingFormat === 'duo' ? 2 : 4)
-              : eventSpecificData.squadMembers,
+              : undefined,
+            rampWalkTheme: (selectedDay3Event?.slug?.toLowerCase().includes('ramp') || selectedDay3Event?.name?.toLowerCase().includes('ramp'))
+              ? (eventSpecificData.rampWalkTheme || 'Waste to Wow (Eco / Upcycled Couture)')
+              : undefined,
+            iksFormat: (selectedDay1Event?.slug?.toLowerCase().includes('model') || selectedDay1Event?.name?.toLowerCase().includes('model') || selectedDay1Event?.slug?.toLowerCase().includes('iks'))
+              ? (eventSpecificData.iksFormat || 'Working / Static 3D Model')
+              : undefined,
+            faceArtCategory: (selectedDay1Event?.slug?.toLowerCase().includes('face') || selectedDay1Event?.name?.toLowerCase().includes('face'))
+              ? (eventSpecificData.faceArtCategory || 'Face Painting')
+              : undefined,
+            modelPartnerName: (selectedDay1Event?.slug?.toLowerCase().includes('face') || selectedDay1Event?.name?.toLowerCase().includes('face'))
+              ? eventSpecificData.modelPartnerName
+              : undefined,
             selectedEventsByDay: {
               day_1: selectedDay1Event ? { id: selectedDay1Event.id, name: selectedDay1Event.name, slug: selectedDay1Event.slug } : null,
               day_2: selectedDay2Event ? { id: selectedDay2Event.id, name: selectedDay2Event.name, slug: selectedDay2Event.slug } : null,
@@ -483,7 +494,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
           <div className="space-y-4">
             <div className="font-mono text-xs uppercase font-bold tracking-wider text-slate-900 flex items-center justify-between">
               <span>1. PARTICIPANT IDENTITY CREDENTIALS</span>
-              <span className="text-[11px] text-slate-500 font-normal">Physical ID Required at Campus Gates</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -640,9 +650,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
             </div>
           </div>
 
-          {/* Mandatory Physical ID Card Check */}
+          {/* Festival Guidelines Acceptance Check */}
           <div className="pt-6 border-t-[1.5px] border-slate-900/10">
-            <label className="flex items-start gap-3 p-4 rounded-2xl bg-[#FEF08A]/30 border-[1.5px] border-slate-900 cursor-pointer hover:bg-[#FEF08A]/40 transition-colors">
+            <label className="flex items-start gap-3 p-4 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 cursor-pointer hover:bg-slate-100 transition-colors">
               <input
                 type="checkbox"
                 checked={idCardConfirmed}
@@ -650,7 +660,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 className="w-5 h-5 mt-0.5 rounded border-slate-900 text-[#2B59FF] focus:ring-[#2B59FF] cursor-pointer"
               />
               <span className="font-display text-xs text-slate-900 leading-relaxed font-bold">
-                I solemnly confirm that I will carry my original, physical College/University ID card to YUNIFEST 2026. Entry will be denied at campus gates without physical verification. <span className="text-red-500">*</span>
+                I agree to abide by the official festival rules, campus guidelines, and code of conduct for YUNIFEST 2026. <span className="text-red-500">*</span>
               </span>
             </label>
             {errors.idCardConfirmed && (

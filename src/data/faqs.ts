@@ -17,8 +17,8 @@ export const FEST_FAQS: FAQItem[] = [
   },
   {
     category: "eligibility",
-    question: "Is carrying a physical College ID card mandatory?",
-    answer: "Yes, without exception. Every registered participant (both YBN University students and visiting college participants) must carry a valid physical institutional ID card at physical security and registration verification desks.",
+    question: "What documents do I need to present for entry?",
+    answer: "Every registered participant should present their official YUNIFEST 2026 digital QR pass (or a printed copy) for quick scanning and gate verification at campus entry.",
   },
   {
     category: "registration",

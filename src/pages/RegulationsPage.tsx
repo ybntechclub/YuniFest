@@ -13,7 +13,7 @@ export const RegulationsPage: React.FC = () => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-4 shadow-sm">
             <span>[ PROTOCOLS &amp; ELIGIBILITY ]</span>
             <span className="text-slate-500">•</span>
-            <span className="text-[#2B59FF] font-bold">Mandatory ID Policy</span>
+            <span className="text-[#2B59FF] font-bold">Campus Guidelines</span>
           </div>
           <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight">
             CAMPUS REGULATIONS{' '}
@@ -24,31 +24,6 @@ export const RegulationsPage: React.FC = () => {
           <p className="font-display text-slate-600 text-sm sm:text-base mt-4 leading-relaxed max-w-2xl">
             Established by the Proctorial Board and Fest Steering Committee of <strong className="text-slate-900 font-editorial italic text-lg">YBN University, Ranchi</strong>. All participants must abide by institutional code of conduct.
           </p>
-        </div>
-
-        {/* Mandatory Physical ID Card Warning - Butter Yellow Banner */}
-        <div className="mb-14 p-8 sm:p-10 rounded-[32px] bg-[#FEF08A] border-[1.5px] border-slate-900 shadow-solid-pop">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <span className="font-mono text-xs uppercase tracking-widest text-slate-900 font-bold block">
-                [ STRICT MANDATORY ADMISSION CLAUSE ]
-              </span>
-              <h2 className="font-headline font-black text-2xl sm:text-3xl text-slate-950 uppercase">
-                ORIGINAL PHYSICAL ID CARD REQUIRED FOR CAMPUS ENTRY
-              </h2>
-              <p className="font-display text-xs sm:text-sm text-slate-800 max-w-3xl leading-relaxed">
-                Every registered attendee (both YBN University internal students and visiting college students) must carry and produce their original, physical institutional ID card at Campus Gate 1 &amp; 2. Digital images, phone screenshots, or photocopies alone are not permitted.
-              </p>
-            </div>
-
-            <Link
-              to="/register"
-              className="btn-voltage inline-flex items-center gap-2 text-xs py-3.5 px-8 shrink-0 self-start md:self-auto"
-            >
-              <span>REGISTER FOR PASS</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
 
         {/* 2-Column High Contrast Comparison */}
@@ -96,7 +71,7 @@ export const RegulationsPage: React.FC = () => {
 
             <div className="mt-8 pt-4 border-t border-slate-200 text-xs font-mono text-slate-500 flex items-center justify-between">
               <span>Pass Fee: ₹499 (External) / ₹399 (YBN)</span>
-              <span className="font-bold text-slate-950">PHYSICAL COLLEGE ID REQUIRED</span>
+              <span className="font-bold text-slate-950">OFFICIAL 3-DAY FESTIVAL ACCESS</span>
             </div>
           </div>
 
