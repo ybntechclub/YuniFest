@@ -46,7 +46,7 @@ export const StudentTypeSelector: React.FC<StudentTypeSelectorProps> = ({ select
             </div>
 
             <div className="font-mono text-[11px] font-bold uppercase tracking-widest text-[#2B59FF]">
-              [ OPTION A // INTERNAL ]
+              [ INTERNAL ]
             </div>
             
             <h3 className="font-headline font-black text-2xl text-slate-950 mt-1 mb-2">
@@ -86,7 +86,7 @@ export const StudentTypeSelector: React.FC<StudentTypeSelectorProps> = ({ select
             </div>
 
             <div className="font-mono text-[11px] font-bold uppercase tracking-widest text-[#2B59FF]">
-              [ OPTION B // VISITOR (OUTSIDE COLLEGE) ]
+              [ VISITOR (OUTSIDE COLLEGE) ]
             </div>
             
             <h3 className="font-headline font-black text-2xl text-slate-950 mt-1 mb-2">
