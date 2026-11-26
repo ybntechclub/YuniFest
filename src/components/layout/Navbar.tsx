@@ -95,13 +95,19 @@ export const Navbar: React.FC = () => {
         <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
           <Link
             to="/my-pass"
-            className={`inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all border-[1.5px] border-slate-900 shadow-xs hover:shadow-solid-pop hover:scale-105 active:scale-95 ${isActive('/my-pass')
-              ? 'bg-[#0A367B] text-white border-[#0A367B]'
-              : 'bg-white hover:bg-slate-50 text-slate-900'
-              }`}
+            className={`inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full font-display text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95 shadow-sm group border-[1.5px] border-slate-900 ${
+              isActive('/my-pass')
+                ? 'bg-[#2B59FF] text-white shadow-solid-pop'
+                : 'bg-white hover:bg-[#2B59FF] text-slate-950 hover:text-white'
+            }`}
           >
-            <QrCode className="w-3.5 h-3.5 text-[#0A367B]" />
-            <span>MY PASS</span>
+            <QrCode className={`w-3.5 h-3.5 transition-colors ${
+              isActive('/my-pass') ? 'text-white' : 'text-[#0A367B] group-hover:text-white'
+            }`} />
+            <RollText text="MY PASS" highlightColor="text-white" />
+            <span className={`w-2 h-2 rounded-full transition-all group-hover:scale-125 ${
+              isActive('/my-pass') ? 'bg-[#FEF08A]' : 'bg-[#2B59FF] group-hover:bg-[#FEF08A]'
+            }`} />
           </Link>
 
           <Link
@@ -117,10 +123,12 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center gap-2 lg:hidden">
           <Link
             to="/my-pass"
-            className="inline-flex items-center gap-1 bg-white text-slate-950 border border-slate-900 px-3 py-2 rounded-full font-display text-xs font-bold uppercase tracking-wider shadow-2xs"
+            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full font-display text-xs font-bold uppercase tracking-wider shadow-2xs border border-slate-900 transition-colors ${
+              isActive('/my-pass') ? 'bg-[#2B59FF] text-white' : 'bg-white text-slate-950 hover:bg-[#2B59FF] hover:text-white'
+            }`}
           >
-            <QrCode className="w-3 h-3 text-[#0A367B]" />
-            <span className="hidden sm:inline">PASS</span>
+            <QrCode className="w-3.5 h-3.5" />
+            <span>MY PASS</span>
           </Link>
 
           <Link

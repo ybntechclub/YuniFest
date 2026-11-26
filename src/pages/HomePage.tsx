@@ -2,7 +2,6 @@ import React from 'react';
 import { HeroSection } from '../components/home/HeroSection';
 import { FestOverview } from '../components/home/FestOverview';
 import { DayByDayPreview } from '../components/home/DayByDayPreview';
-import { PricingSection } from '../components/home/PricingSection';
 import { MysteryDjSection } from '../components/home/MysteryDjSection';
 import { CoordinatorsSection } from '../components/home/CoordinatorsSection';
 import { RulesSection } from '../components/home/RulesSection';
@@ -15,12 +14,7 @@ export const HomePage: React.FC = () => {
       {/* 1. Minimalist Editorial Hero Section with Top Kinetic Ticker, Split Content + Dance Arena, and Integrated Countdown */}
       <HeroSection />
 
-      {/* 2. Plans and Pricing Section */}
-      <PricingSection />
-
-
-      {/* 3. Manifesto & Work Showcases (Exact 6-Card Neo-Brutalist Layout) */}
-
+      {/* 2. Manifesto & Work Showcases (Exact 6-Card Neo-Brutalist Layout) */}
       <FestOverview />
 
       {/* 4. Three-Day Itinerary (Schedule) */}

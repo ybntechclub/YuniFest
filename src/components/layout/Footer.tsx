@@ -55,7 +55,7 @@ export const Footer: React.FC = () => {
                   />
                 </defs>
                 <text
-                  style={{ fontFamily: '"Anton", "Syne", sans-serif' }}
+                  style={{ fontFamily: '"Source Serif 4", Georgia, serif' }}
                   className="font-black text-[70px] sm:text-[76px] tracking-[0.05em] uppercase"
                 >
                   <textPath href="#circlePath" startOffset="0%">

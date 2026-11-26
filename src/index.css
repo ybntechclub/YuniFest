@@ -31,9 +31,20 @@
   body {
     background-color: #F6F7F9;
     color: #0F172A;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
     overflow-x: hidden;
     position: relative;
+  }
+
+  /* Global Typography System: Source Serif 4 (Headers), Roboto Bold (Subheadings), Roboto Regular (Body) */
+  h1, h2, h3, h4, h5, h6,
+  .font-headline {
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+
+  p, li, input, textarea, select {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   /* Custom clean minimalist scrollbar */
@@ -103,7 +114,7 @@
     justify-content: center;
     gap: 0.65rem;
     padding: 0.8rem 1.75rem;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -132,7 +143,7 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.8rem 1.75rem;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -243,6 +254,21 @@
 
   .glossy-shine {
     background: linear-gradient(135deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+  }
+
+  /* 3D Flip Card Utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
   }
 
   /* Print Styles: strictly print only the festival pass card */

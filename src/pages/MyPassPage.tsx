@@ -5,7 +5,7 @@ import { registrationStore } from '../lib/registrationStore';
 import { RegistrationRecord } from '../types/database';
 import { 
   AlertCircle, Loader2, ArrowRight, Mail, FileCheck2, RefreshCw,
-  Download, User, CheckCircle2, Ticket, HelpCircle, ShieldCheck, Printer
+  Download, User, CheckCircle2, Ticket, HelpCircle, ShieldCheck, Printer, Clock
 } from 'lucide-react';
 
 export const MyPassPage: React.FC = () => {
@@ -77,7 +77,22 @@ export const MyPassPage: React.FC = () => {
     }
   }, [initialRef]);
 
-  // Sample placeholder record for realistic visual preview before search
+  // Check from backend whether payment is confirmed and verified
+  const isVerified = Boolean(
+    passRecord && 
+    (passRecord.registration_status === 'confirmed' || !!passRecord.payment_verified_at) &&
+    !passRecord.registration_code.startsWith('PENDING-')
+  );
+
+  const isPending = Boolean(
+    passRecord && !isVerified
+  );
+
+  const isNotFound = Boolean(
+    searched && !isSearching && !passRecord
+  );
+
+  // Placeholder record for realistic visual preview before search
   const displayRecord: RegistrationRecord = passRecord || {
     id: 'sample-preview',
     registration_code: 'YUNI-2026-VIP',
@@ -94,7 +109,7 @@ export const MyPassPage: React.FC = () => {
     event_name: '3-Day All-Access Pass',
     consent: true,
     amount_inr: 399,
-    registration_status: 'confirmed',
+    registration_status: 'pending',
     transaction_id: 'UPI-SAMPLE-8910',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -105,7 +120,7 @@ export const MyPassPage: React.FC = () => {
     name: displayRecord.full_name,
     email: displayRecord.email,
     enroll: displayRecord.student_id_number,
-    status: displayRecord.registration_status,
+    status: isVerified ? 'confirmed' : 'pending',
     fest: 'YUNIFEST 2026',
   });
 
@@ -224,12 +239,12 @@ export const MyPassPage: React.FC = () => {
       ctx.textBaseline = 'alphabetic';
       ctx.fillText('YUNIFEST', cardX + 132, cardY + 80);
 
-      // Subtitle: YBN UNIVERSITY • RANCHI (Subheading: Roboto Bold)
+      // Subtitle: YBN UNIVERSITY • RANCHI (Sub-heading: Roboto Bold)
       ctx.fillStyle = '#64748B';
       ctx.font = "700 13px 'Roboto', sans-serif";
       ctx.fillText('YBN UNIVERSITY  •  RANCHI', cardX + 132, cardY + 104);
 
-      // VIP Pass Pill Badge (Top Right - Subheading: Roboto Bold)
+      // VIP Pass Pill Badge (Top Right: Roboto Bold)
       const badgeW = 200;
       const badgeH = 44;
       const badgeX = cardX + cardWidth - badgeW - 52;
@@ -251,7 +266,7 @@ export const MyPassPage: React.FC = () => {
       // 4. Attendee Details (Left Column)
       ctx.textAlign = 'left';
 
-      // NAME : (Subheading: Roboto Bold)
+      // NAME : (Sub-heading: Roboto Bold)
       ctx.fillStyle = '#64748B';
       ctx.font = "700 14px 'Roboto', sans-serif";
       ctx.fillText('NAME :', cardX + 52, cardY + 175);
@@ -262,7 +277,7 @@ export const MyPassPage: React.FC = () => {
       const attendeeName = displayRecord.full_name || 'Attendee Name';
       ctx.fillText(attendeeName, cardX + 52, cardY + 220);
 
-      // EMAIL : (Subheading: Roboto Bold)
+      // EMAIL : (Sub-heading: Roboto Bold)
       ctx.fillStyle = '#64748B';
       ctx.font = "700 14px 'Roboto', sans-serif";
       ctx.fillText('EMAIL :', cardX + 52, cardY + 275);
@@ -272,51 +287,108 @@ export const MyPassPage: React.FC = () => {
       ctx.font = "400 19px 'Roboto', sans-serif";
       ctx.fillText(displayRecord.email || 'attendee@example.com', cardX + 52, cardY + 310);
 
-      // ENROLL ID : (Subheading: Roboto Bold)
+      // ENROLL ID : (Sub-heading: Roboto Bold)
       ctx.fillStyle = '#64748B';
       ctx.font = "700 14px 'Roboto', sans-serif";
       ctx.fillText('ENROLL ID :', cardX + 52, cardY + 365);
 
-      // Enroll ID text (Subheading: Roboto Bold)
+      // Enroll ID text (Body: Roboto Regular)
       ctx.fillStyle = '#0284C7';
-      ctx.font = "700 19px 'Roboto', sans-serif";
+      ctx.font = "400 19px 'Roboto', sans-serif";
       ctx.fillText(displayRecord.student_id_number || 'YBN/2026/ENROLL-01', cardX + 52, cardY + 400);
 
-      // Verified Badge Pill (Subheading: Roboto Bold)
-      const pillW = 340;
-      const pillH = 48;
-      const pillX = cardX + 52;
-      const pillY = cardY + 445;
-      ctx.save();
-      drawRoundRect(ctx, pillX, pillY, pillW, pillH, 14);
-      ctx.fillStyle = '#ECFDF5';
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#10B981';
-      ctx.stroke();
+      // Verified vs Pending Status Badge Pill (No Price)
+      if (!searched) {
+        // Pass Preview Badge Pill at start
+        const pillW = 165;
+        const pillH = 46;
+        const pillX = cardX + 52;
+        const pillY = cardY + 445;
+        ctx.save();
+        drawRoundRect(ctx, pillX, pillY, pillW, pillH, 14);
+        ctx.fillStyle = '#F1F5F9';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#94A3B8';
+        ctx.stroke();
 
-      // Green Checkmark icon in badge
-      const checkCx = pillX + 26;
-      const checkCy = pillY + 24;
-      ctx.beginPath();
-      ctx.arc(checkCx, checkCy, 10, 0, Math.PI * 2);
-      ctx.strokeStyle = '#10B981';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        ctx.fillStyle = '#334155';
+        ctx.font = "700 14px 'Roboto', sans-serif";
+        ctx.fillText('PASS PREVIEW', pillX + 28, pillY + 29);
+        ctx.restore();
+      } else if (isVerified) {
+        // Verified Badge Pill (Green)
+        const pillW = 165;
+        const pillH = 46;
+        const pillX = cardX + 52;
+        const pillY = cardY + 445;
+        ctx.save();
+        drawRoundRect(ctx, pillX, pillY, pillW, pillH, 14);
+        ctx.fillStyle = '#ECFDF5';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#10B981';
+        ctx.stroke();
 
-      ctx.beginPath();
-      ctx.moveTo(checkCx - 4.5, checkCy - 0.5);
-      ctx.lineTo(checkCx - 1, checkCy + 3.5);
-      ctx.lineTo(checkCx + 5, checkCy - 3.5);
-      ctx.strokeStyle = '#10B981';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+        // Green Checkmark icon in badge
+        const checkCx = pillX + 24;
+        const checkCy = pillY + 23;
+        ctx.beginPath();
+        ctx.arc(checkCx, checkCy, 10, 0, Math.PI * 2);
+        ctx.strokeStyle = '#10B981';
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-      // Text: PAID: ₹399 • VERIFIED (Subheading: Roboto Bold)
-      ctx.fillStyle = '#065F46';
-      ctx.font = "700 15px 'Roboto', sans-serif";
-      ctx.fillText(`PAID: ₹${displayRecord.amount_inr} • VERIFIED`, pillX + 48, pillY + 30);
-      ctx.restore();
+        ctx.beginPath();
+        ctx.moveTo(checkCx - 4.5, checkCy - 0.5);
+        ctx.lineTo(checkCx - 1, checkCy + 3.5);
+        ctx.lineTo(checkCx + 5, checkCy - 3.5);
+        ctx.strokeStyle = '#10B981';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Text: VERIFIED
+        ctx.fillStyle = '#065F46';
+        ctx.font = "700 15px 'Roboto', sans-serif";
+        ctx.fillText('VERIFIED', pillX + 44, pillY + 29);
+        ctx.restore();
+      } else {
+        // Pending Badge Pill (Amber)
+        const pillW = 265;
+        const pillH = 46;
+        const pillX = cardX + 52;
+        const pillY = cardY + 445;
+        ctx.save();
+        drawRoundRect(ctx, pillX, pillY, pillW, pillH, 14);
+        ctx.fillStyle = '#FFFBEB';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#F59E0B';
+        ctx.stroke();
+
+        // Amber Clock icon in badge
+        const checkCx = pillX + 24;
+        const checkCy = pillY + 23;
+        ctx.beginPath();
+        ctx.arc(checkCx, checkCy, 10, 0, Math.PI * 2);
+        ctx.strokeStyle = '#D97706';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(checkCx, checkCy - 5);
+        ctx.lineTo(checkCx, checkCy);
+        ctx.lineTo(checkCx + 3.5, checkCy);
+        ctx.strokeStyle = '#D97706';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Text: VERIFICATION PENDING
+        ctx.fillStyle = '#92400E';
+        ctx.font = "700 14px 'Roboto', sans-serif";
+        ctx.fillText('VERIFICATION PENDING', pillX + 44, pillY + 29);
+        ctx.restore();
+      }
 
       // 5. QR Code Box (Right Column)
       const qrBoxW = 320;
@@ -341,11 +413,11 @@ export const MyPassPage: React.FC = () => {
         ctx.drawImage(qrCanvas, qrDispX, qrDispY, qrDisplaySize, qrDisplaySize);
       }
 
-      // Label: GATE QR BAR (Subheading: Roboto Bold)
+      // Label: GATE QR BAR
       ctx.fillStyle = '#0F172A';
-      ctx.font = "700 15px 'Roboto', sans-serif";
+      ctx.font = "900 15px 'Roboto', sans-serif";
       ctx.textAlign = 'center';
-      ctx.fillText('GATE QR BAR', qrBoxX + qrBoxW / 2, qrBoxY + 312);
+      ctx.fillText((!searched || isVerified) ? 'GATE QR BAR' : 'GATE QR BAR • PENDING', qrBoxX + qrBoxW / 2, qrBoxY + 312);
       ctx.restore();
 
       // 6. Dashed Perforated Divider Line
@@ -360,17 +432,65 @@ export const MyPassPage: React.FC = () => {
       ctx.restore();
 
       // 7. Footer: Reference Code & Festival Dates
-      // Left: REF (Subheading: Roboto Bold)
-      ctx.fillStyle = '#0A367B';
+      // Left: REF
+      ctx.fillStyle = isVerified ? '#0A367B' : '#D97706';
       ctx.font = "700 17px 'Roboto', sans-serif";
       ctx.textAlign = 'left';
       ctx.fillText(`REF: ${displayRecord.registration_code}`, cardX + 52, cardY + 605);
 
-      // Right: Dates (Body: Roboto Regular)
+      // Right: Dates
       ctx.fillStyle = '#475569';
-      ctx.font = "400 17px 'Roboto', sans-serif";
+      ctx.font = "700 17px 'Roboto', sans-serif";
       ctx.textAlign = 'right';
       ctx.fillText('DEC 10, 11 & 12, 2026', cardX + cardWidth - 52, cardY + 605);
+
+      // 8. Diagonal Watermark Stamp from Left-Bottom to Right-Top (Angled -22deg, ONLY AFTER SEARCH)
+      if (searched && passRecord) {
+        ctx.save();
+        ctx.translate(cardX + cardWidth / 2, cardY + cardHeight / 2 - 10);
+        ctx.rotate((-22 * Math.PI) / 180);
+
+        if (!isVerified) {
+          const stampW = 580;
+          const stampH = 70;
+          const stampX = -stampW / 2;
+          const stampY = -stampH / 2;
+
+          ctx.fillStyle = 'rgba(254, 243, 199, 0.65)';
+          ctx.strokeStyle = 'rgba(217, 119, 6, 0.85)';
+          ctx.lineWidth = 3.5;
+          ctx.setLineDash([12, 8]);
+          drawRoundRect(ctx, stampX, stampY, stampW, stampH, 20);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#B45309';
+          ctx.font = "900 26px 'Roboto', sans-serif";
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('VERIFICATION PENDING', 0, 0);
+        } else {
+          const stampW = 380;
+          const stampH = 70;
+          const stampX = -stampW / 2;
+          const stampY = -stampH / 2;
+
+          ctx.fillStyle = 'rgba(209, 250, 229, 0.55)';
+          ctx.strokeStyle = 'rgba(16, 185, 129, 0.85)';
+          ctx.lineWidth = 3.5;
+          ctx.setLineDash([12, 8]);
+          drawRoundRect(ctx, stampX, stampY, stampW, stampH, 20);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#047857';
+          ctx.font = "900 26px 'Roboto', sans-serif";
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('✓ VERIFIED', 0, 0);
+        }
+        ctx.restore();
+      }
 
       ctx.restore(); // restore clipping
 
@@ -401,17 +521,17 @@ export const MyPassPage: React.FC = () => {
         
         {/* Header Banner */}
         <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-roboto font-bold text-slate-900 uppercase tracking-wider mb-3 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider mb-3 shadow-xs">
             <Ticket className="w-3.5 h-3.5 text-[#0A367B]" />
             <span>Digital Festival Pass Portal</span>
             <span className="text-slate-400">•</span>
             <span className="text-emerald-700 font-bold">Instant Pass Retrieval</span>
           </div>
 
-          <h1 className="font-sourceserif font-bold text-2xl sm:text-3xl md:text-4xl text-slate-950 tracking-tight mb-2 uppercase">
+          <h1 className="font-headline font-black text-2xl sm:text-3xl md:text-4xl text-slate-950 tracking-tight mb-2 uppercase">
             MY FESTIVAL <span className="text-[#0A367B]">PASS</span>
           </h1>
-          <p className="font-roboto font-normal text-slate-600 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
+          <p className="font-display text-slate-600 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
             Enter your registered Name and Email to view and download your official YUNIFEST 2026 entry pass.
           </p>
         </div>
@@ -421,16 +541,16 @@ export const MyPassPage: React.FC = () => {
           
           {/* Left Column (6 cols): Landscape Input Card designed for easy non-technical use */}
           <div className="lg:col-span-6 space-y-3">
-            <div className="bg-white rounded-3xl border-[2px] border-slate-800 p-6 sm:p-8 md:p-9 shadow-solid-pop">
+            <div className="bg-white rounded-3xl border-[2px] border-slate-900 p-6 sm:p-8 md:p-9 shadow-solid-pop">
               
               <div className="mb-6 pb-3 border-b border-slate-200/80">
-                <span className="font-roboto text-[11px] uppercase font-bold tracking-widest text-[#0A367B] block mb-1">
+                <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#0A367B] block mb-1">
                   [ PASS VERIFICATION ]
                 </span>
-                <h3 className="font-sourceserif font-bold text-xl sm:text-2xl text-slate-950 uppercase">
+                <h3 className="font-headline font-black text-xl text-slate-950 uppercase">
                   ENTER PASS DETAILS
                 </h3>
-                <p className="font-roboto font-normal text-xs text-slate-500 mt-1">
+                <p className="font-display text-xs text-slate-500 mt-1">
                   Fill in your registered name or email to view your pass and gate QR code.
                 </p>
               </div>
@@ -444,9 +564,9 @@ export const MyPassPage: React.FC = () => {
               >
                 {/* Full Name Input Field */}
                 <div>
-                  <label className="block font-roboto text-xs uppercase font-bold tracking-wider text-slate-900 mb-1.5 flex items-center justify-between">
+                  <label className="block font-headline text-xs uppercase font-extrabold tracking-wider text-slate-900 mb-1.5 flex items-center justify-between">
                     <span>NAME :</span>
-                    <span className="font-roboto text-[11px] text-slate-400 normal-case font-normal">As registered</span>
+                    <span className="font-mono text-[10px] text-slate-400 normal-case font-normal">As registered</span>
                   </label>
                   <div className="relative">
                     <input
@@ -454,7 +574,7 @@ export const MyPassPage: React.FC = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter registered full name"
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#0A367B] focus:bg-white text-sm text-slate-950 font-roboto font-normal focus:outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#0A367B] focus:bg-white text-sm text-slate-950 font-bold focus:outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                     />
                     <User className="w-5 h-5 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
@@ -462,9 +582,9 @@ export const MyPassPage: React.FC = () => {
 
                 {/* Email Address Input Field */}
                 <div>
-                  <label className="block font-roboto text-xs uppercase font-bold tracking-wider text-slate-900 mb-1.5 flex items-center justify-between">
+                  <label className="block font-headline text-xs uppercase font-extrabold tracking-wider text-slate-900 mb-1.5 flex items-center justify-between">
                     <span>EMAIL :</span>
-                    <span className="font-roboto text-[11px] text-slate-400 normal-case font-normal">Where you received confirmation</span>
+                    <span className="font-mono text-[10px] text-slate-400 normal-case font-normal">Where you received confirmation</span>
                   </label>
                   <div className="relative">
                     <input
@@ -472,7 +592,7 @@ export const MyPassPage: React.FC = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter registered email address"
-                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#0A367B] focus:bg-white text-sm text-slate-950 font-roboto font-normal focus:outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
+                      className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#0A367B] focus:bg-white text-sm text-slate-950 font-bold focus:outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                     />
                     <Mail className="w-5 h-5 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
@@ -529,6 +649,19 @@ export const MyPassPage: React.FC = () => {
                 </div>
               )}
 
+              {/* Status Notice when Pending */}
+              {searched && passRecord && !isVerified && (
+                <div className="mt-4 p-3.5 rounded-2xl bg-amber-50 border-[1.5px] border-amber-300 text-amber-900 text-xs font-mono space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span>PAYMENT STATUS: PENDING VERIFICATION</span>
+                  </div>
+                  <p className="text-[11px] text-amber-800 leading-relaxed font-sans">
+                    Your registration code is <strong className="font-mono font-bold text-amber-950">{passRecord.registration_code}</strong>. Payment verification is currently being processed by the committee. Your pass will update to Verified once approved.
+                  </p>
+                </div>
+              )}
+
               {/* Verified with Database Notes */}
               <div className="mt-5 pt-4 border-t border-slate-200/80 space-y-2 text-xs text-slate-600">
                 <div className="flex items-center gap-2 text-[11px] font-mono text-emerald-700">
@@ -541,169 +674,269 @@ export const MyPassPage: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Error Message when Not Found */}
-            {searched && !isSearching && !passRecord && (
-              <div className="p-5 rounded-2xl bg-white border-[2px] border-red-500 shadow-sm text-center space-y-2">
-                <p className="font-headline font-bold text-xs text-red-600 uppercase">
-                  No Registration Found for "{name || email}"
-                </p>
-                <p className="font-display text-xs text-slate-600">
-                  Please verify spelling or register for your official 3-day festival pass below.
-                </p>
-                <Link
-                  to="/register"
-                  className="btn-voltage inline-flex items-center gap-1.5 text-xs py-2.5 px-4 mt-1"
-                >
-                  <span>REGISTER FOR FESTIVAL PASS</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            )}
           </div>
 
-          {/* Right Column (6 cols): Pass Card Tilted to the RIGHT with a completely STABLE Download Button */}
+          {/* Right Column (6 cols): Pass Card Tilted to the RIGHT with 3D Flip */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center py-4 lg:py-6">
             
-            {/* The Compact Pass Card tilted specifically to the RIGHT (Clockwise +6deg on desktop) */}
-            <div className="relative w-full max-w-[530px] transform lg:rotate-6 xl:rotate-7 lg:hover:rotate-0 transition-transform duration-500 ease-out origin-center">
+            {/* The Compact Pass Card tilted specifically to the RIGHT (Clockwise +6deg on desktop) with 3D perspective */}
+            <div className="relative w-full max-w-[530px] transform lg:rotate-6 xl:rotate-7 lg:hover:rotate-0 transition-transform duration-500 ease-out origin-center perspective-1000">
               
               <div
-                id="printable-pass"
-                className="relative bg-white border-[2.5px] border-slate-900 rounded-[28px] p-5 sm:p-6 shadow-solid-pop-lg overflow-hidden text-slate-950 print:m-0 print:border-black print:text-black print:bg-white print:transform-none"
+                className={`relative w-full transition-transform duration-700 ease-in-out transform-style-3d ${
+                  isNotFound ? 'rotate-y-180' : ''
+                }`}
               >
-                {/* Decorative soft glow */}
-                <div className="absolute top-0 right-0 w-40 h-40 bg-[#FEF08A]/45 rounded-full blur-2xl pointer-events-none" />
+                {/* FRONT FACE: Official Digital Pass Card (Pending or Verified) */}
+                <div
+                  id="printable-pass"
+                  className="relative bg-white border-[2.5px] border-slate-900 rounded-[28px] p-5 sm:p-6 shadow-[6px_6px_0px_#2B59FF] sm:shadow-[8px_8px_0px_#2B59FF] overflow-hidden text-slate-950 backface-hidden print:m-0 print:border-black print:text-black print:bg-white print:transform-none"
+                >
+                  {/* Decorative soft glow */}
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-amber-100/60 rounded-full blur-2xl pointer-events-none" />
 
-                {/* Top Bar: YUNIFEST Branding */}
-                <div className="flex items-center justify-between pb-3.5 border-b-[1.5px] border-slate-900/10">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-white border-[1.5px] border-slate-900 p-0.5 shadow-xs flex items-center justify-center overflow-hidden">
-                      <img src="/ybn-logo.png" alt="YBN Logo" className="w-full h-full object-contain" />
-                    </div>
-                    <div>
-                      <span className="font-headline font-black text-lg text-slate-950 tracking-tight block leading-none">
-                        YUNIFEST
-                      </span>
-                      <span className="font-mono text-[8.5px] text-slate-500 uppercase tracking-widest font-bold">
-                        YBN UNIVERSITY • RANCHI
-                      </span>
-                    </div>
-                  </div>
+                  {/* Diagonal Watermark / Stamp: Left-Bottom to Right-Top (Angled -22deg, ONLY AFTER SEARCH) */}
+                  {searched && passRecord && (
+                    !isVerified ? (
+                      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-20">
+                        <div className="transform -rotate-[22deg] select-none scale-100 sm:scale-110">
+                          <div className="px-5 sm:px-8 py-2 rounded-2xl border-[2.5px] border-dashed border-amber-500/80 bg-amber-400/20 backdrop-blur-[0.5px] shadow-sm flex items-center gap-2.5">
+                            <span className="font-roboto font-black text-sm sm:text-lg md:text-xl text-amber-700 uppercase tracking-[0.22em] drop-shadow-xs whitespace-nowrap">
+                              VERIFICATION PENDING
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-20">
+                        <div className="transform -rotate-[22deg] select-none scale-100 sm:scale-110 opacity-80">
+                          <div className="px-5 sm:px-8 py-2 rounded-2xl border-[2.5px] border-dashed border-emerald-500/70 bg-emerald-400/15 backdrop-blur-[0.5px] shadow-xs flex items-center gap-2">
+                            <span className="font-roboto font-black text-sm sm:text-lg md:text-xl text-emerald-700 uppercase tracking-[0.25em] drop-shadow-xs whitespace-nowrap">
+                              ✓ VERIFIED
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
 
-                  <span className="font-mono text-[9px] font-bold px-3 py-1 rounded-full bg-white text-slate-950 border-[1.5px] border-slate-900 shadow-2xs">
-                    VIP 3-DAY PASS
-                  </span>
-                </div>
-
-                {/* Pass Details & QR Code Grid (Compact Height matching screenshot) */}
-                <div className="py-4 grid grid-cols-12 gap-3 sm:gap-4 items-center">
-                  
-                  {/* Left Side: Name, Email, Enroll */}
-                  <div className="col-span-8 space-y-2">
-                    {/* Attendee Name */}
-                    <div>
-                      <span className="font-mono text-[9px] uppercase tracking-wider text-slate-500 font-bold block mb-0.5">
-                        NAME :
-                      </span>
-                      <p className="font-sourceserif font-bold text-sm sm:text-base text-[#0A367B] truncate">
-                        {displayRecord.full_name}
-                      </p>
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <span className="font-mono text-[9px] uppercase tracking-wider text-slate-500 font-bold block mb-0.5">
-                        EMAIL :
-                      </span>
-                      <p className="font-mono text-[11px] sm:text-xs font-bold text-slate-900 truncate">
-                        {displayRecord.email}
-                      </p>
-                    </div>
-
-                    {/* Enroll / Roll ID */}
-                    <div>
-                      <span className="font-mono text-[9px] uppercase tracking-wider text-slate-500 font-bold block mb-0.5">
-                        ENROLL ID :
-                      </span>
-                      <p className="font-mono text-[11px] sm:text-xs font-bold text-[#0284C7] truncate">
-                        {displayRecord.student_id_number || 'YBN/2026/ENROLL-01'}
-                      </p>
-                    </div>
-
-                    {/* Payment Status Badge */}
-                    <div className="pt-1">
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border-[1.5px] border-emerald-500 text-emerald-950 text-[10px] font-mono font-bold shadow-2xs">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                        <span>PAID: ₹{displayRecord.amount_inr} • VERIFIED</span>
+                  {/* Top Bar: YUNIFEST Branding */}
+                  <div className="flex items-center justify-between pb-3.5 border-b-[1.5px] border-slate-900/10">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-white border-[1.5px] border-slate-900 p-0.5 shadow-xs flex items-center justify-center overflow-hidden">
+                        <img src="/ybn-logo.png" alt="YBN Logo" className="w-full h-full object-contain" />
+                      </div>
+                      <div>
+                        <span className="font-sourceserif font-black text-lg text-slate-950 tracking-tight block leading-none">
+                          YUNIFEST
+                        </span>
+                        <span className="font-roboto font-bold text-[8.5px] text-slate-500 uppercase tracking-widest">
+                          YBN UNIVERSITY • RANCHI
+                        </span>
                       </div>
                     </div>
+
+                    <span className="font-roboto font-bold text-[9px] px-3 py-1 rounded-full bg-white text-slate-950 border-[1.5px] border-slate-900 shadow-2xs">
+                      VIP 3-DAY PASS
+                    </span>
                   </div>
 
-                  {/* Right Side: QR Code Bar Box */}
-                  <div className="col-span-4 flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border-[1.5px] border-slate-900 shadow-xs">
-                    <QRCodeCanvas
-                      id="pass-qr-canvas"
-                      value={qrData}
-                      size={105}
-                      level="H"
-                      includeMargin={false}
-                      className="w-full h-auto max-w-[95px]"
-                    />
-                    <span className="font-mono text-[8px] sm:text-[8.5px] font-black text-slate-900 uppercase tracking-tight mt-1.5">
-                      GATE QR BAR
+                  {/* Pass Details & QR Code Grid (Compact Height matching screenshot) */}
+                  <div className="py-4 grid grid-cols-12 gap-3 sm:gap-4 items-center">
+                    
+                    {/* Left Side: Name, Email, Enroll */}
+                    <div className="col-span-8 space-y-2">
+                      {/* Attendee Name */}
+                      <div>
+                        <span className="font-roboto font-bold text-[9px] uppercase tracking-wider text-slate-500 block mb-0.5">
+                          NAME :
+                        </span>
+                        <p className="font-sourceserif font-bold text-sm sm:text-base text-[#0A367B] truncate">
+                          {displayRecord.full_name}
+                        </p>
+                      </div>
+
+                      {/* Email */}
+                      <div>
+                        <span className="font-roboto font-bold text-[9px] uppercase tracking-wider text-slate-500 block mb-0.5">
+                          EMAIL :
+                        </span>
+                        <p className="font-roboto font-normal text-[11px] sm:text-xs text-slate-900 truncate">
+                          {displayRecord.email}
+                        </p>
+                      </div>
+
+                      {/* Enroll / Roll ID */}
+                      <div>
+                        <span className="font-roboto font-bold text-[9px] uppercase tracking-wider text-slate-500 block mb-0.5">
+                          ENROLL ID :
+                        </span>
+                        <p className="font-roboto font-normal text-[11px] sm:text-xs text-[#0284C7] truncate">
+                          {displayRecord.student_id_number || 'YBN/2026/ENROLL-01'}
+                        </p>
+                      </div>
+
+                      {/* Payment Status Badge: Dynamically checked from Backend (No Price) */}
+                      <div className="pt-1">
+                        {!searched ? (
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 border-[1.5px] border-slate-300 text-slate-700 text-[10px] font-roboto font-bold shadow-2xs">
+                            <Ticket className="w-3.5 h-3.5 text-[#0A367B] shrink-0" />
+                            <span>PASS PREVIEW</span>
+                          </div>
+                        ) : isVerified ? (
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-50 border-[1.5px] border-emerald-500 text-emerald-950 text-[10px] font-roboto font-bold shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <span>VERIFIED</span>
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-50 border-[1.5px] border-amber-400 text-amber-900 text-[10px] font-roboto font-bold shadow-2xs">
+                            <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                            <span>VERIFICATION PENDING</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right Side: QR Code Bar Box */}
+                    <div className="col-span-4 flex flex-col items-center justify-center p-2.5 rounded-2xl bg-white border-[1.5px] border-slate-900 shadow-xs">
+                      <QRCodeCanvas
+                        id="pass-qr-canvas"
+                        value={qrData}
+                        size={105}
+                        level="H"
+                        includeMargin={false}
+                        className="w-full h-auto max-w-[95px]"
+                      />
+                      <span className="font-roboto font-bold text-[8px] sm:text-[8.5px] text-slate-900 uppercase tracking-tight mt-1.5 text-center">
+                        {!searched || isVerified ? 'GATE QR BAR' : 'GATE QR BAR • PENDING'}
+                      </span>
+                    </div>
+
+                  </div>
+
+                  {/* Perforated ticket stub divider */}
+                  <div className="border-b-[1.5px] border-dashed border-slate-300 my-2 print:border-black" />
+
+                  {/* Bottom Bar: Reference Code & Festival Dates */}
+                  <div className="flex items-center justify-between text-[10px] font-roboto text-slate-600 pt-1">
+                    <span className={`font-bold ${isVerified ? 'text-[#0A367B]' : 'text-amber-600'}`}>
+                      REF: {displayRecord.registration_code}
+                    </span>
+                    <span className="font-normal text-slate-600">
+                      DEC 10, 11 &amp; 12, 2026
                     </span>
                   </div>
 
                 </div>
 
-                {/* Perforated ticket stub divider */}
-                <div className="border-b-[1.5px] border-dashed border-slate-300 my-2 print:border-black" />
+                {/* BACK FACE: Red NOT FOUND Card (Revealed on 3D Flip) */}
+                <div
+                  className="absolute inset-0 bg-white border-[2.5px] border-red-600 rounded-[28px] p-5 sm:p-6 shadow-[6px_6px_0px_#EF4444] sm:shadow-[8px_8px_0px_#EF4444] overflow-hidden text-slate-950 flex flex-col justify-between backface-hidden rotate-y-180"
+                >
+                  {/* Decorative soft red glow */}
+                  <div className="absolute top-0 right-0 w-44 h-44 bg-red-100/70 rounded-full blur-2xl pointer-events-none" />
 
-                {/* Bottom Bar: Reference Code & Festival Dates */}
-                <div className="flex items-center justify-between text-[10px] font-mono text-slate-600 pt-1">
-                  <span className="font-bold text-[#0A367B]">
-                    REF: {displayRecord.registration_code}
-                  </span>
-                  <span className="font-medium text-slate-600">
-                    DEC 10, 11 &amp; 12, 2026
-                  </span>
+                  {/* Top Bar: YUNIFEST Branding + Red NOT FOUND Pill */}
+                  <div className="flex items-center justify-between pb-3.5 border-b-[1.5px] border-red-200">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-red-50 border-[1.5px] border-red-500 p-0.5 shadow-xs flex items-center justify-center overflow-hidden">
+                        <img src="/ybn-logo.png" alt="YBN Logo" className="w-full h-full object-contain" />
+                      </div>
+                      <div>
+                        <span className="font-sourceserif font-black text-lg text-slate-950 tracking-tight block leading-none">
+                          YUNIFEST
+                        </span>
+                        <span className="font-roboto font-bold text-[8.5px] text-red-500 uppercase tracking-widest">
+                          YBN UNIVERSITY • RANCHI
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="font-roboto font-bold text-[9px] px-3 py-1 rounded-full bg-red-100 text-red-700 border-[1.5px] border-red-500 shadow-2xs flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse inline-block" />
+                      NOT FOUND
+                    </span>
+                  </div>
+
+                  {/* Center: Red Alert Graphics & Explanatory Text */}
+                  <div className="py-3 sm:py-4 flex flex-col items-center justify-center text-center px-2">
+                    <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl bg-red-50 border-[2px] border-red-500 flex items-center justify-center text-red-600 mb-2 shadow-solid-pop">
+                      <AlertCircle className="w-6 h-6 sm:w-7 sm:h-7" />
+                    </div>
+
+                    <h3 className="font-sourceserif font-black text-base sm:text-xl text-red-600 uppercase tracking-tight leading-tight">
+                      REGISTRATION NOT FOUND
+                    </h3>
+
+                    <p className="font-roboto font-bold text-xs text-slate-800 mt-1">
+                      No pass record for <span className="text-red-600 underline decoration-red-400">"{name || email || 'Attendee'}"</span>
+                    </p>
+
+                    <p className="font-roboto font-normal text-[11px] sm:text-xs text-slate-500 mt-1.5 max-w-sm leading-relaxed">
+                      Please check spelling or register for your official 3-day festival pass to attend YUNIFEST 2026.
+                    </p>
+                  </div>
+
+                  {/* Bottom Bar: Action link & Reference */}
+                  <div className="pt-2.5 border-t-[1.5px] border-dashed border-red-200 flex items-center justify-between text-[10px] font-roboto">
+                    <span className="font-bold text-red-600">
+                      STATUS: NOT FOUND
+                    </span>
+                    <Link
+                      to="/register"
+                      className="inline-flex items-center gap-1 font-bold text-red-700 hover:text-red-900 underline decoration-red-500 hover:scale-105 transition-transform"
+                    >
+                      <span>REGISTER FOR PASS</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
                 </div>
-
               </div>
 
             </div>
 
-            {/* STABLE Download Button: Completely flat, level, horizontal and outside the tilted div */}
+            {/* STABLE Action Button */}
             <div className="w-full max-w-[480px] mt-6 flex flex-col sm:flex-row items-center gap-2.5 transform-none print:hidden">
-              <button
-                type="button"
-                onClick={handleDownloadImage}
-                disabled={isDownloading}
-                className="btn-voltage flex-1 w-full py-3.5 px-5 text-xs justify-center font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-solid-pop hover:scale-[1.02] active:scale-95 transition-all"
-              >
-                {isDownloading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>GENERATING ID CARD IMAGE...</span>
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-4 h-4" />
-                    <span>DOWNLOAD / PRINT PASS</span>
-                  </>
-                )}
-              </button>
+              {isNotFound ? (
+                <Link
+                  to="/register"
+                  className="bg-red-600 hover:bg-red-700 text-white flex-1 w-full py-3.5 px-5 text-xs justify-center font-bold uppercase tracking-wider inline-flex items-center gap-2 rounded-full border-[1.5px] border-slate-900 shadow-solid-pop hover:scale-[1.02] active:scale-95 transition-all text-center"
+                >
+                  <span>REGISTER FOR FESTIVAL PASS</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={handleDownloadImage}
+                    disabled={isDownloading}
+                    className="bg-[#2B59FF] hover:bg-[#1D4ED8] text-white flex-1 w-full py-3.5 px-5 text-xs justify-center font-bold uppercase tracking-wider inline-flex items-center gap-2 rounded-full border-[1.5px] border-slate-900 shadow-solid-pop hover:scale-[1.02] active:scale-95 transition-all"
+                  >
+                    {isDownloading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>GENERATING ID CARD IMAGE...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4" />
+                        <span>DOWNLOAD / PRINT PASS</span>
+                      </>
+                    )}
+                  </button>
 
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="w-full sm:w-auto py-3.5 px-4 rounded-full bg-white hover:bg-slate-100 border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-800 inline-flex items-center justify-center gap-1.5 shadow-xs transition-colors shrink-0"
-                title="Save PDF / Print"
-              >
-                <Printer className="w-3.5 h-3.5" />
-                <span>PDF / PRINT</span>
-              </button>
+                  <button
+                    type="button"
+                    onClick={handlePrint}
+                    className="w-full sm:w-auto py-3.5 px-5 rounded-full bg-white hover:bg-slate-100 border-[1.5px] border-slate-900 text-xs font-mono font-bold text-slate-800 inline-flex items-center justify-center gap-1.5 shadow-xs transition-colors shrink-0"
+                    title="Save PDF / Print"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span>PDF / PRINT</span>
+                  </button>
+                </>
+              )}
             </div>
 
           </div>

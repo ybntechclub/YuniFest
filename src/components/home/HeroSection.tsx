@@ -191,7 +191,7 @@ export const HeroSection: React.FC = () => {
             <div className="relative z-10 my-auto" />
 
             {/* Bottom Bar: "A energy packed DJ Perfomance by ???????" in Deep Blue */}
-            <div className="relative z-10 w-full bg-[#0A367B] px-5 sm:px-7 py-3.5 sm:py-4 border-t-[1.5px] border-slate-900 shadow-md">
+            <div className="relative z-10 w-full  px-5 sm:px-7 py-3.5 sm:py-4 border-t-[1.5px] border-slate-900 shadow-md">
               <p className="font-sourceserif font-bold text-white text-sm sm:text-base md:text-lg tracking-wide">
                 A energy packed DJ Perfomance by ???????
               </p>
