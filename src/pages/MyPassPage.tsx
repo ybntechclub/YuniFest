@@ -895,9 +895,23 @@ export const MyPassPage: React.FC = () => {
 
             </div>
 
-            {/* STABLE Action Button */}
+            {/* Action Buttons: Only show download button AFTER user clicks 'Check Pass' and response arrives */}
             <div className="w-full max-w-[480px] mt-6 flex flex-col sm:flex-row items-center gap-2.5 transform-none print:hidden">
-              {isNotFound ? (
+              {!searched ? (
+                /* Before search: No download button shown until user checks their pass */
+                <div className="w-full py-3 px-4 rounded-2xl bg-white border-[1.5px] border-dashed border-slate-300 text-center shadow-2xs">
+                  <p className="font-roboto font-bold text-xs text-slate-600">
+                    Enter your Name or Email above &amp; click <span className="text-[#0A367B] font-black underline">"Check Pass"</span> to verify &amp; download your entry card.
+                  </p>
+                </div>
+              ) : isSearching ? (
+                /* While waiting for backend response */
+                <div className="w-full py-3.5 px-5 rounded-full bg-slate-100 border-[1.5px] border-slate-300 text-center font-roboto font-bold text-xs text-slate-700 inline-flex items-center justify-center gap-2 shadow-2xs">
+                  <Loader2 className="w-4 h-4 animate-spin text-[#0A367B]" />
+                  <span>VERIFYING PASS WITH DATABASE...</span>
+                </div>
+              ) : isNotFound ? (
+                /* Registration not found */
                 <Link
                   to="/register"
                   className="bg-red-600 hover:bg-red-700 text-white flex-1 w-full py-3.5 px-5 text-xs justify-center font-bold uppercase tracking-wider inline-flex items-center gap-2 rounded-full border-[1.5px] border-slate-900 shadow-solid-pop hover:scale-[1.02] active:scale-95 transition-all text-center"
@@ -905,7 +919,8 @@ export const MyPassPage: React.FC = () => {
                   <span>REGISTER FOR FESTIVAL PASS</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-              ) : (
+              ) : passRecord ? (
+                /* Pass found and verified: Show Download and Print buttons */
                 <>
                   <button
                     type="button"
@@ -936,7 +951,7 @@ export const MyPassPage: React.FC = () => {
                     <span>PDF / PRINT</span>
                   </button>
                 </>
-              )}
+              ) : null}
             </div>
 
           </div>

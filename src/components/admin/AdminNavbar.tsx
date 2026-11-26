@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Shield, LogOut, QrCode, Globe, CheckCircle2, AlertTriangle, Settings } from 'lucide-react';
+import { Shield, LogOut, QrCode, Globe, CheckCircle2, AlertTriangle, Settings, Compass, Folder } from 'lucide-react';
 import { isSupabaseConfigured } from '../../lib/supabase';
 import { GOOGLE_DRIVE_FOLDER_URL } from '../../lib/driveUpload';
-import { Folder } from 'lucide-react';
 
 interface AdminNavbarProps {
   onOpenLiveQR: () => void;
   onLogout: () => void;
-  activeTab: 'registrations' | 'events';
-  setActiveTab: (tab: 'registrations' | 'events') => void;
+  activeTab: 'registrations' | 'treasure-hunting' | 'events';
+  setActiveTab: (tab: 'registrations' | 'treasure-hunting' | 'events') => void;
 }
 
 export const AdminNavbar: React.FC<AdminNavbarProps> = ({
@@ -68,6 +67,19 @@ export const AdminNavbar: React.FC<AdminNavbarProps> = ({
                 }`}
               >
                 Registrations
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('treasure-hunting')}
+                className={`px-4 py-1.5 rounded-full text-xs font-display font-bold transition-all flex items-center gap-1.5 ${
+                  activeTab === 'treasure-hunting'
+                    ? 'bg-slate-950 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-950'
+                }`}
+              >
+                <Compass className="w-3 h-3 text-[#2B59FF]" />
+                <span>Treasure Hunt (6 Teams)</span>
               </button>
 
               <button

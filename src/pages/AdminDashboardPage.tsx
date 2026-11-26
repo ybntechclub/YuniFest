@@ -8,11 +8,12 @@ import { RegistrationTable } from '../components/admin/RegistrationTable';
 import { RegistrationDetailModal } from '../components/admin/RegistrationDetailModal';
 import { EventManagementTab } from '../components/admin/EventManagementTab';
 import { LiveQRCodeModal } from '../components/admin/LiveQRCodeModal';
+import { TreasureHuntTeamsView } from '../components/admin/TreasureHuntTeamsView';
 import { sendRegistrationConfirmationEmail } from '../lib/emailService';
 
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'registrations' | 'events'>('registrations');
+  const [activeTab, setActiveTab] = useState<'registrations' | 'treasure-hunting' | 'events'>('registrations');
   const [registrations, setRegistrations] = useState<RegistrationRecord[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -118,6 +119,17 @@ export const AdminDashboardPage: React.FC = () => {
                   onSelectRegistration={(reg) => setSelectedReg(reg)}
                   onStatusUpdate={handleStatusUpdate}
                   onDeleteRegistration={handleDeleteRegistration}
+                  onRefresh={loadData}
+                />
+              </div>
+            )}
+
+            {activeTab === 'treasure-hunting' && (
+              <div className="animate-fadeIn">
+                <TreasureHuntTeamsView
+                  registrations={registrations}
+                  onSelectRegistration={(reg) => setSelectedReg(reg)}
+                  onStatusUpdate={handleStatusUpdate}
                   onRefresh={loadData}
                 />
               </div>

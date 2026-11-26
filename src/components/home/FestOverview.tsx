@@ -1,25 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Sparkles, Trophy, QrCode, Smartphone, Users, Zap, Compass, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Trophy, QrCode, Smartphone, Users, Zap, Compass, CheckCircle2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RollText } from '../ui/RollText';
+import { registrationStore, TreasureTeamSlot } from '../../lib/registrationStore';
 
 export const FestOverview: React.FC = () => {
+  const [treasureSlots, setTreasureSlots] = useState<TreasureTeamSlot[]>(() =>
+    registrationStore.getTreasureHuntingTeams()
+  );
+  const [isTreasureModalOpen, setIsTreasureModalOpen] = useState(false);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    registrationStore.getRegistrations().then(regs => {
+      setTreasureSlots(registrationStore.getTreasureHuntingTeams(regs));
+    });
+  }, []);
+
+  // Lock body scroll when modal is open so mouse scroll operates on modal
+  useEffect(() => {
+    if (isTreasureModalOpen) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [isTreasureModalOpen]);
+
+  const occupiedTeams = treasureSlots.filter(s => s.teamName !== null).length;
+  const totalTreasureMembers = treasureSlots.reduce((acc, s) => acc + s.memberCount, 0);
   return (
     <section className="py-20 sm:py-28 bg-[#F6F7F9] relative border-t-[1.5px] border-slate-900/15">
       
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
         {/* Section Header: Minimalist Editorial Title */}
-        <div className="max-w-3xl mb-14 sm:mb-18">
+        <div className="max-w-4xl mb-14 sm:mb-18">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-[1.5px] border-slate-900 font-mono text-xs font-bold text-slate-900 mb-4 shadow-sm">
             <span>[ 01 // FESTIVAL SHOWCASES &amp; PILLARS ]</span>
           </div>
 
-          <h2 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight leading-[1.04]">
-            TRANSLATING YOUTH ENERGY INTO MOMENTS{' '}
-            <span className="font-editorial italic font-normal text-[#2B59FF] normal-case tracking-normal block sm:inline text-[1.08em]">
-              People Remember
+          <h2 className="font-headline font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-slate-950 tracking-tight leading-tight">
+            TRANSLATING YOUTH ENERGY <br className="hidden sm:inline" />
+            <span className="whitespace-nowrap inline-block">
+              INTO MOMENTS{' '}
+              <span className="font-editorial italic font-normal text-[#2B59FF] normal-case tracking-normal text-[1.08em]">
+                People Remember
+              </span>
             </span>
           </h2>
 
@@ -146,7 +175,7 @@ export const FestOverview: React.FC = () => {
                 Campus-Wide Clue Expedition
               </h3>
 
-              {/* Floating Graph Metric Card inside Mint Card */}
+              {/* Floating Graph Metric Card inside Mint Card with Live Team Slots */}
               <div className="p-4 rounded-2xl bg-white border-[1.5px] border-slate-900 shadow-sm space-y-2 mb-3">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[11px] text-slate-500 uppercase font-bold">Team Quota</span>
@@ -160,6 +189,36 @@ export const FestOverview: React.FC = () => {
                 <div className="flex items-center gap-1.5 font-mono text-[10px] text-slate-600">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>First-Come Registration Guarantee</span>
+                </div>
+
+                {/* Live 6 Team Slots Visual Progress */}
+                <div className="pt-2 border-t border-slate-200 mt-2 space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-700">
+                    <span>TEAM SLOTS:</span>
+                    <span className="text-emerald-700 font-bold">{occupiedTeams}/6 Claimed • {6 - occupiedTeams} Open</span>
+                  </div>
+                  <div className="grid grid-cols-6 gap-1">
+                    {treasureSlots.map(s => (
+                      <div
+                        key={s.slot}
+                        className={`h-2 rounded-full border border-slate-900 transition-all ${
+                          s.teamName ? (s.isFull ? 'bg-red-500' : 'bg-[#2B59FF]') : 'bg-slate-200'
+                        }`}
+                        title={s.teamName ? `Slot ${s.slot}: Team ${s.teamName} (${s.memberCount}/5)` : `Slot ${s.slot}: Open`}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between pt-1 text-[10px] font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setIsTreasureModalOpen(true)}
+                      className="text-[#2B59FF] font-bold hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>Check Team Slots</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </button>
+                    <span className="text-slate-500">{30 - totalTreasureMembers} spots left</span>
+                  </div>
                 </div>
               </div>
 
@@ -360,6 +419,162 @@ export const FestOverview: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Interactive Treasure Hunt 6 Team Slots Modal with Smooth Direct Mouse Wheel Scrolling */}
+      {isTreasureModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsTreasureModalOpen(false);
+          }}
+          onWheel={(e) => {
+            if (modalScrollRef.current) {
+              modalScrollRef.current.scrollTop += e.deltaY;
+            }
+          }}
+        >
+          <div
+            className="relative bg-white rounded-[32px] border-[2px] border-slate-900 max-w-2xl w-full max-h-[85vh] flex flex-col shadow-solid-pop text-left overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+            onWheel={(e) => {
+              if (modalScrollRef.current) {
+                modalScrollRef.current.scrollTop += e.deltaY;
+              }
+            }}
+          >
+            
+            {/* Modal Header: Sticky at Top */}
+            <div className="flex items-center justify-between p-5 sm:p-6 pb-4 border-b border-slate-200 shrink-0 bg-white">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FEF08A] border border-slate-900 text-[10px] font-mono font-bold text-slate-950">
+                  <Compass className="w-3 h-3 text-[#2B59FF]" />
+                  <span>DAY 2 EXPEDITION • 6 TEAMS CAP</span>
+                </div>
+                <h3 className="font-headline font-black text-xl sm:text-2xl text-slate-950 uppercase">
+                  Treasure Hunt Live Team Slots
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsTreasureModalOpen(false)}
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition-colors shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Scrollable Slots Container: Native, effortless direct mouse-wheel scrolling with min-h-0 and direct onWheel */}
+            <div
+              ref={modalScrollRef}
+              className="overflow-y-auto overscroll-contain min-h-0 p-5 sm:p-6 space-y-4 flex-1 scroll-smooth"
+            >
+              <p className="font-display text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Exactly 6 teams are permitted to compete, with 5 members per team (30 participants total). Students can join any team that currently has open slots, or found a new team in any unclaimed slot.
+              </p>
+
+              {/* 6 Team Slots Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {treasureSlots.map(slot => {
+                  const isOccupied = slot.teamName !== null;
+                  const openCount = Math.max(0, 5 - slot.memberCount);
+
+                  return (
+                    <div
+                      key={slot.slot}
+                      className={`p-4 rounded-2xl border-[1.5px] border-slate-900 flex flex-col justify-between ${
+                        isOccupied ? 'bg-white shadow-sm' : 'bg-slate-50/70 border-dashed'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-full bg-slate-900 text-white">
+                            SLOT {slot.slot}
+                          </span>
+                          <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                            slot.isFull
+                              ? 'bg-red-50 text-red-700 border-red-300'
+                              : isOccupied
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                              : 'bg-slate-100 text-slate-600 border-slate-300'
+                          }`}>
+                            {slot.isFull ? 'FULL (5/5)' : `${openCount} SLOTS LEFT`}
+                          </span>
+                        </div>
+
+                        <div className="font-headline font-bold text-base text-slate-950 mb-1">
+                          {isOccupied ? slot.teamName : `Available Slot #${slot.slot}`}
+                        </div>
+
+                        {/* Visual 5 Member Pips & Left Slot Status (No Student Names) */}
+                        <div className="mt-3 p-2.5 rounded-xl bg-[#F6F7F9] border border-slate-200">
+                          <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-700 mb-1.5">
+                            <span>Team Slots:</span>
+                            <span className={openCount === 0 ? 'text-red-600 font-bold' : 'text-emerald-700 font-bold'}>
+                              {openCount === 0 ? 'Team Full (5/5)' : `${openCount} of 5 spots left`}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-5 gap-1.5">
+                            {[0, 1, 2, 3, 4].map((idx) => (
+                              <div
+                                key={idx}
+                                className={`h-2 rounded-full border border-slate-900 transition-colors ${
+                                  slot.members[idx] ? 'bg-[#2B59FF]' : 'bg-white'
+                                }`}
+                                title={slot.members[idx] ? `Occupied Spot #${idx + 1}` : `Open Spot #${idx + 1}`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-mono">
+                        <span>Roster: {slot.memberCount}/5</span>
+                        {isOccupied ? (
+                          slot.isFull ? (
+                            <span className="font-bold text-red-600">Full</span>
+                          ) : (
+                            <Link
+                              to={`/register?event=treasure-hunting&team=${encodeURIComponent(slot.teamName!)}`}
+                              className="font-bold text-[#2B59FF] hover:underline"
+                              onClick={() => setIsTreasureModalOpen(false)}
+                            >
+                              Join Team →
+                            </Link>
+                          )
+                        ) : (
+                          <Link
+                            to="/register?event=treasure-hunting"
+                            className="font-bold text-emerald-700 hover:underline"
+                            onClick={() => setIsTreasureModalOpen(false)}
+                          >
+                            Claim Slot →
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Modal Footer: Sticky at Bottom */}
+            <div className="p-4 sm:p-6 pt-3.5 border-t border-slate-200 bg-[#FAF9F6] shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="font-mono text-xs text-slate-500">
+                {occupiedTeams} of 6 Teams Claimed • {30 - totalTreasureMembers} Open Spots
+              </span>
+              <Link
+                to="/register?event=treasure-hunting"
+                onClick={() => setIsTreasureModalOpen(false)}
+                className="btn-voltage text-xs py-2.5 px-6 w-full sm:w-auto text-center"
+              >
+                <span>Register for Treasure Hunt</span>
+                <ArrowUpRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      )}
     </section>
   );
 };

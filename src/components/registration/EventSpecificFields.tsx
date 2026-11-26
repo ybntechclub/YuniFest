@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventItem } from '../../types/database';
-import { Gamepad2, Users, Music, Flame, Sparkles, Shirt, Palette, Shield } from 'lucide-react';
+import { Gamepad2, Users, Music, Flame, Sparkles, Shirt, Palette, Shield, Compass, CheckCircle2, AlertCircle } from 'lucide-react';
+import { registrationStore, TreasureTeamSlot } from '../../lib/registrationStore';
 
 interface EventSpecificFieldsProps {
   event: EventItem;
@@ -28,6 +29,18 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
   errors
 }) => {
   const slug = event.slug;
+
+  const [treasureSlots, setTreasureSlots] = useState<TreasureTeamSlot[]>(() =>
+    registrationStore.getTreasureHuntingTeams()
+  );
+
+  useEffect(() => {
+    if (slug === 'treasure-hunting') {
+      registrationStore.getRegistrations().then(regs => {
+        setTreasureSlots(registrationStore.getTreasureHuntingTeams(regs));
+      });
+    }
+  }, [slug]);
 
   // 1. GAMING TOURNAMENT (Free Fire & BGMI) — Duo (2 Players) or Squad (4 Players)
   if (slug === 'gaming-tournament') {
@@ -598,24 +611,119 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
     );
   }
 
-  // 7. TREASURE HUNTING
+  // 7. TREASURE HUNTING (6 Teams Cap • 5 Members Each)
   if (slug === 'treasure-hunting') {
+    const occupiedCount = treasureSlots.filter(s => s.teamName !== null).length;
+    const currentNorm = teamName.trim().toLowerCase();
+    const matchedSlot = treasureSlots.find(s => s.teamName?.toLowerCase() === currentNorm);
+    const isJoiningExisting = Boolean(matchedSlot);
+    const isNewTeamBlocked = !isJoiningExisting && occupiedCount >= 6 && teamName.trim() !== '';
+
     return (
-      <div className="p-6 rounded-2xl bg-[#FEF08A]/60 border-[1.5px] border-slate-900 space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="p-6 rounded-2xl bg-[#FEF08A]/60 border-[1.5px] border-slate-900 space-y-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-slate-950 text-xs font-black uppercase tracking-wider">
-            <Users className="w-4 h-4 text-[#2B59FF]" />
-            <span>Treasure Hunting Expedition Team</span>
+            <Compass className="w-4 h-4 text-[#2B59FF]" />
+            <span>Treasure Hunting — 6 Team Rosters (5 Members Each)</span>
           </div>
-          <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-slate-900 text-slate-950">
-            CAP: 6 TEAMS ONLY (5 MEMBERS EACH)
+          <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-white border border-slate-900 text-slate-950">
+            {occupiedCount} / 6 TEAMS FORMED
           </span>
         </div>
 
-        <div className="p-3 rounded-xl bg-white border border-amber-300 font-mono text-xs text-amber-900">
-          <span className="font-bold">Team Roster Requirement:</span> Exactly 5 members per team from YBN University. Strictly capped at 6 teams.
+        <div className="p-3.5 rounded-xl bg-white border border-amber-300 font-mono text-xs text-amber-900 space-y-1">
+          <div className="font-bold flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-amber-700" />
+            <span>How Team Registration Works:</span>
+          </div>
+          <p className="text-[11px] leading-relaxed text-amber-800">
+            Treasure hunting is strictly limited to 6 teams of 5 members. Each teammate registers with their pass.
+            Click an open team below to join, or click an empty slot to create your new team name!
+          </p>
         </div>
 
+        {/* 6 Team Slots Visual Picker */}
+        <div>
+          <label className="block text-xs font-bold font-mono text-slate-900 mb-2 uppercase">
+            Official 6 Team Slots (Click to Select or Claim):
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            {treasureSlots.map((slot) => {
+              const isOccupied = slot.teamName !== null;
+              const isSelected = isOccupied && teamName.trim().toLowerCase() === slot.teamName?.toLowerCase();
+              const openCount = Math.max(0, 5 - slot.memberCount);
+
+              return (
+                <div
+                  key={slot.slot}
+                  onClick={() => {
+                    if (isOccupied && !slot.isFull) {
+                      setTeamName(slot.teamName!);
+                    } else if (!isOccupied) {
+                      if (!teamName.trim() || isJoiningExisting) {
+                        setTeamName(`Team ${slot.slot}`);
+                      }
+                    }
+                  }}
+                  className={`p-3 rounded-xl border-[1.5px] transition-all cursor-pointer text-left flex flex-col justify-between ${
+                    isSelected
+                      ? 'bg-white border-[#2B59FF] shadow-sm ring-2 ring-[#2B59FF]/30'
+                      : isOccupied
+                      ? slot.isFull
+                        ? 'bg-slate-100 border-slate-300 opacity-60 cursor-not-allowed'
+                        : 'bg-white border-slate-900 hover:border-[#2B59FF]'
+                      : 'bg-[#FEF08A]/30 border-dashed border-slate-900/60 hover:bg-white'
+                  }`}
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-900 text-white">
+                        SLOT {slot.slot}
+                      </span>
+                      <span className={`font-mono text-[9px] font-bold px-1.5 py-0.2 rounded ${
+                        slot.isFull
+                          ? 'bg-red-100 text-red-700'
+                          : isOccupied
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}>
+                        {slot.isFull ? 'FULL (5/5)' : isOccupied ? `${slot.memberCount}/5 (${openCount} spots)` : 'OPEN SLOT'}
+                      </span>
+                    </div>
+
+                    <div className="font-bold text-slate-950 text-xs truncate">
+                      {isOccupied ? slot.teamName : `Empty Slot #${slot.slot}`}
+                    </div>
+
+                    <div className="font-mono text-[10px] text-slate-500 truncate">
+                      {isOccupied ? `${openCount} spots remaining` : '5 spots available'}
+                    </div>
+                  </div>
+
+                  <div className="mt-2 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[10px] font-mono">
+                    {/* Visual 5 Member Dots */}
+                    <div className="flex items-center gap-1">
+                      {[0, 1, 2, 3, 4].map(idx => (
+                        <span
+                          key={idx}
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            slot.members[idx] ? 'bg-[#2B59FF]' : 'bg-slate-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    <span className="font-bold text-[#2B59FF]">
+                      {isSelected ? '✓ SELECTED' : isOccupied ? (slot.isFull ? 'CLOSED' : 'JOIN →') : 'CREATE +'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Team Name Input with Live Dynamic Helper */}
         <div>
           <label className="block text-xs font-bold text-slate-800 mb-1">
             Official Team Name <span className="text-red-500">*</span>
@@ -624,21 +732,52 @@ export const EventSpecificFields: React.FC<EventSpecificFieldsProps> = ({
             type="text"
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
-            placeholder="e.g. The Cryptic Voyagers"
+            placeholder="e.g. The Cryptic Voyagers or click slot above"
             className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-bold focus:outline-none"
           />
-          {errors.teamName && <p className="text-xs text-red-600 mt-1">{errors.teamName}</p>}
+
+          {/* Dynamic Helper Guidance */}
+          {teamName.trim() && (
+            <div className="mt-1.5">
+              {matchedSlot ? (
+                matchedSlot.isFull ? (
+                  <p className="font-mono text-xs text-red-600 font-bold flex items-center gap-1">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    <span>Team "{matchedSlot.teamName}" is already full with 5 members.</span>
+                  </p>
+                ) : (
+                  <p className="font-mono text-xs text-emerald-700 font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Joining Team "{matchedSlot.teamName}" as Member #{matchedSlot.memberCount + 1} of 5 ({5 - matchedSlot.memberCount} spots open).</span>
+                  </p>
+                )
+              ) : isNewTeamBlocked ? (
+                <p className="font-mono text-xs text-red-600 font-bold flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>All 6 team slots have already been created. Please select an existing open team above.</span>
+                </p>
+              ) : (
+                <p className="font-mono text-xs text-[#2B59FF] font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Founding new Team "{teamName}" as Team Captain (Slot #{occupiedCount + 1} of 6).</span>
+                </p>
+              )}
+            </div>
+          )}
+
+          {errors.teamName && <p className="text-xs text-red-600 mt-1 font-bold">{errors.teamName}</p>}
         </div>
 
+        {/* Teammates Roster Details */}
         <div>
           <label className="block text-xs font-bold text-slate-800 mb-1">
-            5 Team Members with Roll / Student ID Numbers <span className="text-red-500">*</span>
+            Team Member Roster / Roll Numbers (Optional if Teammates Register Separately)
           </label>
           <textarea
-            rows={5}
+            rows={3}
             value={teamDetails}
             onChange={(e) => setTeamDetails(e.target.value)}
-            placeholder="1. Team Captain - Roll No: ...&#10;2. Member 2 - Roll No: ...&#10;3. Member 3 - Roll No: ...&#10;4. Member 4 - Roll No: ...&#10;5. Member 5 - Roll No: ..."
+            placeholder="List your 4 teammates (e.g. 1. Amit Kumar - YBN/..., 2. Priya - YBN/...)&#10;Teammates can also register themselves using your exact Team Name above!"
             className="w-full px-3.5 py-2.5 rounded-xl bg-white border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 focus:outline-none resize-none font-mono"
           />
           {errors.teamDetails && <p className="text-xs text-red-600 mt-1">{errors.teamDetails}</p>}

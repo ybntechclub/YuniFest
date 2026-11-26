@@ -1,6 +1,7 @@
 import React from 'react';
 import { RegistrationRecord, EventItem } from '../../types/database';
 import { Users, GraduationCap, Building2, CheckCircle, Clock, AlertTriangle, Flame } from 'lucide-react';
+import { registrationStore } from '../../lib/registrationStore';
 
 interface StatsOverviewProps {
   registrations: RegistrationRecord[];
@@ -15,13 +16,12 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({ registrations, eve
   const confirmedCount = registrations.filter(r => r.registration_status === 'confirmed').length;
   const pendingCount = registrations.filter(r => r.registration_status === 'pending').length;
 
-  // Treasure Hunting tracking
-  const treasureHuntingEvent = events.find(e => e.slug === 'treasure-hunting');
-  const treasureHuntingCount = registrations.filter(
-    r => r.event_id === treasureHuntingEvent?.id && r.registration_status !== 'rejected'
-  ).length;
-  const treasureMaxCapacity = treasureHuntingEvent?.capacity || 6;
-  const treasurePercent = Math.min(100, Math.round((treasureHuntingCount / treasureMaxCapacity) * 100));
+  // Treasure Hunting tracking (Accurate segregation by Team Name, max 6 teams, 5 members each)
+  const treasureSlots = registrationStore.getTreasureHuntingTeams(registrations);
+  const occupiedTreasureTeams = treasureSlots.filter(s => s.teamName !== null).length;
+  const totalTreasureMembers = treasureSlots.reduce((acc, s) => acc + s.memberCount, 0);
+  const treasureMaxCapacity = 6;
+  const treasurePercent = Math.min(100, Math.round((occupiedTreasureTeams / treasureMaxCapacity) * 100));
 
   return (
     <div className="space-y-6 mb-8 text-slate-950">
@@ -103,10 +103,10 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({ registrations, eve
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-black text-slate-950 font-headline">
-              {treasureHuntingCount}
+              {occupiedTreasureTeams}
             </span>
             <span className="text-xs font-mono font-bold text-slate-700">
-              / {treasureMaxCapacity} TEAMS
+              / 6 TEAMS ({totalTreasureMembers}/30 Members)
             </span>
           </div>
           
@@ -120,8 +120,8 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({ registrations, eve
             />
           </div>
           <p className="text-[10px] font-mono font-bold text-slate-800 mt-1.5 flex justify-between">
-            <span>{treasurePercent}% Capacity</span>
-            <span>{Math.max(0, treasureMaxCapacity - treasureHuntingCount)} slots left</span>
+            <span>{occupiedTreasureTeams}/6 Teams Formed</span>
+            <span>{Math.max(0, 6 - occupiedTreasureTeams)} team slots open</span>
           </p>
         </div>
 

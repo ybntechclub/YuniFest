@@ -4,6 +4,7 @@ import { ParticipantType, EventItem } from '../../types/database';
 import { EventSpecificFields } from './EventSpecificFields';
 import { PaymentStep } from './PaymentStep';
 import { RegistrationStep } from './RegistrationProgressBar';
+import { registrationStore } from '../../lib/registrationStore';
 import { 
   Sparkles, CheckCircle2, AlertCircle, ArrowRight, ArrowLeft,
   Calendar, Check, User, Phone, Mail, FileText, Building2, ShieldCheck, Gamepad2
@@ -297,8 +298,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
       }
 
       if (selectedDay2Event.slug === 'treasure-hunting') {
-        if (!teamName.trim()) errs.teamName = "Treasure hunting team name is required.";
-        if (!teamDetails.trim()) errs.teamDetails = "Team member names and student IDs are required.";
+        if (!teamName.trim()) {
+          errs.teamName = "Treasure hunting team name is required.";
+        } else {
+          const check = registrationStore.canJoinTreasureTeam(teamName);
+          if (!check.allowed) {
+            errs.teamName = check.reason || "This team is not eligible.";
+          }
+        }
       }
     }
 

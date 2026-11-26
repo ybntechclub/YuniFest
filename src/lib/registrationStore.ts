@@ -10,6 +10,31 @@ const EVENT_OVERRIDES_KEY = 'yunifest_event_overrides_v1';
 // Seed sample registrations (only used if Supabase is completely unconfigured)
 const SAMPLE_REGISTRATIONS: RegistrationRecord[] = [];
 
+export interface TreasureTeamMember {
+  id: string;
+  code: string;
+  name: string;
+  studentId: string;
+  phone: string;
+  email: string;
+  institution: string;
+  utr?: string;
+  amount: number;
+  status: RegistrationStatus;
+  receiptUrl?: string;
+  registeredAt: string;
+}
+
+export interface TreasureTeamSlot {
+  slot: number; // 1 to 6
+  teamName: string | null;
+  members: TreasureTeamMember[];
+  memberCount: number;
+  maxMembers: number; // 5
+  isFull: boolean;
+  isOpen: boolean;
+}
+
 class RegistrationStore {
   private events: EventItem[] = [];
   private registrations: RegistrationRecord[] = [];
@@ -273,6 +298,10 @@ class RegistrationStore {
   // Get current registration count for an event
   getRegistrationCount(eventId: string): number {
     const event = this.getEventBySlugOrId(eventId);
+    if (event?.slug === 'treasure-hunting' || eventId === 'evt-treasure-hunting' || eventId === 'treasure-hunting') {
+      const slots = this.getTreasureHuntingTeams();
+      return slots.filter(s => s.teamName !== null).length;
+    }
     const validIds = new Set<string>([eventId]);
     if (event) {
       if (event.id) validIds.add(event.id);
@@ -285,6 +314,17 @@ class RegistrationStore {
   // Check capacity limit
   checkCapacityAvailable(eventId: string): { available: boolean; currentCount: number; maxCapacity: number | null } {
     const event = this.getEventBySlugOrId(eventId);
+    if (event?.slug === 'treasure-hunting' || eventId === 'evt-treasure-hunting' || eventId === 'treasure-hunting') {
+      const slots = this.getTreasureHuntingTeams();
+      const occupiedTeams = slots.filter(s => s.teamName !== null);
+      // Available if fewer than 6 teams OR if any team has < 5 members
+      const hasOpenSpot = occupiedTeams.length < 6 || occupiedTeams.some(s => s.memberCount < 5);
+      return {
+        available: hasOpenSpot,
+        currentCount: occupiedTeams.length,
+        maxCapacity: 6
+      };
+    }
     const currentCount = this.getRegistrationCount(eventId);
     if (!event || event.capacity === null) {
       return { available: true, currentCount, maxCapacity: null };
@@ -730,7 +770,100 @@ class RegistrationStore {
     return local || null;
   }
 
-  // Export registrations as CSV
+  // Helper to extract and segregate 6 Treasure Hunting teams (5 members max each)
+  getTreasureHuntingTeams(records?: RegistrationRecord[]): TreasureTeamSlot[] {
+    const list = records || this.registrations;
+    const treasureRegs = list.filter(r => {
+      if (r.registration_status === 'rejected') return false;
+      const isDay2Treasure = r.day_2_event_id === 'evt-treasure-hunting' || 
+                            r.selected_events_by_day?.day_2?.slug === 'treasure-hunting' ||
+                            r.selected_events_by_day?.day_2?.id === 'evt-treasure-hunting';
+      const isMainTreasure = r.event_id === 'evt-treasure-hunting' || 
+                            r.event_name?.toLowerCase().includes('treasure');
+      return isDay2Treasure || isMainTreasure;
+    });
+
+    // Group by normalized team name (case-insensitive)
+    const teamGroups = new Map<string, { originalName: string; members: TreasureTeamMember[] }>();
+
+    for (const reg of treasureRegs) {
+      const rawName = (reg.team_name || 'Unnamed Team').trim();
+      const normKey = rawName.toLowerCase();
+      if (!teamGroups.has(normKey)) {
+        teamGroups.set(normKey, { originalName: rawName, members: [] });
+      }
+      const group = teamGroups.get(normKey)!;
+      // Capped at exactly 5 members per team
+      if (group.members.length < 5) {
+        group.members.push({
+          id: reg.id,
+          code: reg.registration_code,
+          name: reg.full_name,
+          studentId: reg.student_id_number,
+          phone: reg.mobile,
+          email: reg.email,
+          institution: reg.institution_name,
+          utr: reg.transaction_id,
+          amount: reg.amount_inr || (reg.participant_type === 'ybn_student' ? 399 : 499),
+          status: reg.registration_status,
+          receiptUrl: reg.payment_screenshot_url,
+          registeredAt: reg.created_at,
+        });
+      }
+    }
+
+    // Build exactly 6 slots
+    const slots: TreasureTeamSlot[] = [];
+    const teamEntries = Array.from(teamGroups.values());
+
+    for (let i = 0; i < 6; i++) {
+      if (i < teamEntries.length) {
+        const team = teamEntries[i];
+        slots.push({
+          slot: i + 1,
+          teamName: team.originalName,
+          members: team.members,
+          memberCount: team.members.length,
+          maxMembers: 5,
+          isFull: team.members.length >= 5,
+          isOpen: team.members.length < 5,
+        });
+      } else {
+        slots.push({
+          slot: i + 1,
+          teamName: null,
+          members: [],
+          memberCount: 0,
+          maxMembers: 5,
+          isFull: false,
+          isOpen: true,
+        });
+      }
+    }
+
+    return slots;
+  }
+
+  // Check if a team name is eligible to join or create
+  canJoinTreasureTeam(teamName: string, records?: RegistrationRecord[]): { allowed: boolean; reason?: string } {
+    const slots = this.getTreasureHuntingTeams(records);
+    const norm = teamName.trim().toLowerCase();
+    const existing = slots.find(s => s.teamName?.toLowerCase() === norm);
+    if (existing) {
+      if (existing.isFull) {
+        return { allowed: false, reason: `Team "${existing.teamName}" is already full with 5 members.` };
+      }
+      return { allowed: true };
+    }
+    // New team creation: check if all 6 slots are already occupied
+    const occupiedSlots = slots.filter(s => s.teamName !== null);
+    if (occupiedSlots.length >= 6) {
+      return { allowed: false, reason: 'All 6 team slots for Treasure Hunting are taken. Please join an open existing team.' };
+    }
+    return { allowed: true };
+  }
+
+  // Export registrations as CSV with UTR and Payment details
   exportRegistrationsToCSV(records: RegistrationRecord[]): string {
     const headers = [
       "Registration Code",
@@ -747,7 +880,12 @@ class RegistrationStore {
       "Team Name",
       "Team Members",
       "Specific Details",
-      "Status",
+      "UTR Number",
+      "Payment Fee (INR)",
+      "Payment Status",
+      "Payment Verified At",
+      "Payment Verified By",
+      "Registration Status",
       "Registration Time"
     ];
 
@@ -777,6 +915,11 @@ class RegistrationStore {
         escapeCSV(r.team_name || 'N/A'),
         escapeCSV(r.team_details || 'N/A'),
         escapeCSV(specificDetails),
+        escapeCSV(r.transaction_id || 'N/A'),
+        escapeCSV(r.amount_inr || (r.participant_type === 'ybn_student' ? 399 : 499)),
+        escapeCSV(r.registration_status === 'confirmed' ? 'Verified' : 'Pending Verification'),
+        escapeCSV(r.payment_verified_at || 'Pending'),
+        escapeCSV(r.payment_verified_by || 'N/A'),
         escapeCSV(r.registration_status),
         escapeCSV(r.created_at)
       ].join(',');

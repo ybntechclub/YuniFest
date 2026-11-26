@@ -56,14 +56,30 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
     });
   }, [registrations, searchQuery, eventFilter, typeFilter, statusFilter]);
 
-  // Export CSV Handler
-  const handleExportCSV = () => {
-    const csvContent = registrationStore.exportRegistrationsToCSV(filteredRegistrations);
+  const isFiltered = statusFilter !== 'all' || eventFilter !== 'all' || typeFilter !== 'all' || searchQuery.trim() !== '';
+
+  // Export CSV Handler (Exports filtered view or all records with full UTR details)
+  const handleExportCSV = (exportAll = false) => {
+    const dataToExport = exportAll ? registrations : filteredRegistrations;
+    let label = 'all';
+    if (!exportAll && isFiltered) {
+      if (statusFilter !== 'all') {
+        label = statusFilter;
+      } else if (eventFilter !== 'all') {
+        const ev = events.find(e => e.id === eventFilter);
+        label = ev ? ev.slug : 'event';
+      } else if (typeFilter !== 'all') {
+        label = typeFilter;
+      } else {
+        label = 'filtered';
+      }
+    }
+    const csvContent = registrationStore.exportRegistrationsToCSV(dataToExport);
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `yunifest-2026-registrations-${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `yunifest-2026-${label}-registrations-${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -84,100 +100,109 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
   return (
     <div className="bg-white border-[1.5px] border-slate-900 rounded-[32px] p-6 sm:p-8 shadow-solid-pop text-slate-950">
       
-      {/* Top Controls: Search + Multi-Filters + Export & Refresh Buttons */}
-      <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between mb-6 pb-6 border-b border-slate-200">
+      {/* Top Controls: Search and All Action Buttons strictly in 1 single horizontal row */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 border-b border-slate-200 flex-nowrap w-full">
         
         {/* Search */}
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+        <div className="relative min-w-[190px] sm:min-w-[220px] max-w-xs shrink-0">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search code, participant name, college, email, or student ID..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs sm:text-sm text-slate-950 font-medium focus:outline-none"
+            placeholder="Search participant, code, email..."
+            className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#F6F7F9] border-[1.5px] border-slate-900 focus:border-[#2B59FF] text-xs text-slate-950 font-medium focus:outline-none"
           />
         </div>
 
-        {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          {/* Event Filter */}
-          <select
-            value={eventFilter}
-            onChange={(e) => setEventFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-800 font-bold focus:outline-none"
-          >
-            <option value="all">All Events</option>
-            {events.map((e) => (
-              <option key={e.id} value={e.id}>{e.name}</option>
-            ))}
-          </select>
+        {/* Event Filter */}
+        <select
+          value={eventFilter}
+          onChange={(e) => setEventFilter(e.target.value)}
+          className="px-2.5 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-800 font-bold focus:outline-none max-w-[130px] sm:max-w-[150px] truncate shrink-0"
+        >
+          <option value="all">All Events</option>
+          {events.map((e) => (
+            <option key={e.id} value={e.id}>{e.name}</option>
+          ))}
+        </select>
 
-          {/* Type Filter */}
-          <select
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-800 font-bold focus:outline-none"
-          >
-            <option value="all">All Participants</option>
-            <option value="ybn_student">YBN Students</option>
-            <option value="outside_student">Visitors (Outside Students)</option>
-          </select>
+        {/* Type Filter */}
+        <select
+          value={typeFilter}
+          onChange={(e) => setTypeFilter(e.target.value)}
+          className="px-2.5 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-800 font-bold focus:outline-none shrink-0"
+        >
+          <option value="all">All Participants</option>
+          <option value="ybn_student">YBN Students</option>
+          <option value="outside_student">Visitors</option>
+        </select>
 
-          {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-800 font-bold focus:outline-none"
-          >
-            <option value="all">All Statuses</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="pending">Pending</option>
-            <option value="waitlisted">Waitlisted</option>
-            <option value="rejected">Rejected</option>
-          </select>
+        {/* Status Filter */}
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-2.5 py-2 rounded-xl bg-white border border-slate-300 text-xs text-slate-800 font-bold focus:outline-none shrink-0"
+        >
+          <option value="all">All Statuses</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="pending">Pending</option>
+          <option value="waitlisted">Waitlisted</option>
+          <option value="rejected">Rejected</option>
+        </select>
 
-          {/* Purge Local Cache Button */}
+        {/* Purge Local Cache Button */}
+        <button
+          type="button"
+          onClick={handlePurgeCache}
+          className="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-xs font-bold border border-slate-300 transition-colors whitespace-nowrap shrink-0"
+          title="Clear browser local cache and re-sync directly from Supabase"
+        >
+          <span>Purge Cache</span>
+        </button>
+
+        {/* Refresh Button */}
+        {onRefresh && (
           <button
             type="button"
-            onClick={handlePurgeCache}
-            className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-xs font-bold border border-slate-300 transition-colors"
-            title="Clear browser local cache and re-sync directly from Supabase"
+            onClick={onRefresh}
+            className="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 font-display font-bold text-xs border border-slate-300 transition-colors shadow-sm whitespace-nowrap shrink-0"
+            title="Sync records from Supabase"
           >
-            <span>Purge Cache</span>
+            <RefreshCw className="w-3.5 h-3.5 text-slate-600" />
+            <span>Refresh</span>
           </button>
+        )}
 
-          {/* Refresh Button */}
-          {onRefresh && (
-            <button
-              type="button"
-              onClick={onRefresh}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-800 font-display font-bold text-xs border border-slate-300 transition-colors shadow-sm"
-              title="Sync records from Supabase"
-            >
-              <RefreshCw className="w-3.5 h-3.5 text-slate-600" />
-              <span>Refresh</span>
-            </button>
-          )}
-
-          {/* Export CSV Button */}
-          <button
-            type="button"
-            onClick={handleExportCSV}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FEF08A] hover:bg-yellow-300 text-slate-950 font-display font-bold text-xs border border-slate-900 transition-colors shadow-sm"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
-          </button>
-        </div>
-
+        {/* Single Clean Export CSV Button */}
+        <button
+          type="button"
+          onClick={() => handleExportCSV(false)}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#FEF08A] hover:bg-yellow-300 text-slate-950 font-display font-bold text-xs border border-slate-900 transition-colors shadow-sm whitespace-nowrap shrink-0"
+          title={isFiltered ? `Export only the ${filteredRegistrations.length} filtered records as CSV (with UTR numbers)` : `Export all ${registrations.length} registrations as CSV (with UTR numbers)`}
+        >
+          <Download className="w-3.5 h-3.5" />
+          <span>Export CSV {isFiltered ? `(${filteredRegistrations.length})` : `(${registrations.length})`}</span>
+        </button>
       </div>
 
-      {/* Counter bar */}
-      <div className="flex items-center justify-between text-xs font-mono text-slate-500 mb-4 px-1">
+      {/* Counter bar & Event Alert */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-slate-500 mb-4 px-1 gap-2">
         <span>Showing <strong>{filteredRegistrations.length}</strong> of <strong>{registrations.length}</strong> records</span>
         <span>Click any row to view full participant profile</span>
       </div>
+
+      {/* Quick Treasure Hunt Segregation Notice */}
+      {eventFilter === 'evt-treasure-hunting' && (
+        <div className="mb-4 p-3.5 rounded-2xl bg-[#FEF08A]/50 border border-slate-900 text-xs font-mono flex items-center justify-between">
+          <span className="font-bold text-slate-900">
+            TREASURE HUNTING: Filtered by 6 Teams Quota (5 members max per team). All records include UTR number in CSV export.
+          </span>
+          <span className="text-[11px] text-[#2B59FF] font-bold">
+            Switch to "Treasure Hunt (6 Teams)" tab for visual team board →
+          </span>
+        </div>
+      )}
 
       {/* Table Container */}
       <div className="overflow-x-auto rounded-2xl border border-slate-200">
@@ -225,7 +250,11 @@ export const RegistrationTable: React.FC<RegistrationTableProps> = ({
                     <td className="py-3.5 px-4 max-w-[180px]">
                       <div className="font-bold text-slate-950 truncate">{reg.event_name}</div>
                       {reg.team_name && (
-                        <div className="text-[10px] text-[#2B59FF] font-mono truncate">Team: {reg.team_name}</div>
+                        <div className="text-[10px] text-[#2B59FF] font-mono truncate font-bold mt-0.5">
+                          <span className="px-1.5 py-0.2 rounded bg-[#E0E7FF] border border-blue-200">
+                            Team: {reg.team_name}
+                          </span>
+                        </div>
                       )}
                     </td>
 

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EventItem } from '../../types/database';
 import { OFFICIAL_COORDINATORS } from '../../data/coordinators';
-import { X, Calendar, Clock, MapPin, Users, ArrowRight, CheckCircle2, Phone } from 'lucide-react';
+import { X, Calendar, Clock, MapPin, Users, ArrowRight, CheckCircle2, Phone, Compass } from 'lucide-react';
+import { registrationStore, TreasureTeamSlot } from '../../lib/registrationStore';
 
 interface EventDetailModalProps {
   event: EventItem | null;
@@ -10,6 +11,17 @@ interface EventDetailModalProps {
 }
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) => {
+  const [treasureSlots, setTreasureSlots] = useState<TreasureTeamSlot[]>([]);
+
+  useEffect(() => {
+    if (event?.slug === 'treasure-hunting') {
+      setTreasureSlots(registrationStore.getTreasureHuntingTeams());
+      registrationStore.getRegistrations().then(regs => {
+        setTreasureSlots(registrationStore.getTreasureHuntingTeams(regs));
+      });
+    }
+  }, [event]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -139,6 +151,57 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
               </div>
             </div>
           </div>
+
+          {/* Live 6 Team Slots (For Treasure Hunting) */}
+          {event.slug === 'treasure-hunting' && (
+            <div className="p-5 rounded-2xl bg-[#FEF08A]/40 border-[1.5px] border-slate-900 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-[#2B59FF]" />
+                  <span className="font-headline font-bold text-xs uppercase tracking-wider text-slate-950">
+                    Live 6 Team Slots (5 Members Each)
+                  </span>
+                </div>
+                <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-slate-900">
+                  {treasureSlots.filter(s => s.teamName !== null).length} / 6 TEAMS FORMED
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {treasureSlots.map(slot => (
+                  <div
+                    key={slot.slot}
+                    className={`p-3 rounded-xl border text-xs font-mono flex items-center justify-between ${
+                      slot.teamName ? 'bg-white border-slate-900 shadow-sm' : 'bg-white/60 border-dashed border-slate-300'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="px-1.5 py-0.2 rounded bg-slate-900 text-white text-[10px] font-bold">
+                          #{slot.slot}
+                        </span>
+                        <strong className="text-slate-950 font-bold">
+                          {slot.teamName ? slot.teamName : `Open Slot #${slot.slot}`}
+                        </strong>
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+                        {slot.isFull ? '0 spots left' : `${5 - slot.memberCount} spots open`}
+                      </div>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      slot.isFull
+                        ? 'bg-red-100 text-red-700'
+                        : slot.teamName
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-slate-100 text-slate-600'
+                    }`}>
+                      {slot.isFull ? 'FULL' : slot.teamName ? `${slot.memberCount}/5` : 'AVAILABLE'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Rules & Guidelines */}
           {event.rules && event.rules.length > 0 && (
