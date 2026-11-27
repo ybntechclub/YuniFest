@@ -42,11 +42,11 @@ export const FestOverview: React.FC = () => {
             <span>[ 01 // FESTIVAL SHOWCASES &amp; PILLARS ]</span>
           </div>
 
-          <h2 className="font-headline font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-slate-950 tracking-tight leading-tight">
+          <h2 className="font-headline font-extrabold text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-slate-950 tracking-tight leading-tight">
             TRANSLATING YOUTH ENERGY <br className="hidden sm:inline" />
-            <span className="whitespace-nowrap inline-block">
+            <span className="whitespace-normal sm:whitespace-nowrap inline-block">
               INTO MOMENTS{' '}
-              <span className="font-editorial italic font-normal text-[#2B59FF] normal-case tracking-normal text-[1.08em]">
+              <span className="font-editorial italic font-normal text-[#2B59FF] normal-case tracking-normal text-[1.08em] whitespace-nowrap inline-block">
                 People Remember
               </span>
             </span>

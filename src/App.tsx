@@ -67,7 +67,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#07152F] text-slate-100 selection:bg-[#F5C451] selection:text-[#07152F]">
+    <div className="flex flex-col min-h-screen bg-[#07152F] text-slate-100 selection:bg-[#F5C451] selection:text-[#07152F] overflow-x-hidden w-full max-w-full">
       {!isAdminRoute && <Navbar />}
       <main className="flex-grow">{children}</main>
       {!isAdminRoute && <Footer />}

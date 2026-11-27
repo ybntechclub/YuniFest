@@ -15,9 +15,9 @@ export const RulesSection: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-[1.5px] border-slate-900 font-mono text-xs font-bold text-slate-900 mb-3 shadow-sm">
               <span>[ 04 // PROTOCOLS &amp; ELIGIBILITY ]</span>
             </div>
-            <h2 className="font-headline font-black text-2xl sm:text-4xl lg:text-[2.65rem] xl:text-5xl text-slate-950 uppercase tracking-tight leading-tight">
+            <h2 className="font-headline font-black text-xl sm:text-4xl lg:text-[2.65rem] xl:text-5xl text-slate-950 uppercase tracking-tight leading-tight">
               CAMPUS REGULATIONS &amp;{' '}
-              <span className="text-[#2B59FF] whitespace-nowrap inline-block">
+              <span className="text-[#2B59FF] whitespace-normal sm:whitespace-nowrap inline-block">
                 ENTRY PROTOCOLS
               </span>
             </h2>

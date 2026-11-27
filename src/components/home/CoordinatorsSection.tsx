@@ -45,9 +45,9 @@ export const CoordinatorsSection: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border-[1.5px] border-slate-900 font-mono text-xs font-bold text-slate-900 mb-3 shadow-sm">
               <span>[ 03 // STUDENT CONVENERS ]</span>
             </div>
-            <h2 className="font-headline font-black text-2xl sm:text-4xl lg:text-[2.65rem] xl:text-5xl text-slate-950 uppercase tracking-tight leading-tight">
+            <h2 className="font-headline font-black text-xl sm:text-4xl lg:text-[2.65rem] xl:text-5xl text-slate-950 uppercase tracking-tight leading-tight">
               STEERING COMMITTEE &amp;{' '}
-              <span className="font-editorial italic font-normal text-[#2B59FF] normal-case text-[1.08em] whitespace-nowrap inline-block">
+              <span className="font-editorial italic font-normal text-[#2B59FF] normal-case text-[1.08em] whitespace-normal sm:whitespace-nowrap inline-block">
                 student conveners ~
               </span>
             </h2>

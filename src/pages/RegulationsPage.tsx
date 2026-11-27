@@ -15,9 +15,9 @@ export const RegulationsPage: React.FC = () => {
             <span className="text-slate-500">•</span>
             <span className="text-[#2B59FF] font-bold">Campus Guidelines</span>
           </div>
-          <h1 className="font-headline font-extrabold text-3xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight">
+          <h1 className="font-headline font-extrabold text-2xl sm:text-5xl lg:text-6xl text-slate-950 tracking-tight">
             CAMPUS REGULATIONS{' '}
-            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal whitespace-nowrap inline-block text-[1.05em]">
+            <span className="font-editorial italic font-normal text-[#2B59FF] tracking-normal whitespace-normal sm:whitespace-nowrap inline-block text-[1.05em]">
               &amp; Admission Policies
             </span>
           </h1>
