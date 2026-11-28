@@ -37,7 +37,7 @@ export async function sendRegistrationConfirmationEmail(
   }
 
   // High-deliverability subject line featuring participant name and confirmed registration token
-  const subject = `YUNIFEST 2026 Registration Confirmation - ${record.full_name} [${record.registration_code}]`;
+  const subject = `YUNIFEST 2026 Registration Confirmation - ${record.full_name} (${record.registration_code})`;
 
   // Resolve 3-Day Festival Itinerary
   const eventData = record.event_specific_data || {};
